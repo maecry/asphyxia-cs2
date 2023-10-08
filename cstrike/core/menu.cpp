@@ -562,7 +562,6 @@ void T::Miscellaneous()
 					ImGui::MultiCombo(CS_XOR("additional settings"), &C_GET(unsigned int, Vars.bMenuAdditional), arrMenuAddition, CS_ARRAYSIZE(arrMenuAddition));
 
 					ImGui::SliderFloat(CS_XOR("animation speed"), &C_GET(float, Vars.flAnimationSpeed), 1.f, 10.f);
-					ImGui::HelpMarker(CS_XOR("global animation speed (including menu particles's velocity speed)"));
 
 					ImGui::SeparatorText(CS_XOR("colors pallete"));
 
