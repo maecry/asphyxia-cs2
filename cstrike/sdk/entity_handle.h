@@ -39,7 +39,7 @@ public:
 
 	[[nodiscard]] bool IsValid() const noexcept
 	{
-		return nIndex != INVALID_EHANDLE_INDEX && nIndex < ENT_MAX_NETWORKED_ENTRY;
+		return nIndex != INVALID_EHANDLE_INDEX;
 	}
 
 	[[nodiscard]] int GetEntryIndex() const noexcept
