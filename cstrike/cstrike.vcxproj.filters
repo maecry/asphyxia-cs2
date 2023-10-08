@@ -287,9 +287,15 @@
     <ClInclude Include="sdk\datatypes\transform.h">
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
-    <ClInclude Include="utilities\easing.h" />
-    <ClInclude Include="utilities\notify.h" />
-    <ClInclude Include="sdk\entity_handle.h" />
+    <ClInclude Include="utilities\easing.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\entity_handle.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\notify.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dependencies\imgui\imgui.cpp">
@@ -389,8 +395,14 @@
     <ClCompile Include="features\misc\movement.cpp">
       <Filter>features\misc</Filter>
     </ClCompile>
-    <ClCompile Include="utilities\notify.cpp" />
-    <ClCompile Include="utilities\math.cpp" />
-    <ClCompile Include="core\sdk.cpp" />
+    <ClCompile Include="core\sdk.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\math.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\notify.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
