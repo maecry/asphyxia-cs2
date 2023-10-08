@@ -5,8 +5,9 @@
 - [Contact](#contact)
 - [Credits](#credits)
 
-## About information_source:
+## About :information_source:
 - Counter-Strike 2 Open Source DLL
+- x64-bit architecture
 
 ## Contact :email:
 - **Discord**: user164asdfzxcq257(852617501140844564)
