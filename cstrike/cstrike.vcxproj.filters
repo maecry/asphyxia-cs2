@@ -1,50 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="core">
+      <UniqueIdentifier>{4E40957C-3A77-960D-E363-7C10CF79120F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="dependencies">
-      <UniqueIdentifier>{1cf642be-39fb-4b4f-9238-f7185c339086}</UniqueIdentifier>
+      <UniqueIdentifier>{8CAD9F58-7810-2FFD-2196-67B30DD8FA7F}</UniqueIdentifier>
     </Filter>
     <Filter Include="dependencies\imgui">
-      <UniqueIdentifier>{d8f5ce2d-4c40-443c-8c64-60659a0ec58c}</UniqueIdentifier>
+      <UniqueIdentifier>{F6B312BD-E297-D312-4BF8-CD6537FBBD94}</UniqueIdentifier>
     </Filter>
     <Filter Include="dependencies\minhook">
-      <UniqueIdentifier>{c9bc9212-2d10-40e2-bbea-e679169f9f09}</UniqueIdentifier>
+      <UniqueIdentifier>{D08C9B77-BC1B-2541-653A-393C51A835E7}</UniqueIdentifier>
     </Filter>
     <Filter Include="dependencies\minhook\hde">
-      <UniqueIdentifier>{5f5811e3-6973-46f6-b9d8-b9402ab66040}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dependencies\nlohmann">
-      <UniqueIdentifier>{6e30fc18-ba5a-43fb-b424-b3453ad8a3e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="utilities">
-      <UniqueIdentifier>{9b1a0391-2fdb-4be5-9671-fdfd4883cb4d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core">
-      <UniqueIdentifier>{d03eb422-d925-486c-98e7-e6ccc48c6352}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk">
-      <UniqueIdentifier>{ffbfabe2-56df-4f32-8e78-0f3a89a78384}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\interfaces">
-      <UniqueIdentifier>{1079bbcb-9516-4447-bdd0-7789f3d914dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\datatypes">
-      <UniqueIdentifier>{103ddbcf-ebba-4e94-a805-55a8316f996d}</UniqueIdentifier>
+      <UniqueIdentifier>{500251C1-3C27-A041-6572-85D151F69E5F}</UniqueIdentifier>
     </Filter>
     <Filter Include="features">
-      <UniqueIdentifier>{56ce0177-0666-4c89-b6c1-6c94d1c68eab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="features\visuals">
-      <UniqueIdentifier>{b2f7303c-cf86-4f52-a8bb-5f67a2fbf3b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extensions">
-      <UniqueIdentifier>{6944d6eb-4766-47ce-aca5-b75fb593559e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resources">
-      <UniqueIdentifier>{d9e08a11-02ef-4204-a091-d5df9c217054}</UniqueIdentifier>
+      <UniqueIdentifier>{04AE61E7-F07A-BCF2-1994-AA9A05C0F180}</UniqueIdentifier>
     </Filter>
     <Filter Include="features\misc">
-      <UniqueIdentifier>{a4dbbf63-16c9-4445-9966-4f9ede72f22b}</UniqueIdentifier>
+      <UniqueIdentifier>{5F23839A-CBE3-FED0-941E-484E009E43AD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\visuals">
+      <UniqueIdentifier>{9A07E0F7-8600-FF49-AF32-E4CE9B8ADE55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{202B5BA7-8C95-0F1E-D5D3-C0C3417DED72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk">
+      <UniqueIdentifier>{67A9880B-D3B2-887C-5C2E-9F7CC836947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\datatypes">
+      <UniqueIdentifier>{85931A81-F153-96B7-BA8E-DF34260EDB93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\interfaces">
+      <UniqueIdentifier>{7A23D2D0-66F1-C5D6-4F85-36FD3BF2A13B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utilities">
+      <UniqueIdentifier>{212A0ED3-8D94-C249-D6D2-73EF427CA09E}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,13 +69,10 @@
     <ClInclude Include="..\dependencies\imgui\imstb_truetype.h">
       <Filter>dependencies\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="..\dependencies\imgui_notify.h">
+      <Filter>dependencies</Filter>
+    </ClInclude>
     <ClInclude Include="..\dependencies\minhook\buffer.h">
-      <Filter>dependencies\minhook</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\minhook\minhook.h">
-      <Filter>dependencies\minhook</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\minhook\trampoline.h">
       <Filter>dependencies\minhook</Filter>
     </ClInclude>
     <ClInclude Include="..\dependencies\minhook\hde\hde32.h">
@@ -99,90 +90,97 @@
     <ClInclude Include="..\dependencies\minhook\hde\table64.h">
       <Filter>dependencies\minhook\hde</Filter>
     </ClInclude>
-    <ClInclude Include="..\dependencies\nlohmann\json.hpp">
-      <Filter>dependencies\nlohmann</Filter>
+    <ClInclude Include="..\dependencies\minhook\minhook.h">
+      <Filter>dependencies\minhook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\minhook\trampoline.h">
+      <Filter>dependencies\minhook</Filter>
     </ClInclude>
     <ClInclude Include="..\dependencies\stb_image.h">
-      <Filter>dependencies\nlohmann</Filter>
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\stb_sprintf.h">
+      <Filter>dependencies</Filter>
     </ClInclude>
     <ClInclude Include="..\dependencies\xorstr.h">
-      <Filter>dependencies\nlohmann</Filter>
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\fa_solid_900.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\font_awesome_5.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\game_icons.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resources\smallest_pixel.h">
+      <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="common.h" />
     <ClInclude Include="core.h" />
-    <ClInclude Include="utilities\crt.h">
-      <Filter>utilities</Filter>
+    <ClInclude Include="core\config.h">
+      <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\dependencies\stb_sprintf.h">
-      <Filter>dependencies\nlohmann</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\math.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\log.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\memory.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\pe64.h">
-      <Filter>utilities</Filter>
+    <ClInclude Include="core\convars.h">
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="core\hooks.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="utilities\detourhook.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
     <ClInclude Include="core\interfaces.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\interfaces\iswapchaindx11.h">
-      <Filter>sdk\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\datatypes\vector.h">
-      <Filter>sdk\datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\interfaces\imemalloc.h">
-      <Filter>sdk\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\datatypes\qangle.h">
-      <Filter>sdk\datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\datatypes\matrix.h">
-      <Filter>sdk\datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\datatypes\color.h">
-      <Filter>sdk\datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\inputsystem.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="core\config.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\fnv1a.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\draw.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="core\variables.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\interfaces\ccsgoinput.h">
-      <Filter>sdk\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\interfaces\iviewrender.h">
-      <Filter>sdk\interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="core\menu.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\schema.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="core\sdk.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="core\variables.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="features.h" />
+    <ClInclude Include="features\misc.h">
+      <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="features\misc\movement.h">
+      <Filter>features\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="features\visuals.h">
+      <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="features\visuals\overlay.h">
+      <Filter>features\visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\const.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\datatypes\color.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\datatypes\matrix.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\datatypes\qangle.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\datatypes\quaternion.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\datatypes\transform.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
     <ClInclude Include="sdk\datatypes\usercmd.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\datatypes\utlfixedmemory.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\datatypes\utllinkedlist.h">
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
     <ClInclude Include="sdk\datatypes\utlmap.h">
@@ -203,38 +201,23 @@
     <ClInclude Include="sdk\datatypes\utlvector.h">
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\interfaces\ischemasystem.h">
-      <Filter>sdk\interfaces</Filter>
+    <ClInclude Include="sdk\datatypes\vector.h">
+      <Filter>sdk\datatypes</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\interfaces\iglobalvars.h">
-      <Filter>sdk\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\interfaces\iinputsystem.h">
-      <Filter>sdk\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="core\schema.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\interfaces\igameresourceservice.h">
-      <Filter>sdk\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\interfaces\cgameentitysystem.h">
-      <Filter>sdk\interfaces</Filter>
+    <ClInclude Include="sdk\datatypes\viewsetup.h">
+      <Filter>sdk\datatypes</Filter>
     </ClInclude>
     <ClInclude Include="sdk\entity.h">
       <Filter>sdk</Filter>
     </ClInclude>
-    <ClInclude Include="features.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="features\visuals\overlay.h">
-      <Filter>features\visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="sdk\const.h">
+    <ClInclude Include="sdk\entity_handle.h">
       <Filter>sdk</Filter>
     </ClInclude>
-    <ClInclude Include="core\convars.h">
-      <Filter>core</Filter>
+    <ClInclude Include="sdk\interfaces\ccsgoinput.h">
+      <Filter>sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\interfaces\cgameentitysystem.h">
+      <Filter>sdk\interfaces</Filter>
     </ClInclude>
     <ClInclude Include="sdk\interfaces\idebugoverlay.h">
       <Filter>sdk\interfaces</Filter>
@@ -245,55 +228,61 @@
     <ClInclude Include="sdk\interfaces\ienginecvar.h">
       <Filter>sdk\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\datatypes\utlfixedmemory.h">
-      <Filter>sdk\datatypes</Filter>
+    <ClInclude Include="sdk\interfaces\igameresourceservice.h">
+      <Filter>sdk\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\datatypes\utllinkedlist.h">
-      <Filter>sdk\datatypes</Filter>
+    <ClInclude Include="sdk\interfaces\iglobalvars.h">
+      <Filter>sdk\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="features\visuals.h">
-      <Filter>features</Filter>
+    <ClInclude Include="sdk\interfaces\iinputsystem.h">
+      <Filter>sdk\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\resources\fa_solid_900.h">
-      <Filter>resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\resources\font_awesome_5.h">
-      <Filter>resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\resources\game_icons.h">
-      <Filter>resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\resources\smallest_pixel.h">
-      <Filter>resources</Filter>
+    <ClInclude Include="sdk\interfaces\imemalloc.h">
+      <Filter>sdk\interfaces</Filter>
     </ClInclude>
     <ClInclude Include="sdk\interfaces\inetworkclientservice.h">
       <Filter>sdk\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\extensions\binary.h">
-      <Filter>extensions</Filter>
+    <ClInclude Include="sdk\interfaces\ischemasystem.h">
+      <Filter>sdk\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="features\misc.h">
-      <Filter>features</Filter>
+    <ClInclude Include="sdk\interfaces\iswapchaindx11.h">
+      <Filter>sdk\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="features\misc\movement.h">
-      <Filter>features\misc</Filter>
+    <ClInclude Include="sdk\interfaces\iviewrender.h">
+      <Filter>sdk\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\datatypes\viewsetup.h">
-      <Filter>sdk\datatypes</Filter>
+    <ClInclude Include="utilities\crt.h">
+      <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\datatypes\quaternion.h">
-      <Filter>sdk\datatypes</Filter>
+    <ClInclude Include="utilities\detourhook.h">
+      <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\datatypes\transform.h">
-      <Filter>sdk\datatypes</Filter>
+    <ClInclude Include="utilities\draw.h">
+      <Filter>utilities</Filter>
     </ClInclude>
     <ClInclude Include="utilities\easing.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\entity_handle.h">
-      <Filter>sdk</Filter>
+    <ClInclude Include="utilities\fnv1a.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\inputsystem.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\log.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\math.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\memory.h">
+      <Filter>utilities</Filter>
     </ClInclude>
     <ClInclude Include="utilities\notify.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\pe64.h">
       <Filter>utilities</Filter>
     </ClInclude>
   </ItemGroup>
@@ -325,48 +314,30 @@
     <ClCompile Include="..\dependencies\minhook\buffer.c">
       <Filter>dependencies\minhook</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\minhook\hook.c">
-      <Filter>dependencies\minhook</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\minhook\trampoline.c">
-      <Filter>dependencies\minhook</Filter>
-    </ClCompile>
     <ClCompile Include="..\dependencies\minhook\hde\hde32.c">
       <Filter>dependencies\minhook\hde</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\minhook\hde\hde64.c">
       <Filter>dependencies\minhook\hde</Filter>
     </ClCompile>
+    <ClCompile Include="..\dependencies\minhook\hook.c">
+      <Filter>dependencies\minhook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\minhook\trampoline.c">
+      <Filter>dependencies\minhook</Filter>
+    </ClCompile>
     <ClCompile Include="core.cpp" />
-    <ClCompile Include="utilities\log.cpp">
-      <Filter>utilities</Filter>
+    <ClCompile Include="core\config.cpp">
+      <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="utilities\memory.cpp">
-      <Filter>utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="core\interfaces.cpp">
+    <ClCompile Include="core\convars.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="core\hooks.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="sdk\datatypes\vector.cpp">
-      <Filter>sdk\datatypes</Filter>
-    </ClCompile>
-    <ClCompile Include="sdk\datatypes\qangle.cpp">
-      <Filter>sdk\datatypes</Filter>
-    </ClCompile>
-    <ClCompile Include="sdk\datatypes\matrix.cpp">
-      <Filter>sdk\datatypes</Filter>
-    </ClCompile>
-    <ClCompile Include="core\config.cpp">
+    <ClCompile Include="core\interfaces.cpp">
       <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="utilities\inputsystem.cpp">
-      <Filter>utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="utilities\draw.cpp">
-      <Filter>utilities</Filter>
     </ClCompile>
     <ClCompile Include="core\menu.cpp">
       <Filter>core</Filter>
@@ -374,31 +345,47 @@
     <ClCompile Include="core\schema.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="features.cpp">
+    <ClCompile Include="core\sdk.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="core\convars.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="sdk\entity.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="features\visuals\overlay.cpp">
-      <Filter>features\visuals</Filter>
-    </ClCompile>
-    <ClCompile Include="features\visuals.cpp">
-      <Filter>features</Filter>
-    </ClCompile>
+    <ClCompile Include="features.cpp" />
     <ClCompile Include="features\misc.cpp">
       <Filter>features</Filter>
     </ClCompile>
     <ClCompile Include="features\misc\movement.cpp">
       <Filter>features\misc</Filter>
     </ClCompile>
-    <ClCompile Include="core\sdk.cpp">
-      <Filter>core</Filter>
+    <ClCompile Include="features\visuals.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="features\visuals\overlay.cpp">
+      <Filter>features\visuals</Filter>
+    </ClCompile>
+    <ClCompile Include="sdk\datatypes\matrix.cpp">
+      <Filter>sdk\datatypes</Filter>
+    </ClCompile>
+    <ClCompile Include="sdk\datatypes\qangle.cpp">
+      <Filter>sdk\datatypes</Filter>
+    </ClCompile>
+    <ClCompile Include="sdk\datatypes\vector.cpp">
+      <Filter>sdk\datatypes</Filter>
+    </ClCompile>
+    <ClCompile Include="sdk\entity.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\draw.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\inputsystem.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\log.cpp">
+      <Filter>utilities</Filter>
     </ClCompile>
     <ClCompile Include="utilities\math.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\memory.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
     <ClCompile Include="utilities\notify.cpp">

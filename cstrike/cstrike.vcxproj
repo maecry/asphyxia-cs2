@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -11,30 +11,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{DAC639DD-46A6-B878-4FBE-434FBB1C1FDA}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{510990da-88b5-4d96-ada9-129d76f7825a}</ProjectGuid>
     <RootNamespace>cstrike</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -44,79 +41,81 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)build/$(Configuration)/</OutDir>
-    <IntDir>$(SolutionDir)intermediate/$(ProjectName)/$(Configuration)/</IntDir>
-    <TargetName>cstrike</TargetName>
     <LinkIncremental>false</LinkIncremental>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)intermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <TargetName>cstrike</TargetName>
+    <TargetExt>.dll</TargetExt>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)build/$(Configuration)/</OutDir>
-    <IntDir>$(SolutionDir)intermediate/$(ProjectName)/$(Configuration)/</IntDir>
-    <TargetName>cstrike</TargetName>
     <LinkIncremental>false</LinkIncremental>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)intermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <TargetName>cstrike</TargetName>
+    <TargetExt>.dll</TargetExt>
     <GenerateManifest>false</GenerateManifest>
-  </PropertyGroup>
-  <PropertyGroup Label="Vcpkg">
-    <VcpkgEnabled>false</VcpkgEnabled>
-    <VcpkgManifestInstall>false</VcpkgManifestInstall>
-    <VcpkgAutoLink>false</VcpkgAutoLink>
-  </PropertyGroup>
-  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <VcpkgUseStatic>true</VcpkgUseStatic>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>
-      </SDLCheck>
-      <PreprocessorDefinitions>NOMINMAX;_HAS_EXCEPTIONS=0;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PreprocessorDefinitions>NOMINMAX;_DEBUG;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)dependencies;$(SolutionDir)dependencies\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <ExceptionHandling>false</ExceptionHandling>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>false</SupportJustMyCode>
+      <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;freetype_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)dependencies\freetype\binary;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;freetype_debug.lib;ole32.lib;shell32.lib</AdditionalDependencies>
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
       <EntryPointSymbol>CoreEntryPoint</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>NOMINMAX;NDEBUG;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies;$(SolutionDir)dependencies\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>
-      </SDLCheck>
-      <PreprocessorDefinitions>NOMINMAX;_HAS_EXCEPTIONS=0;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies;$(SolutionDir)dependencies\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)dependencies\freetype\binary;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;freetype.lib;ole32.lib;shell32.lib</AdditionalDependencies>
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
       <EntryPointSymbol>CoreEntryPoint</EntryPointSymbol>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -129,6 +128,7 @@
     <ClInclude Include="..\dependencies\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\dependencies\imgui\imstb_textedit.h" />
     <ClInclude Include="..\dependencies\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\dependencies\imgui_notify.h" />
     <ClInclude Include="..\dependencies\minhook\buffer.h" />
     <ClInclude Include="..\dependencies\minhook\hde\hde32.h" />
     <ClInclude Include="..\dependencies\minhook\hde\hde64.h" />
@@ -137,46 +137,37 @@
     <ClInclude Include="..\dependencies\minhook\hde\table64.h" />
     <ClInclude Include="..\dependencies\minhook\minhook.h" />
     <ClInclude Include="..\dependencies\minhook\trampoline.h" />
-    <ClInclude Include="..\dependencies\nlohmann\json.hpp" />
     <ClInclude Include="..\dependencies\stb_image.h" />
     <ClInclude Include="..\dependencies\stb_sprintf.h" />
     <ClInclude Include="..\dependencies\xorstr.h" />
-    <ClInclude Include="..\extensions\binary.h" />
     <ClInclude Include="..\resources\fa_solid_900.h" />
     <ClInclude Include="..\resources\font_awesome_5.h" />
     <ClInclude Include="..\resources\game_icons.h" />
     <ClInclude Include="..\resources\smallest_pixel.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="core.h" />
+    <ClInclude Include="core\config.h" />
     <ClInclude Include="core\convars.h" />
+    <ClInclude Include="core\hooks.h" />
+    <ClInclude Include="core\interfaces.h" />
+    <ClInclude Include="core\menu.h" />
+    <ClInclude Include="core\schema.h" />
+    <ClInclude Include="core\sdk.h" />
+    <ClInclude Include="core\variables.h" />
+    <ClInclude Include="features.h" />
     <ClInclude Include="features\misc.h" />
     <ClInclude Include="features\misc\movement.h" />
     <ClInclude Include="features\visuals.h" />
     <ClInclude Include="features\visuals\overlay.h" />
-    <ClInclude Include="sdk\datatypes\quaternion.h" />
     <ClInclude Include="sdk\const.h" />
-    <ClInclude Include="sdk\datatypes\viewsetup.h" />
-    <ClInclude Include="sdk\entity_handle.h" />
-    <ClInclude Include="sdk\interfaces\ienginecvar.h" />
-    <ClInclude Include="sdk\datatypes\utlfixedmemory.h" />
-    <ClInclude Include="sdk\datatypes\utllinkedlist.h" />
-    <ClInclude Include="sdk\interfaces\idebugoverlay.h" />
-    <ClInclude Include="sdk\entity.h" />
-    <ClInclude Include="sdk\interfaces\cgameentitysystem.h" />
-    <ClInclude Include="common.h" />
-    <ClInclude Include="core.h" />
-    <ClInclude Include="core\config.h" />
-    <ClInclude Include="core\hooks.h" />
-    <ClInclude Include="core\interfaces.h" />
-    <ClInclude Include="core\menu.h" />
-    <ClInclude Include="core\sdk.h" />
-    <ClInclude Include="core\variables.h" />
-    <ClInclude Include="features.h" />
-    <ClInclude Include="sdk\interfaces\iengineclient.h" />
-    <ClInclude Include="sdk\interfaces\igameresourceservice.h" />
-    <ClInclude Include="sdk\interfaces\iinputsystem.h" />
     <ClInclude Include="sdk\datatypes\color.h" />
     <ClInclude Include="sdk\datatypes\matrix.h" />
     <ClInclude Include="sdk\datatypes\qangle.h" />
+    <ClInclude Include="sdk\datatypes\quaternion.h" />
+    <ClInclude Include="sdk\datatypes\transform.h" />
     <ClInclude Include="sdk\datatypes\usercmd.h" />
+    <ClInclude Include="sdk\datatypes\utlfixedmemory.h" />
+    <ClInclude Include="sdk\datatypes\utllinkedlist.h" />
     <ClInclude Include="sdk\datatypes\utlmap.h" />
     <ClInclude Include="sdk\datatypes\utlmemory.h" />
     <ClInclude Include="sdk\datatypes\utlrbtree.h" />
@@ -184,15 +175,22 @@
     <ClInclude Include="sdk\datatypes\utlthash.h" />
     <ClInclude Include="sdk\datatypes\utlvector.h" />
     <ClInclude Include="sdk\datatypes\vector.h" />
+    <ClInclude Include="sdk\datatypes\viewsetup.h" />
+    <ClInclude Include="sdk\entity.h" />
+    <ClInclude Include="sdk\entity_handle.h" />
     <ClInclude Include="sdk\interfaces\ccsgoinput.h" />
+    <ClInclude Include="sdk\interfaces\cgameentitysystem.h" />
+    <ClInclude Include="sdk\interfaces\idebugoverlay.h" />
+    <ClInclude Include="sdk\interfaces\iengineclient.h" />
+    <ClInclude Include="sdk\interfaces\ienginecvar.h" />
+    <ClInclude Include="sdk\interfaces\igameresourceservice.h" />
     <ClInclude Include="sdk\interfaces\iglobalvars.h" />
+    <ClInclude Include="sdk\interfaces\iinputsystem.h" />
     <ClInclude Include="sdk\interfaces\imemalloc.h" />
     <ClInclude Include="sdk\interfaces\inetworkclientservice.h" />
     <ClInclude Include="sdk\interfaces\ischemasystem.h" />
     <ClInclude Include="sdk\interfaces\iswapchaindx11.h" />
     <ClInclude Include="sdk\interfaces\iviewrender.h" />
-    <ClInclude Include="core\schema.h" />
-    <ClInclude Include="sdk\datatypes\transform.h" />
     <ClInclude Include="utilities\crt.h" />
     <ClInclude Include="utilities\detourhook.h" />
     <ClInclude Include="utilities\draw.h" />
@@ -220,10 +218,12 @@
     <ClCompile Include="..\dependencies\minhook\hook.c" />
     <ClCompile Include="..\dependencies\minhook\trampoline.c" />
     <ClCompile Include="core.cpp" />
+    <ClCompile Include="core\config.cpp" />
     <ClCompile Include="core\convars.cpp" />
     <ClCompile Include="core\hooks.cpp" />
     <ClCompile Include="core\interfaces.cpp" />
     <ClCompile Include="core\menu.cpp" />
+    <ClCompile Include="core\schema.cpp" />
     <ClCompile Include="core\sdk.cpp" />
     <ClCompile Include="features.cpp" />
     <ClCompile Include="features\misc.cpp" />
@@ -233,8 +233,6 @@
     <ClCompile Include="sdk\datatypes\matrix.cpp" />
     <ClCompile Include="sdk\datatypes\qangle.cpp" />
     <ClCompile Include="sdk\datatypes\vector.cpp" />
-    <ClCompile Include="core\config.cpp" />
-    <ClCompile Include="core\schema.cpp" />
     <ClCompile Include="sdk\entity.cpp" />
     <ClCompile Include="utilities\draw.cpp" />
     <ClCompile Include="utilities\inputsystem.cpp" />

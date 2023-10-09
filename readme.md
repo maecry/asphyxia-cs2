@@ -9,6 +9,7 @@
 
 ## About :information_source:
 - Counter-Strike 2 Open Source DLL
+- Come with premake5.lua for .sln generation
 - x64-bit architecture
 
 ## Contact :email:
