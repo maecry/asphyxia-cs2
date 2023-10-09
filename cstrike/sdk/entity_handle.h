@@ -44,12 +44,12 @@ public:
 
 	[[nodiscard]] int GetEntryIndex() const noexcept
 	{
-		return nIndex & ENT_ENTRY_MASK;
+		return static_cast<int>(nIndex & ENT_ENTRY_MASK);
 	}
 
 	[[nodiscard]] int GetSerialNumber() const noexcept
 	{
-		return nIndex >> NUM_SERIAL_NUM_SHIFT_BITS;
+		return static_cast<int>(nIndex >> NUM_SERIAL_NUM_SHIFT_BITS);
 	}
 
 private:
