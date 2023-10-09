@@ -15,6 +15,8 @@
 ## Contact :email:
 - **Discord**: user164asdfzxcq257(852617501140844564)
 
+[![](https://dcbadge.vercel.app/api/server/tABmXQe3mm)](https://discord.gg/tABmXQe3mm)
+
 ## Credits
 - [imgui](https://github.com/ocornut/imgui) - framework
 - [freetype](https://freetype.org/) - font rasterizer
