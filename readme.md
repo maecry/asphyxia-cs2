@@ -25,10 +25,13 @@
 ## Reminder
 - This project is for educational purposes only.
 - This project will receive updates and fixes if any crash/bug is found.
-~~- Probably no features request as this is a base/template, User can add it by themselves.~~
+- ~~Probably no features request as this is a base/template, User can add it by themselves.~~
 - Accepting basic features request. Currently todolist:
+  
   [x] ESP - ~~Box~~, ~~Name~~, Health, Weapon (comes with interactive menu preview)
-  [x] AIMBOT 
+  
+  [x] AIMBOT
+  
   [x] CHAMS
 
 ## License
