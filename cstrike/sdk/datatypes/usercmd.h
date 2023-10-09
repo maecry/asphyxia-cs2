@@ -49,8 +49,7 @@ public:
 class CCmdVector : public CBasePB
 {
 public:
-	Vector_t vecValue; // 0x18
-	float flW; // 0x24
+	Vector4D_t vecValue; // 0x18
 };
 
 static_assert(sizeof(CCmdQAngle) == 0x24);
@@ -64,7 +63,8 @@ public:
 	int nDstTick; // 0x20
 };
 
-class CSubTickCmd : public CBasePB
+// credits: https://www.unknowncheats.me/forum/3872928-post1311.html
+class CCSGOInputHistoryEntryPB : public CBasePB
 {
 public:
 	CCmdQAngle* pViewCmd; // 0x18
@@ -91,11 +91,11 @@ public:
 	MEM_PAD(0x4); // 0x4
 	void* pInputHistory; // 0x8
 
-	CSubTickCmd* GetTickEntry(std::int32_t nTick)
+	CCSGOInputHistoryEntryPB* GetInputHistoryEntry(std::int32_t nTick)
 	{
 		if (nTick < this->nTickCount)
 		{
-			CSubTickCmd** arrTickList = reinterpret_cast<CSubTickCmd**>(reinterpret_cast<std::uintptr_t>(pInputHistory) + 0x8);
+			CCSGOInputHistoryEntryPB** arrTickList = reinterpret_cast<CCSGOInputHistoryEntryPB**>(reinterpret_cast<std::uintptr_t>(pInputHistory) + 0x8);
 			return arrTickList[nTick];
 		}
 
@@ -155,14 +155,14 @@ public:
 	{
 		for (int i = 0; i < this->SubTickContainer.nTickCount; i++)
 		{
-			CSubTickCmd* pTick = this->SubTickContainer.GetTickEntry(i);
-			if (pTick == nullptr)
+			CCSGOInputHistoryEntryPB* pInputEntry = this->SubTickContainer.GetInputHistoryEntry(i);
+			if (pInputEntry == nullptr)
 				continue;
 
-			if (pTick->pViewCmd == nullptr)
+			if (pInputEntry->pViewCmd == nullptr)
 				continue;
 
-			pTick->pViewCmd->angValue = angView;
+			pInputEntry->pViewCmd->angValue = angView;
 		}
 	}
 };

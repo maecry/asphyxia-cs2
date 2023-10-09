@@ -31,17 +31,17 @@ void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CCSPlayerController* pLocalContro
 	BunnyHop(pCmd, pBaseCmd, pLocalPawn);
 
 	// loop through all tick commands
-	for (int i = 0; i < pCmd->SubTickContainer.nTickCount; i++)
+	for (int nTick = 0; nTick < pCmd->SubTickContainer.nTickCount; nTick++)
 	{
-		CSubTickCmd* pTickCmd = pCmd->SubTickContainer.GetTickEntry(i);
-		if (pTickCmd == nullptr)
+		CCSGOInputHistoryEntryPB* pInputEntry = pCmd->SubTickContainer.GetInputHistoryEntry(nTick);
+		if (pInputEntry == nullptr)
 			continue;
 
 		// save view angles for movement correction
-		angCorrectionView = pTickCmd->pViewCmd->angValue;
+		angCorrectionView = pInputEntry->pViewCmd->angValue;
 
 		// movement correction & anti-untrusted
-		ValidateUserCommand(pCmd, pBaseCmd, pTickCmd);
+		ValidateUserCommand(pCmd, pBaseCmd, pInputEntry);
 	}
 }
 
@@ -68,11 +68,13 @@ void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CUserCmdBase* pUserCmd, C_CSPla
 			bShouldFakeJump = true;
 		// check did random jump chance passed
 		else if (MATH::fnRandomInt(0, 100) <= C_GET(int, Vars.nAutoBHopChance))
+		{
 			pCmd->nButtons.nValue &= ~IN_JUMP;
+		}
 	}
 }
 
-void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CUserCmdBase* pUserCmd, CSubTickCmd* pSubTickCmd)
+void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CUserCmdBase* pUserCmd, CCSGOInputHistoryEntryPB* pInputEntry)
 {
 	if (pUserCmd == nullptr)
 		return;
@@ -80,19 +82,19 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CUserCmdBase* pUserC
 	// clamp angle to avoid untrusted angle
 	if (C_GET(bool, Vars.bAntiUntrusted))
 	{
-		if (pSubTickCmd->pViewCmd->angValue.IsValid())
+		if (pInputEntry->pViewCmd->angValue.IsValid())
 		{
-			pSubTickCmd->pViewCmd->angValue.Clamp();
-			pSubTickCmd->pViewCmd->angValue.z = 0.f;
+			pInputEntry->pViewCmd->angValue.Clamp();
+			pInputEntry->pViewCmd->angValue.z = 0.f;
 		}
 		else
 		{
-			pSubTickCmd->pViewCmd->angValue = {};
+			pInputEntry->pViewCmd->angValue = {};
 			L_PRINT(LOG_WARNING) << CS_XOR("view angles have a NaN component, the value is reset");
 		}
 	}
 
-	MovementCorrection(pUserCmd, pSubTickCmd, angCorrectionView);
+	MovementCorrection(pUserCmd, pInputEntry, angCorrectionView);
 
 	// correct movement buttons while player move have different to buttons values
 	// clear all of the move buttons states
@@ -109,10 +111,10 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CUserCmdBase* pUserC
 	else if (pUserCmd->flSideMove < 0.0f)
 		pCmd->nButtons.nValue |= IN_LEFT;
 		
-	if (!pSubTickCmd->pViewCmd->angValue.IsZero())
+	if (!pInputEntry->pViewCmd->angValue.IsZero())
 	{
-		const float flDeltaX = std::remainderf(pSubTickCmd->pViewCmd->angValue.x - angCorrectionView.x, 360.f);
-		const float flDeltaY = std::remainderf(pSubTickCmd->pViewCmd->angValue.y - angCorrectionView.y, 360.f);
+		const float flDeltaX = std::remainderf(pInputEntry->pViewCmd->angValue.x - angCorrectionView.x, 360.f);
+		const float flDeltaY = std::remainderf(pInputEntry->pViewCmd->angValue.y - angCorrectionView.y, 360.f);
 
 		float flPitch = CONVAR::m_pitch->value.fl;
 		float flYaw = CONVAR::m_yaw->value.fl;
@@ -126,7 +128,7 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CUserCmdBase* pUserC
 	}
 }
 
-void F::MISC::MOVEMENT::MovementCorrection(CUserCmdBase* pUserCmd, CSubTickCmd* pSubTickCmd, const QAngle_t& angDesiredViewPoint)
+void F::MISC::MOVEMENT::MovementCorrection(CUserCmdBase* pUserCmd, CCSGOInputHistoryEntryPB* pInputEntry, const QAngle_t& angDesiredViewPoint)
 {
 	if (pUserCmd == nullptr)
 		return;
@@ -142,7 +144,7 @@ void F::MISC::MOVEMENT::MovementCorrection(CUserCmdBase* pUserCmd, CSubTickCmd* 
 	vecUp.NormalizeInPlace();
 
 	Vector_t vecOldForward = {}, vecOldRight = {}, vecOldUp = {};
-	pSubTickCmd->pViewCmd->angValue.ToDirections(&vecOldForward, &vecOldRight, &vecOldUp);
+	pInputEntry->pViewCmd->angValue.ToDirections(&vecOldForward, &vecOldRight, &vecOldUp);
 
 	// we don't attempt on forward/right roll, and on up pitch/yaw
 	vecOldForward.z = vecOldRight.z = vecOldUp.x = vecOldUp.y = 0.0f;
