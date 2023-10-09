@@ -4,6 +4,8 @@
 - [About](#about)
 - [Contact](#contact)
 - [Credits](#credits)
+- [Reminder](#reminder)
+- [License](#license)
 
 ## About :information_source:
 - Counter-Strike 2 Open Source DLL
@@ -18,3 +20,12 @@
 - [minhook](https://github.com/TsudaKageyu/minhook) - hooking library
 - [qo0:csgo](https://github.com/rollraw/qo0-csgo) - where this base is inspired
 - [unknowncheats](https://www.unknowncheats.me/) - for helping building this base
+
+## Reminder
+- This project is for educational purposes only.
+- This project will receive updates and fixes if any crash/bug is found.
+- Probably no features request as this is a base/template, User can add it by themselves.
+
+## License
+
+- This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
