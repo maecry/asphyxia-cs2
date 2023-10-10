@@ -5,14 +5,11 @@
 // used: quaternion
 #include "quaternion.h"
 
-class alignas(16) CTransform
+class CTransform
 {
 public:
-	alignas(16) Vector_t vecPosition;
-	alignas(16) Quaternion_t quatOrientation;
-
-	const Matrix3x4_t& GetMatrix() const
-	{
-		return quatOrientation.ToMatrix(vecPosition);
-	}
+	VectorAligned_t vecPosition;
+	QuaternionAligned_t quatOrientation;
 };
+
+static_assert(alignof(CTransform) == 16);

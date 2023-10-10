@@ -528,6 +528,7 @@ bool OVERLAY::GetEntityBoundingBox(C_CSPlayerPawn* pEntity, ImVec4* pVecOut)
 		return false;
 
 	CTransform nodeToWorldTransform = pGameSceneNode->GetNodeToWorld();
+	const Matrix3x4_t matTransform = nodeToWorldTransform.quatOrientation.ToMatrix(nodeToWorldTransform.vecPosition);
 
 	const Vector_t vecMins = pCollision->GetMins();
 	const Vector_t vecMaxs = pCollision->GetMaxs();
@@ -543,7 +544,7 @@ bool OVERLAY::GetEntityBoundingBox(C_CSPlayerPawn* pEntity, ImVec4* pVecOut)
 			i & 4 ? vecMaxs.z : vecMins.z 
 		};
 		ImVec2 vecScreen;
-		if (!D::WorldToScreen(vecPoint.Transform(nodeToWorldTransform.quatOrientation.ToMatrix(nodeToWorldTransform.vecPosition)), &vecScreen))
+		if (!D::WorldToScreen(vecPoint.Transform(matTransform), &vecScreen))
 			return false;
 
 		pVecOut->x = MATH::Min(pVecOut->x, vecScreen.x);
