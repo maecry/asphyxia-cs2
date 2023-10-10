@@ -79,9 +79,7 @@ OVERLAY::CBarComponent::CBarComponent(const bool bIsMenuItem, const EAlignSide n
 void OVERLAY::CBarComponent::Render(ImDrawList* pDrawList, const ImVec2& vecPosition)
 {
 	BarOverlayVar_t& overlayConfig = C_GET(BarOverlayVar_t, uOverlayVarIndex);
-
 	const ImVec2 vecThicknessOffset = { overlayConfig.flThickness, overlayConfig.flThickness };
-
 	ImVec2 vecMin = vecPosition, vecMax = vecPosition + this->vecSize;
 
 	// background glow
@@ -102,10 +100,13 @@ void OVERLAY::CBarComponent::Render(ImDrawList* pDrawList, const ImVec2& vecPosi
 		vecMax.x -= vecLineSize.x * (1.0f - this->flProgressFactor);
 
 	// bar
-	if (overlayConfig.bGradient)
+	if (overlayConfig.bGradient && !overlayConfig.bUseFactorColor)
 		pDrawList->AddRectFilledMultiColor(vecMin, vecMax, overlayConfig.colPrimary.GetU32(), overlayConfig.colPrimary.GetU32(), overlayConfig.colSecondary.GetU32(), overlayConfig.colSecondary.GetU32());
 	else
-		pDrawList->AddRectFilled(vecMin, vecMax, overlayConfig.colPrimary.GetU32(), 0.f, ImDrawFlags_None);
+	{
+		const ImU32 u32Color = overlayConfig.bUseFactorColor ? Color_t::FromHSB((flProgressFactor * 120.f) / 360.f, 1.0f, 1.0f).GetU32() : overlayConfig.colPrimary.GetU32();
+		pDrawList->AddRectFilled(vecMin, vecMax, u32Color, 0.f, ImDrawFlags_None);
+	}
 
 	// only open menu item if menu is opened and overlay is enabled
 	bIsMenuItem &= (MENU::bMainWindowOpened && overlayConfig.bEnable);
@@ -121,10 +122,12 @@ void OVERLAY::CBarComponent::Render(ImDrawList* pDrawList, const ImVec2& vecPosi
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, -1));
 
+			ImGui::Checkbox(CS_XOR("use factor color##component.bar"), &overlayConfig.bUseFactorColor);
+			if (!overlayConfig.bUseFactorColor)
 			ImGui::Checkbox(CS_XOR("use gradient##component.bar"), &overlayConfig.bGradient);
 
 			ImGui::ColorEdit3(CS_XOR("primary color##component.bar"), &overlayConfig.colPrimary);
-			if (overlayConfig.bGradient)
+			if (overlayConfig.bGradient && !overlayConfig.bUseFactorColor)
 				ImGui::ColorEdit3(CS_XOR("secondary color##component.bar"), &overlayConfig.colSecondary);
 
 			ImGui::ColorEdit4(CS_XOR("outline color##component.bar"), &overlayConfig.colOutline);

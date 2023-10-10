@@ -113,11 +113,12 @@ struct FrameOverlayVar_t
 /// hold config variables for bar component overlay
 struct BarOverlayVar_t
 {
-	constexpr BarOverlayVar_t(const bool bEnable, const bool bGradient = false, const float flThickness = 1.f, const Color_t& colPrimary = Color_t(255, 255, 255), const Color_t& colSecondary = Color_t(255, 255, 255), const Color_t& colBackground = Color_t(), const Color_t& colOutline = Color_t()) :
-		bEnable(bEnable), bGradient(bGradient), flThickness(flThickness), colPrimary(colPrimary), colSecondary(colSecondary), colBackground(colBackground), colOutline(colOutline) { }
+	constexpr BarOverlayVar_t(const bool bEnable, const bool bGradient = false, const bool bUseFactorColor = false, const float flThickness = 1.f, const Color_t& colPrimary = Color_t(255, 255, 255), const Color_t& colSecondary = Color_t(255, 255, 255), const Color_t& colBackground = Color_t(), const Color_t& colOutline = Color_t()) :
+		bEnable(bEnable), bGradient(bGradient), bUseFactorColor(bUseFactorColor), flThickness(flThickness), colPrimary(colPrimary), colSecondary(colSecondary), colBackground(colBackground), colOutline(colOutline) { }
 
 	bool bEnable = false;
 	bool bGradient = false;
+	bool bUseFactorColor = false;
 
 	float flThickness = 1.f;
 
