@@ -101,7 +101,12 @@ void OVERLAY::CBarComponent::Render(ImDrawList* pDrawList, const ImVec2& vecPosi
 
 	// bar
 	if (overlayConfig.bGradient && !overlayConfig.bUseFactorColor)
-		pDrawList->AddRectFilledMultiColor(vecMin, vecMax, overlayConfig.colPrimary.GetU32(), overlayConfig.colPrimary.GetU32(), overlayConfig.colSecondary.GetU32(), overlayConfig.colSecondary.GetU32());
+	{
+		if (this->nSide == SIDE_LEFT || this->nSide == SIDE_RIGHT)
+			pDrawList->AddRectFilledMultiColor(vecMin, vecMax, overlayConfig.colPrimary.GetU32(), overlayConfig.colPrimary.GetU32(), overlayConfig.colSecondary.GetU32(), overlayConfig.colSecondary.GetU32());
+		else
+			pDrawList->AddRectFilledMultiColor(vecMin, vecMax, overlayConfig.colSecondary.GetU32(), overlayConfig.colPrimary.GetU32(), overlayConfig.colPrimary.GetU32(), overlayConfig.colSecondary.GetU32());
+	}
 	else
 	{
 		const ImU32 u32Color = overlayConfig.bUseFactorColor ? Color_t::FromHSB((flProgressFactor * 120.f) / 360.f, 1.0f, 1.0f).GetU32() : overlayConfig.colPrimary.GetU32();
@@ -594,6 +599,12 @@ void OVERLAY::Player(CCSPlayerController* pLocal, CCSPlayerController* pPlayer, 
 		// @note: pPawn->GetMaxHealth() always return 0.f?
 		const float flHealthFactor = pPlayer->GetPawnHealth() / 100.f;
 		context.AddComponent(new CBarComponent(false, SIDE_LEFT, vecBox, flHealthFactor, Vars.overlayHealthBar));
+	}
+
+	if (const auto& armorOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayArmorBar); armorOverlayConfig.bEnable)
+	{
+		const float flArmorFactor = pPlayer->GetPawnArmor() / 100.f;
+		context.AddComponent(new CBarComponent(false, SIDE_BOTTOM, vecBox, flArmorFactor, Vars.overlayArmorBar));
 	}
 
 	// render all the context
