@@ -20,7 +20,7 @@ void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CCSPlayerController* pLocalContro
 	if (!pLocalController->IsPawnAlive())
 		return;
 
-	CUserCmdBase* pBaseCmd = pCmd->pBaseCmd;
+	CBaseUserCmdPB* pBaseCmd = pCmd->pBaseCmd;
 	if (pBaseCmd == nullptr)
 		return;
 
@@ -31,9 +31,9 @@ void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CCSPlayerController* pLocalContro
 	BunnyHop(pCmd, pBaseCmd, pLocalPawn);
 
 	// loop through all tick commands
-	for (int nTick = 0; nTick < pCmd->SubTickContainer.nTickCount; nTick++)
+	for (int nTick = 0; nTick < pCmd->csgoUserCmd.nTickCount; nTick++)
 	{
-		CCSGOInputHistoryEntryPB* pInputEntry = pCmd->SubTickContainer.GetInputHistoryEntry(nTick);
+		CCSGOInputHistoryEntryPB* pInputEntry = pCmd->csgoUserCmd.GetInputHistoryEntry(nTick);
 		if (pInputEntry == nullptr)
 			continue;
 
@@ -45,7 +45,7 @@ void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CCSPlayerController* pLocalContro
 	}
 }
 
-void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CUserCmdBase* pUserCmd, C_CSPlayerPawn* pLocalPawn)
+void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLocalPawn)
 {
 	if (!C_GET(bool, Vars.bAutoBHop) || CONVAR::sv_autobunnyhopping->value.i1)
 		return;
@@ -74,7 +74,7 @@ void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CUserCmdBase* pUserCmd, C_CSPla
 	}
 }
 
-void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CUserCmdBase* pUserCmd, CCSGOInputHistoryEntryPB* pInputEntry)
+void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, CCSGOInputHistoryEntryPB* pInputEntry)
 {
 	if (pUserCmd == nullptr)
 		return;
@@ -128,7 +128,7 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CUserCmdBase* pUserC
 	}
 }
 
-void F::MISC::MOVEMENT::MovementCorrection(CUserCmdBase* pUserCmd, CCSGOInputHistoryEntryPB* pInputEntry, const QAngle_t& angDesiredViewPoint)
+void F::MISC::MOVEMENT::MovementCorrection(CBaseUserCmdPB* pUserCmd, CCSGOInputHistoryEntryPB* pInputEntry, const QAngle_t& angDesiredViewPoint)
 {
 	if (pUserCmd == nullptr)
 		return;

@@ -84,7 +84,7 @@ public:
 	int nTargetEntIndex; // 0x74
 };
 
-class CSubTickContainer
+class CCSGOUserCmdPB
 {
 public:
 	int32_t nTickCount; // 0x0
@@ -103,12 +103,12 @@ public:
 	}
 };
 
-static_assert(sizeof(CSubTickContainer) == 0x10);
+static_assert(sizeof(CCSGOUserCmdPB) == 0x10);
 
-class CUserCmdBase
+class CBaseUserCmdPB : public CBasePB
 {
 public:
-	MEM_PAD(0x40); // 0x0
+	MEM_PAD(0x28); // 0x18
 	CCmdQAngle* pCmdView; // 0x40
 	int nCommandNumber; // 0x48
 	int ntickCount; // 0x4C
@@ -144,8 +144,8 @@ class CUserCmd
 {
 public:
 	MEM_PAD(0x20); // 0x0
-	CSubTickContainer SubTickContainer; // 0x20
-	CUserCmdBase* pBaseCmd; // 0x30
+	CCSGOUserCmdPB csgoUserCmd; // 0x20
+	CBaseUserCmdPB* pBaseCmd; // 0x30
 	StartHistoryIndexTick_t nStartHistoryIndexAttack; // 0x38
 	MEM_PAD(0x8); // 0x44
 	ButtonState_t nButtons; // 0x4C
@@ -153,9 +153,9 @@ public:
 
 	void SetSubTickAngle(const QAngle_t& angView)
 	{
-		for (int i = 0; i < this->SubTickContainer.nTickCount; i++)
+		for (int i = 0; i < this->csgoUserCmd.nTickCount; i++)
 		{
-			CCSGOInputHistoryEntryPB* pInputEntry = this->SubTickContainer.GetInputHistoryEntry(i);
+			CCSGOInputHistoryEntryPB* pInputEntry = this->csgoUserCmd.GetInputHistoryEntry(i);
 			if (pInputEntry == nullptr)
 				continue;
 
