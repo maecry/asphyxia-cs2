@@ -66,7 +66,7 @@ ImVec2 OVERLAY::CBaseDirectionalComponent::GetBasePosition(const ImVec4& box) co
 }
 
 OVERLAY::CBarComponent::CBarComponent(const bool bIsMenuItem, const EAlignSide nAlignSide, const ImVec4& vecBox, const float flProgressFactor, const std::size_t uOverlayVarIndex) :
-	bIsMenuItem(bIsMenuItem), uOverlayVarIndex(uOverlayVarIndex)
+	bIsMenuItem(bIsMenuItem), uOverlayVarIndex(uOverlayVarIndex), flProgressFactor(MATH::Clamp(flProgressFactor, 0.f, 1.f))
 {
 	this->nSide = nAlignSide;
 
@@ -87,7 +87,7 @@ void OVERLAY::CBarComponent::Render(ImDrawList* pDrawList, const ImVec2& vecPosi
 	// background glow
 	pDrawList->AddShadowRect(vecMin, vecMax, overlayConfig.colBackground.GetU32(), 1.f, ImVec2(0, 0));
 	// outline
-	pDrawList->AddRect(vecMin, vecMax, overlayConfig.colOutline.GetU32(), overlayConfig.flRounding, ImDrawFlags_RoundCornersAll, overlayConfig.flThickness);
+	pDrawList->AddRect(vecMin, vecMax, overlayConfig.colOutline.GetU32(), 0.f, ImDrawFlags_None, overlayConfig.flThickness);
 
 	// account outline offset
 	vecMin += vecThicknessOffset;
@@ -102,31 +102,37 @@ void OVERLAY::CBarComponent::Render(ImDrawList* pDrawList, const ImVec2& vecPosi
 		vecMax.x -= vecLineSize.x * (1.0f - this->flProgressFactor);
 
 	// bar
-	pDrawList->AddRectFilled(vecMin, vecMax, overlayConfig.colPrimary.GetU32());
+	if (overlayConfig.bGradient)
+		pDrawList->AddRectFilledMultiColor(vecMin, vecMax, overlayConfig.colPrimary.GetU32(), overlayConfig.colPrimary.GetU32(), overlayConfig.colSecondary.GetU32(), overlayConfig.colSecondary.GetU32());
+	else
+		pDrawList->AddRectFilled(vecMin, vecMax, overlayConfig.colPrimary.GetU32(), 0.f, ImDrawFlags_None);
 
 	// only open menu item if menu is opened and overlay is enabled
 	bIsMenuItem &= (MENU::bMainWindowOpened && overlayConfig.bEnable);
 	if (bIsMenuItem)
 	{
-		this->bIsHovered = ImRect(vecPosition, this->vecSize).Contains(ImGui::GetIO().MousePos);
+		// @note: padding 2.f incase the thickness is too small
+		this->bIsHovered = ImRect(vecPosition - ImVec2(2.f, 2.f), vecPosition + this->vecSize + ImVec2(2.f, 2.f)).Contains(ImGui::GetIO().MousePos);
 		// if component is hovered + right clicked
-		if (this->bIsHovered)
-		{
-			D::AddDrawListShadowRect(pDrawList, vecMin, vecMax, C_GET(ColorPickerVar_t, Vars.colAccent0).colValue);
-			if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-				ImGui::OpenPopup(CS_XOR("context##component.bar"));
-		}
-
+		if (this->bIsHovered && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+			ImGui::OpenPopup(CS_XOR("context##component.bar"));
+		
 		if (ImGui::BeginPopup(CS_XOR("context##component.bar"), ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, -1));
+
+			ImGui::Checkbox(CS_XOR("use gradient##component.bar"), &overlayConfig.bGradient);
+
 			ImGui::ColorEdit3(CS_XOR("primary color##component.bar"), &overlayConfig.colPrimary);
-			ImGui::ColorEdit3(CS_XOR("outline color##component.bar"), &overlayConfig.colOutline);
-			ImGui::ColorEdit3(CS_XOR("background color##component.bar"), &overlayConfig.colBackground);
+			if (overlayConfig.bGradient)
+				ImGui::ColorEdit3(CS_XOR("secondary color##component.bar"), &overlayConfig.colSecondary);
+
+			ImGui::ColorEdit4(CS_XOR("outline color##component.bar"), &overlayConfig.colOutline);
+			ImGui::ColorEdit4(CS_XOR("background color##component.bar"), &overlayConfig.colBackground);
 
 			ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.75f);
-			ImGui::SliderFloat(CS_XOR("thickness##component.bar"), &overlayConfig.flThickness, 1.0f, 10.0f, CS_XOR("%.1f"), ImGuiSliderFlags_AlwaysClamp);
-			ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.75f);
-			ImGui::SliderFloat(CS_XOR("background rounding##component.bar"), &overlayConfig.flRounding, 1.0f, 10.0f, CS_XOR("%.1f"), ImGuiSliderFlags_AlwaysClamp);
+			ImGui::SliderFloat(CS_XOR("thickness##component.bar"), &overlayConfig.flThickness, 1.0f, 10.0f, CS_XOR("%.1f"), ImGuiSliderFlags_NoInput);
+			ImGui::PopStyleVar();
 
 			ImGui::EndPopup();
 		}
@@ -180,23 +186,18 @@ void OVERLAY::CTextComponent::Render(ImDrawList* pDrawList, const ImVec2& vecPos
 		//pDrawList->AddRect(vecPosition, vecPosition + this->vecSize, IM_COL32(this->bIsHovered ? 0 : 255, this->bIsHovered ? 255 : 0, 0, 255));
 
 		// if component is hovered + right clicked
-		if (this->bIsHovered)
-		{
-			D::AddDrawListShadowRect(pDrawList, vecPosition, vecPosition + this->vecSize, C_GET(ColorPickerVar_t, Vars.colAccent0).colValue);
-
-			if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-				ImGui::OpenPopup(CS_XOR("context##component.text"));
-		}
+		if (this->bIsHovered && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+			ImGui::OpenPopup(CS_XOR("context##component.text"));
 
 		if (ImGui::BeginPopup(CS_XOR("context##component.text")))
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, -1));
 
 			ImGui::ColorEdit3(CS_XOR("primary color##component.bar"), &overlayConfig.colPrimary);
-			ImGui::ColorEdit3(CS_XOR("outline color##component.bar"), &overlayConfig.colOutline);
+			ImGui::ColorEdit4(CS_XOR("outline color##component.bar"), &overlayConfig.colOutline);
 
 			ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.75f);
-			ImGui::SliderFloat(CS_XOR("outline thickness##component.bar"), &overlayConfig.flThickness, 1.0f, 10.0f, CS_XOR("%.1f"), ImGuiSliderFlags_AlwaysClamp);
+			ImGui::SliderFloat(CS_XOR("outline thickness##component.bar"), &overlayConfig.flThickness, 1.0f, 10.0f, CS_XOR("%.1f"), ImGuiSliderFlags_NoInput);
 
 			ImGui::PopStyleVar();
 
@@ -583,6 +584,13 @@ void OVERLAY::Player(CCSPlayerController* pLocal, CCSPlayerController* pPlayer, 
 	{
 		const char* szPlayerName = pPlayer->GetPlayerName();
 		context.AddComponent(new CTextComponent(false, SIDE_TOP, DIR_TOP, FONT::pVisual, szPlayerName, Vars.overlayName));
+	}
+
+	if (const auto& healthOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayHealthBar); healthOverlayConfig.bEnable)
+	{
+		// @note: pPawn->GetMaxHealth() always return 0.f?
+		const float flHealthFactor = pPlayer->GetPawnHealth() / 100.f;
+		context.AddComponent(new CBarComponent(false, SIDE_LEFT, vecBox, flHealthFactor, Vars.overlayHealthBar));
 	}
 
 	// render all the context

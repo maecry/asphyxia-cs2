@@ -171,6 +171,12 @@ void MENU::RenderOverlayPreviewWindow()
 		if (const auto& nameOverlayConfig = C_GET(TextOverlayVar_t, Vars.overlayName); nameOverlayConfig.bEnable)
 			context.AddComponent(new CTextComponent(true, SIDE_TOP, DIR_TOP, FONT::pVisual, CS_XOR("asphyxia"), Vars.overlayName));
 
+		if (const auto& healthOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayHealthBar); healthOverlayConfig.bEnable)
+		{
+			const float flFactor = M_SIN(ImGui::GetTime() * 5.f) * 0.55f + 0.45f;
+			context.AddComponent(new CBarComponent(true, SIDE_LEFT, vecBox, flFactor, Vars.overlayHealthBar));
+		}
+
 		// only render context preview if overlay is enabled
 		context.Render(pDrawList, vecBox);
 
@@ -369,6 +375,8 @@ void T::Visuals()
 			{
 				ImGui::Checkbox(CS_XOR("bounding box"), &C_GET(FrameOverlayVar_t, Vars.overlayBox).bEnable);
 				ImGui::Checkbox(CS_XOR("name"), &C_GET(TextOverlayVar_t, Vars.overlayName).bEnable);
+				ImGui::Checkbox(CS_XOR("health bar"), &C_GET(BarOverlayVar_t, Vars.overlayHealthBar).bEnable);
+
 			}
 			ImGui::EndDisabled();
 

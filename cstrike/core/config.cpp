@@ -149,7 +149,6 @@ bool C::Setup(const wchar_t* wszDefaultFileName)
 		UserDataMember_t{ FNV1A::HashConst("bEnable"), FNV1A::HashConst("bool"), &BarOverlayVar_t::bEnable },
 		UserDataMember_t{ FNV1A::HashConst("bGradient"), FNV1A::HashConst("bool"), &BarOverlayVar_t::bGradient },
 		UserDataMember_t{ FNV1A::HashConst("flThickness"), FNV1A::HashConst("float"), &BarOverlayVar_t::flThickness },
-		UserDataMember_t{ FNV1A::HashConst("flRounding"), FNV1A::HashConst("float"), &BarOverlayVar_t::flRounding },
 		UserDataMember_t{ FNV1A::HashConst("colPrimary"), FNV1A::HashConst("Color_t"), &BarOverlayVar_t::colPrimary },
 		UserDataMember_t{ FNV1A::HashConst("colSecondary"), FNV1A::HashConst("Color_t"), &BarOverlayVar_t::colSecondary },
 		UserDataMember_t{ FNV1A::HashConst("colBackground"), FNV1A::HashConst("Color_t"), &BarOverlayVar_t::colBackground },
