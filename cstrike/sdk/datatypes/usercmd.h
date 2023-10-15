@@ -63,7 +63,7 @@ public:
 	int nDstTick; // 0x20
 };
 
-// credits: https://www.unknowncheats.me/forum/3872928-post1311.html
+// credits: @patoke [uc:3872928-post1311]
 class CCSGOInputHistoryEntryPB : public CBasePB
 {
 public:
