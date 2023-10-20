@@ -186,6 +186,7 @@
     <ClInclude Include="sdk\interfaces\igameresourceservice.h" />
     <ClInclude Include="sdk\interfaces\iglobalvars.h" />
     <ClInclude Include="sdk\interfaces\iinputsystem.h" />
+    <ClInclude Include="sdk\interfaces\imaterialsystem.h" />
     <ClInclude Include="sdk\interfaces\imemalloc.h" />
     <ClInclude Include="sdk\interfaces\inetworkclientservice.h" />
     <ClInclude Include="sdk\interfaces\ischemasystem.h" />

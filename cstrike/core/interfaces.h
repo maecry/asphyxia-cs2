@@ -3,14 +3,15 @@
 #include "../common.h"
 
 #pragma region sdk_definitons
-#define GAME_RESOURCE_SERVICE_CLIENT "GameResourceServiceClientV00"
-#define SOURCE2_CLIENT "Source2Client00"
-#define SCHEMA_SYSTEM "SchemaSystem_00"
-#define INPUT_SYSTEM_VERSION "InputSystemVersion00"
-#define SOURCE2_ENGINE_TO_CLIENT "Source2EngineToClient00"
-#define ENGINE_CVAR "VEngineCvar00"
-#define LOCALIZE "Localize_00"
-#define NETWORK_CLIENT_SERVICE "NetworkClientService_00"
+#define GAME_RESOURCE_SERVICE_CLIENT CS_XOR("GameResourceServiceClientV00")
+#define SOURCE2_CLIENT CS_XOR("Source2Client00")
+#define SCHEMA_SYSTEM CS_XOR("SchemaSystem_00")
+#define INPUT_SYSTEM_VERSION CS_XOR("InputSystemVersion00")
+#define SOURCE2_ENGINE_TO_CLIENT CS_XOR("Source2EngineToClient00")
+#define ENGINE_CVAR CS_XOR("VEngineCvar00")
+#define LOCALIZE CS_XOR("Localize_00")
+#define NETWORK_CLIENT_SERVICE CS_XOR("NetworkClientService_00")
+#define MATERIAL_SYSTEM2 CS_XOR("VMaterialSystem2_00")
 
 // @source: master/game/shared/shareddefs.h
 #define TICK_INTERVAL (SDK::GlobalVars->m_flIntervalPerTick)
@@ -32,6 +33,7 @@ class ISource2Client;
 class IEngineClient;
 class IEngineCVar;
 class INetworkClientService;
+class IMaterialSystem2;
 
 // [d3d] struct
 struct ID3D11Device;
@@ -61,4 +63,5 @@ namespace I
 	inline IEngineClient* Engine = nullptr;
 	inline IEngineCVar* Cvar = nullptr;
 	inline INetworkClientService* NetworkClientService = nullptr;
+	inline IMaterialSystem2* MaterialSystem2 = nullptr;
 }

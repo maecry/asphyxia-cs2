@@ -45,7 +45,7 @@ class CRenderGameSystem;
 class IViewRender;
 class CCSGOInput;
 class CViewSetup;
-
+class CMaterialData;
 
 namespace H
 {
@@ -67,6 +67,8 @@ namespace H
 	__int64* CS_FASTCALL LevelInit(void* pClientModeShared, const char* szNewMap);
 	__int64 CS_FASTCALL LevelShutdown(void* pClientModeShared);
 	void CS_FASTCALL OverrideView(void* pClientModeCSNormal, CViewSetup* pSetup);
+	void CS_FASTCALL DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, bool bUnk, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2);
+
 
 	/* @section: managers */
 	inline CBaseHookObject<decltype(&Present)> hkPresent = {};
@@ -81,4 +83,6 @@ namespace H
 	inline CBaseHookObject<decltype(&LevelInit)> hkLevelInit = {};
 	inline CBaseHookObject<decltype(&LevelShutdown)> hkLevelShutdown = {};
 	inline CBaseHookObject<decltype(&OverrideView)> hkOverrideView = {};
+
+	inline CBaseHookObject<decltype(&DrawObject)> hkDrawObject = {};
 }
