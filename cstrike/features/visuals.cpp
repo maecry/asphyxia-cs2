@@ -8,6 +8,8 @@
 #include "visuals/overlay.h"
 #include "visuals/chams.h"
 
+#include "../core/sdk.h"
+
 using namespace F;
 
 void VISUALS::OnFrame(const int nStage)
@@ -34,7 +36,7 @@ void VISUALS::OnFrame(const int nStage)
 
 bool F::VISUALS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
 {
-	if (!CHAMS::bInitialized)
+	if (!CHAMS::bInitialized && SDK::LocalController->IsPawnAlive())
 		CHAMS::Initialize();
 
 	return CHAMS::OnDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
