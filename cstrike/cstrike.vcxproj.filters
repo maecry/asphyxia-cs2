@@ -72,6 +72,9 @@
     <ClInclude Include="..\dependencies\imgui_notify.h">
       <Filter>dependencies</Filter>
     </ClInclude>
+    <ClInclude Include="..\dependencies\json.hpp">
+      <Filter>dependencies</Filter>
+    </ClInclude>
     <ClInclude Include="..\dependencies\minhook\buffer.h">
       <Filter>dependencies\minhook</Filter>
     </ClInclude>
@@ -152,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="features\visuals.h">
       <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="features\visuals\chams.h">
+      <Filter>features\visuals</Filter>
     </ClInclude>
     <ClInclude Include="features\visuals\overlay.h">
       <Filter>features\visuals</Filter>
@@ -360,6 +366,9 @@
     </ClCompile>
     <ClCompile Include="features\visuals.cpp">
       <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="features\visuals\chams.cpp">
+      <Filter>features\visuals</Filter>
     </ClCompile>
     <ClCompile Include="features\visuals\overlay.cpp">
       <Filter>features\visuals</Filter>

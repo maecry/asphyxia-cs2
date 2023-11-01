@@ -6,6 +6,7 @@
 // used: game's sdk
 #include "../sdk/interfaces/iswapchaindx11.h"
 #include "../sdk/interfaces/iviewrender.h"
+#include "../sdk/interfaces/cgameentitysystem.h"
 #include "../sdk/interfaces/ccsgoinput.h"
 #include "../sdk/interfaces/iinputsystem.h"
 #include "../sdk/interfaces/iengineclient.h"
@@ -208,6 +209,10 @@ bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, bool bActive)
 	if (SDK::LocalController == nullptr)
 		return bResult;
 
+	SDK::LocalPawn = I::GameResourceService->pGameEntitySystem->Get<C_CSPlayerPawn>(SDK::LocalController->GetPawnHandle());
+	if (SDK::LocalPawn == nullptr)
+		return bResult;
+
 	F::OnCreateMove(pCmd, SDK::LocalController);
 
 	return bResult;
@@ -259,42 +264,16 @@ void CS_FASTCALL H::OverrideView(void* pClientModeCSNormal, CViewSetup* pSetup)
 	oOverrideView(pClientModeCSNormal, pSetup);
 }
 
-static CMaterial2* TestMaterial()
-{
-	CMaterialData* pData = reinterpret_cast<CMaterialData*>(MEM_STACKALLOC(0x1050));
-	CMaterial2** pMatPrototype;
-	I::MaterialSystem2->FindOrCreateFromResource(&pMatPrototype, CS_XOR("materials/dev/primary_white.vmat"));
-	I::MaterialSystem2->SetCreateDataByMaterial(&pMatPrototype, pData);
-	pData->SetShaderType(CS_XOR("csgo_unlitgeneric.vfx"));
-	pData->SetMaterialFunction(CS_XOR("F_BLEND_MODE"), 1);
-	pData->SetMaterialFunction(CS_XOR("F_TRANSLUCENT"), 1);
-
-	CMaterial2** pCustomMaterial;
-	I::MaterialSystem2->CreateMaterial(&pCustomMaterial, CS_XOR("testMaterial"), pData);
-	return *pCustomMaterial;
-}
-
-void CS_FASTCALL H::DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, bool bUnk, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
+void CS_FASTCALL H::DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
 {
 	const auto oDrawObject = hkDrawObject.GetOriginal();
 
 	if (!I::Engine->IsConnected() || !I::Engine->IsInGame())
-		return oDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, pUnk, pSceneView, pSceneLayer, pUnk, pUnk2);
+		return oDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 
-	if (SDK::LocalController == nullptr)
-		return oDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, pUnk, pSceneView, pSceneLayer, pUnk, pUnk2);
+	if (SDK::LocalController == nullptr || SDK::LocalPawn == nullptr)
+		return oDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 
-	CMaterial2* pMaterial = pMaterialData->pMaterial;
-	if (pMaterial == nullptr)
-		return oDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, pUnk, pSceneView, pSceneLayer, pUnk, pUnk2);
-
-	if (CRT::StringString(pMaterial->GetName(), CS_XOR("weapon")) != 0)
-	{
-		static CMaterial2* pMaterial = TestMaterial();
-		pMaterialData->pMaterial = pMaterial;
-		pMaterialData->colValue = Color_t(255, 0, 255);
-		oDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, pUnk, pSceneView, pSceneLayer, pUnk, pUnk2);
-	}
-	else
-		oDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, pUnk, pSceneView, pSceneLayer, pUnk, pUnk2);
+	if (!F::OnDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2))
+		oDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 }

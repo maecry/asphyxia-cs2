@@ -6,6 +6,7 @@
 
 // used: overlay
 #include "visuals/overlay.h"
+#include "visuals/chams.h"
 
 using namespace F;
 
@@ -29,4 +30,12 @@ void VISUALS::OnFrame(const int nStage)
 
 		D::SwapDrawData();
 	}
+}
+
+bool F::VISUALS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
+{
+	if (!CHAMS::bInitialized)
+		CHAMS::Initialize();
+
+	return CHAMS::OnDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 }

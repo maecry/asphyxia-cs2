@@ -3,6 +3,9 @@
 // used: call virtual function
 #include "../../utilities/memory.h"
 
+// used: color_t
+#include "../datatypes/color.h"
+
 class CMaterial2
 {
 public:
@@ -48,13 +51,7 @@ class CObjectInfo
 // the naming is incorrect but i dont care atm
 class CMaterialData
 {
-	MEM_PAD(0x18); // 0x0
-	CMaterial2* pMaterial; // 0x18
-	MEM_PAD(0x20); // 0x20
-	Color_t colValue; // 0x40
-	MEM_PAD(0x4); // 0x44
-	CObjectInfo* pObjectInfo; // 0x48
-
+public:
 	void SetShaderType(const char* szShaderName)
 	{
 		// @ida: #STR: shader, spritecard.vfx
@@ -81,6 +78,13 @@ class CMaterialData
 		MaterialKeyVar_t functionVar(szFunctionName, true);
 		SetMaterialFunction(this, functionVar, nValue, 0x18);
 	}
+
+	MEM_PAD(0x18); // 0x0
+	CMaterial2* pMaterial; // 0x18
+	MEM_PAD(0x20); // 0x20
+	Color_t colValue; // 0x40
+	MEM_PAD(0x4); // 0x44
+	CObjectInfo* pObjectInfo; // 0x48
 };
 
 class IMaterialSystem2

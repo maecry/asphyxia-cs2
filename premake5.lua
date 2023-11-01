@@ -44,6 +44,7 @@ workspace "asphyxia"
 
 			-- general like: stb_X library, xor_str, etc...
 			"dependencies/*.h",
+			"dependencies/*.hpp",
 
 			-- imgui
 			"dependencies/imgui/**.cpp",
@@ -56,7 +57,7 @@ workspace "asphyxia"
 			"dependencies/minhook/hde/**.c",
 
             -- extension
-            "cstrike/extension/**.h",
+            "extension/**.h",
 
             -- resources [fonts, images, etc...]
 			"resources/*.h"
@@ -76,6 +77,9 @@ workspace "asphyxia"
 			{ ["dependencies/*"] = "dependencies/*" },
 			{ ["dependencies/imgui/*"] = "dependencies/imgui/*" },
 			{ ["dependencies/safetyhook/*"] = "dependencies/safetyhook/*" },
+
+			-- extension
+			{ ["extension/*"] = "extension/*" },
 
 			-- resources [fonts, images, etc...]
 			{ ["resources/*"] = "resources/*.h" }
