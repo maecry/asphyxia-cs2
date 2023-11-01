@@ -107,7 +107,6 @@ workspace "asphyxia"
 		exceptionhandling "off"
 		staticruntime "on"
 		symbols "full"
-		--vectorextensions "AVX2"
 
 		-- configuration specific
 		filter "configurations:Debug"
