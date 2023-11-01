@@ -3,6 +3,8 @@
 
 #include "core.h"
 
+// used: features setup
+#include "features.h"
 // used: string copy
 #include "utilities/crt.h"
 // used: mem
@@ -98,10 +100,10 @@ static bool Setup(HMODULE hModule)
 
 	if (!SDK::Setup())
 	{
-			CS_ASSERT(false); // failed to setup sdk
-			return false;
+		CS_ASSERT(false); // failed to setup sdk
+		return false;
 	}
-L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("sdk initialization completed");
+	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("sdk initialization completed");
 
 	// setup input system and replace game's window messages processor with our
 	if (!IPT::Setup())
@@ -116,8 +118,15 @@ L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY
 	MENU::UpdateStyle(nullptr);
 	while (D::bInitialized == false)
 		::Sleep(200U);
-
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("renderer backend initialization completed");
+
+	// initialize feature-related stuff
+	if (!F::Setup())
+	{
+		CS_ASSERT(false); // failed to setup features
+		return false;
+	}
+	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("features initialization completed");
 
 	if (!SCHEMA::Setup(CS_XOR(L"schema.txt")))
 	{

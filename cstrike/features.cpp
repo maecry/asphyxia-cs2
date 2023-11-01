@@ -21,6 +21,17 @@
 #include "sdk/datatypes/usercmd.h"
 #include "sdk/entity.h"
 
+bool F::Setup()
+{
+	if (!VISUALS::Setup())
+	{
+		L_PRINT(LOG_ERROR) << CS_XOR("failed to setup visuals");
+		return false;
+	}
+
+	return true;
+}
+
 void F::OnPresent()
 {
 	if (!D::bInitialized)

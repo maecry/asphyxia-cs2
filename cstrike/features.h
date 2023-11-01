@@ -8,6 +8,7 @@ class CMaterialData;
 
 namespace F
 {
+	bool Setup();
 	void OnPresent();
 	void OnFrameStageNotify(int nStage);
 	void OnCreateMove(CUserCmd* pCmd, CCSPlayerController* pLocalController);

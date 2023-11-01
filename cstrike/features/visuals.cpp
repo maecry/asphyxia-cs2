@@ -12,6 +12,17 @@
 
 using namespace F;
 
+bool F::VISUALS::Setup()
+{
+	if (!CHAMS::Initialize())
+	{
+		L_PRINT(LOG_ERROR) << CS_XOR("failed to initialize chams");
+		return false;
+	}
+
+	return true;
+}
+
 void VISUALS::OnFrame(const int nStage)
 {
 	if (nStage == FRAME_RENDER_END)
@@ -36,8 +47,5 @@ void VISUALS::OnFrame(const int nStage)
 
 bool F::VISUALS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
 {
-	if (!CHAMS::bInitialized && SDK::LocalController->IsPawnAlive())
-		CHAMS::Initialize();
-
 	return CHAMS::OnDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 }
