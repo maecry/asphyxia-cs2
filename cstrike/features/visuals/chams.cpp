@@ -111,19 +111,18 @@ CMaterial2* F::VISUALS::CHAMS::CreateMaterial(const char* szName, const char* sz
 
 bool F::VISUALS::CHAMS::OverrideMaterial(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
 {
-	const auto oDrawObject = H::hkDrawObject.GetOriginal();
 	const CustomMaterial_t customMaterial = arrMaterials[C_GET(int, Vars.nVisualChamMaterial)];
 
 	if (C_GET(bool, Vars.bVisualChamsIgnoreZ))
 	{
 		pMaterialData->pMaterial = customMaterial.pMaterialInvisible;
 		pMaterialData->colValue = C_GET(Color_t, Vars.colVisualChamsIgnoreZ);
-		oDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
+		H::hkDrawObject.CallOriginal(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 	}
 
 	pMaterialData->pMaterial = customMaterial.pMaterial;
 	pMaterialData->colValue = C_GET(Color_t, Vars.colVisualChams);
-	oDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
+	H::hkDrawObject.CallOriginal(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 
 	return true;
 }

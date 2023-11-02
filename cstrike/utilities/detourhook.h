@@ -153,7 +153,6 @@ class CHookObject<T(CS_FASTCALL*)(Args_t...)> : public CBaseHookObject<void*>
 public:
 	/// @note: reference and const reference arguments must be forwarded as pointers or wrapped with 'std::ref'/'std::cref' calls!
 	/// @returns: call original function return value
-	template <typename Gadget_t>
 	CS_INLINE T CallOriginal(Args_t... argList)
 	{
 		return reinterpret_cast<T(CS_FASTCALL*)(Args_t...)>(this->GetOriginal())(argList...);

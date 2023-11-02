@@ -76,13 +76,13 @@ namespace H
 	inline CBaseHookObject<decltype(&CreateSwapChain)> hkCreateSwapChain = {};
 	inline CBaseHookObject<decltype(&WndProc)> hkWndProc = {};
 
-	inline CBaseHookObject<decltype(&GetMatrixForView)> hkGetMatrixForView = {};
-	inline CBaseHookObject<decltype(&CreateMove)> hkCreateMove = {};
-	inline CBaseHookObject<decltype(&MouseInputEnabled)> hkMouseInputEnabled = {};
-	inline CBaseHookObject<decltype(&FrameStageNotify)> hkFrameStageNotify = {};
-	inline CBaseHookObject<decltype(&LevelInit)> hkLevelInit = {};
-	inline CBaseHookObject<decltype(&LevelShutdown)> hkLevelShutdown = {};
-	inline CBaseHookObject<decltype(&OverrideView)> hkOverrideView = {};
+	inline CHookObject<decltype(&GetMatrixForView)> hkGetMatrixForView = {};
+	inline CHookObject<decltype(&CreateMove)> hkCreateMove = {};
+	inline CHookObject<decltype(&MouseInputEnabled)> hkMouseInputEnabled = {};
+	inline CHookObject<decltype(&FrameStageNotify)> hkFrameStageNotify = {};
+	inline CHookObject<decltype(&LevelInit)> hkLevelInit = {};
+	inline CHookObject<decltype(&LevelShutdown)> hkLevelShutdown = {};
+	inline CHookObject<decltype(&OverrideView)> hkOverrideView = {};
 
-	inline CBaseHookObject<decltype(&DrawObject)> hkDrawObject = {};
+	inline CHookObject<decltype(&DrawObject)> hkDrawObject = {};
 }
