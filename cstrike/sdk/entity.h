@@ -148,6 +148,10 @@ public:
 	SCHEMA_ADD_FIELD(std::uint8_t, GetLifeState, "C_BaseEntity->m_lifeState");
 	SCHEMA_ADD_FIELD(std::int32_t, GetHealth, "C_BaseEntity->m_iMaxHealth");
 	SCHEMA_ADD_FIELD(std::int32_t, GetMaxHealth, "C_BaseEntity->m_iHealth");
+
+	SCHEMA_ADD_FIELD(std::int32_t, GetPawnArmor, "CCSPlayerController->m_iPawnArmor");
+
+
 	SCHEMA_ADD_FIELD(float, GetWaterLevel, "C_BaseEntity->m_flWaterLevel");
 };
 

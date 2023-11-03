@@ -76,6 +76,23 @@ namespace F::VISUALS::OVERLAY
 		std::size_t uOverlayVarIndex = 0ULL;
 	};
 
+	class CArmorBarComponent : public CBaseComponent
+	{
+	public:
+		CArmorBarComponent(const bool bIsMenuItem, const EAlignSide nAlignSide, const ImVec4& vecBox, const float flProgressFactor, const std::size_t uOverlayVarIndex);
+
+		void Render(ImDrawList* pDrawList, const ImVec2& vecPosition) final;
+
+	private:
+		bool bIsMenuItem = false;
+		// bar progress
+		float flProgressFactor = 0.0f;
+		// hovered state for context menu
+		bool bIsHovered = false;
+		// config variables
+		std::size_t uOverlayVarIndex = 0ULL;
+	};
+
 	class CTextComponent : public CBaseDirectionalComponent
 	{
 	public:
