@@ -72,7 +72,7 @@ bool F::VISUALS::CHAMS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx
 
 CMaterial2* F::VISUALS::CHAMS::CreateMaterial(const char* szName, const char* szMaterialVMAT, const char* szShaderType, bool bBlendMode, bool bTranslucent, bool bDisableZBuffering)
 {
-	CMaterialData* pData = static_cast<CMaterialData*>(MEM_STACKALLOC(0x1050));
+	CMaterialData* pData = static_cast<CMaterialData*>(MEM_STACKALLOC(0x200));
 	CMaterial2** pMatPrototype;
 
 	I::MaterialSystem2->FindOrCreateFromResource(&pMatPrototype, szMaterialVMAT);
