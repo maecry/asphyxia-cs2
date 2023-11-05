@@ -206,6 +206,7 @@ public:
 	SCHEMA_ADD_FIELD(float, GetFlashDuration, "C_CSPlayerPawnBase->m_flFlashDuration");
 	SCHEMA_ADD_FIELD(Vector_t, GetLastSmokeOverlayColor, "C_CSPlayerPawnBase->m_vLastSmokeOverlayColor");
 	SCHEMA_ADD_FIELD(int, GetSurvivalTeam, "C_CSPlayerPawnBase->m_nSurvivalTeam"); // danger zone
+	SCHEMA_ADD_FIELD(std::int32_t, GetArmorValue, "C_CSPlayerPawnBase->m_ArmorValue");
 };
 
 class C_CSPlayerPawn : public C_CSPlayerPawnBase

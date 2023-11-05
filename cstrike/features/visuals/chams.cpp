@@ -72,7 +72,7 @@ bool F::VISUALS::CHAMS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx
 
 CMaterial2* F::VISUALS::CHAMS::CreateMaterial(const char* szName, const char* szMaterialVMAT, const char* szShaderType, bool bBlendMode, bool bTranslucent, bool bDisableZBuffering)
 {
-	CMaterialData* pData = reinterpret_cast<CMaterialData*>(MEM_STACKALLOC(0x1050));
+	CMaterialData* pData = reinterpret_cast<CMaterialData*>(static_cast<std::byte*>(MEM_STACKALLOC(0x200)) + 0x50);
 	CMaterial2** pMatPrototype;
 
 	I::MaterialSystem2->FindOrCreateFromResource(&pMatPrototype, szMaterialVMAT);
@@ -100,7 +100,6 @@ bool F::VISUALS::CHAMS::OverrideMaterial(void* pAnimatableSceneObjectDesc, void*
 		pMaterialData->pMaterial = customMaterial.pMaterialInvisible;
 		pMaterialData->colValue = C_GET(Color_t, Vars.colVisualChamsIgnoreZ);
 		H::hkDrawObject.CallOriginal(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
-		return true;
 	}
 
 	pMaterialData->pMaterial = customMaterial.pMaterial;
