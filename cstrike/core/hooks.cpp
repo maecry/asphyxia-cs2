@@ -6,11 +6,13 @@
 // used: game's sdk
 #include "../sdk/interfaces/iswapchaindx11.h"
 #include "../sdk/interfaces/iviewrender.h"
+#include "../sdk/interfaces/cgameentitysystem.h"
 #include "../sdk/interfaces/ccsgoinput.h"
 #include "../sdk/interfaces/iinputsystem.h"
 #include "../sdk/interfaces/iengineclient.h"
 #include "../sdk/interfaces/inetworkclientservice.h"
 #include "../sdk/interfaces/iglobalvars.h"
+#include "../sdk/interfaces/imaterialsystem.h"
 
 // used: viewsetup
 #include "../sdk/datatypes/viewsetup.h"
@@ -115,6 +117,10 @@ bool H::Setup()
 
 	//L_PRINT(LOG_INFO) << CS_XOR("\"OverrideView\" hook has been created");
 
+	if (!hkDrawObject.Create(MEM::FindPattern(SCENESYSTEM_DLL, CS_XOR("48 8B C4 48 89 50 ? 55 41 56")), reinterpret_cast<void*>(&DrawObject)))
+		return false;
+	L_PRINT(LOG_INFO) << CS_XOR("\"DrawObject\" hook has been created");
+
 	return true;
 }
 
@@ -174,9 +180,7 @@ long H::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 ViewMatrix_t* CS_FASTCALL H::GetMatrixForView(CRenderGameSystem* pRenderGameSystem, IViewRender* pViewRender, ViewMatrix_t* pOutWorldToView, ViewMatrix_t* pOutViewToProjection, ViewMatrix_t* pOutWorldToProjection, ViewMatrix_t* pOutWorldToPixels)
 {
-	const auto oGetMatrixForView = hkGetMatrixForView.GetOriginal();
-
-	ViewMatrix_t* matResult = oGetMatrixForView(pRenderGameSystem, pViewRender, pOutWorldToView, pOutViewToProjection, pOutWorldToProjection, pOutWorldToPixels);
+	ViewMatrix_t* matResult = hkGetMatrixForView.CallOriginal(pRenderGameSystem, pViewRender, pOutWorldToView, pOutViewToProjection, pOutWorldToProjection, pOutWorldToPixels);
 
 	// get view matrix
 	SDK::ViewMatrix = *pOutWorldToProjection;
@@ -189,8 +193,7 @@ ViewMatrix_t* CS_FASTCALL H::GetMatrixForView(CRenderGameSystem* pRenderGameSyst
 
 bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, bool bActive)
 {
-	const auto oCreateMove = hkCreateMove.GetOriginal();
-	const bool bResult = oCreateMove(pInput, nSlot, bActive);
+	const bool bResult = hkCreateMove.CallOriginal(pInput, nSlot, bActive);
 
 	if (!I::Engine->IsConnected() || !I::Engine->IsInGame())
 		return bResult;
@@ -203,6 +206,10 @@ bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, bool bActive)
 	if (SDK::LocalController == nullptr)
 		return bResult;
 
+	SDK::LocalPawn = I::GameResourceService->pGameEntitySystem->Get<C_CSPlayerPawn>(SDK::LocalController->GetPawnHandle());
+	if (SDK::LocalPawn == nullptr)
+		return bResult;
+
 	F::OnCreateMove(pCmd, SDK::LocalController);
 
 	return bResult;
@@ -210,46 +217,50 @@ bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, bool bActive)
 
 bool CS_FASTCALL H::MouseInputEnabled(void* pThisptr)
 {
-	const auto oMouseInputEnabled = hkMouseInputEnabled.GetOriginal();
-	return MENU::bMainWindowOpened ? false : oMouseInputEnabled(pThisptr);
+	const auto bResult = hkMouseInputEnabled.CallOriginal(pThisptr);
+	return MENU::bMainWindowOpened ? false : bResult;
 }
 
 void CS_FASTCALL H::FrameStageNotify(void* rcx, int nFrameStage)
 {
-	const auto oFrameStageNotify = hkFrameStageNotify.GetOriginal();
-
 	F::OnFrameStageNotify(nFrameStage);
 
-	return oFrameStageNotify(rcx, nFrameStage);
+	return hkFrameStageNotify.CallOriginal(rcx, nFrameStage);
 }
 
 __int64* CS_FASTCALL H::LevelInit(void* pClientModeShared, const char* szNewMap)
 {
-	const auto oLevelInit = hkLevelInit.GetOriginal();
-
 	// if global variables are not captured during I::Setup or we join a new game, recapture it
 	if (I::GlobalVars == nullptr)
 		I::GlobalVars = *reinterpret_cast<IGlobalVars**>(MEM::ResolveRelativeAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 0D ? ? ? ? 48 89 41")), 0x3, 0x7));
 
-	return oLevelInit(pClientModeShared, szNewMap);
+	return hkLevelInit.CallOriginal(pClientModeShared, szNewMap);
 }
 
 __int64 CS_FASTCALL H::LevelShutdown(void* pClientModeShared)
 {
-	const auto oLevelShutdown = hkLevelShutdown.GetOriginal();
-
 	// reset global variables since it got discarded by the game
 	I::GlobalVars = nullptr;
 
-	return oLevelShutdown(pClientModeShared);
+	return hkLevelShutdown.CallOriginal(pClientModeShared);
 }
 
 void CS_FASTCALL H::OverrideView(void* pClientModeCSNormal, CViewSetup* pSetup)
 {
-	const auto oOverrideView = hkOverrideView.GetOriginal();
-
 	if (!I::Engine->IsConnected() || !I::Engine->IsInGame())
-		return oOverrideView(pClientModeCSNormal, pSetup);
+		return hkOverrideView.CallOriginal(pClientModeCSNormal, pSetup);
 
-	oOverrideView(pClientModeCSNormal, pSetup);
+	hkOverrideView.CallOriginal(pClientModeCSNormal, pSetup);
+}
+
+void CS_FASTCALL H::DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
+{
+	if (!I::Engine->IsConnected() || !I::Engine->IsInGame())
+		return hkDrawObject.CallOriginal(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
+
+	if (SDK::LocalController == nullptr || SDK::LocalPawn == nullptr)
+		return hkDrawObject.CallOriginal(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
+
+	if (!F::OnDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2))
+		hkDrawObject.CallOriginal(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 }

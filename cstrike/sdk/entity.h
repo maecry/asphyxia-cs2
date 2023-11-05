@@ -35,8 +35,8 @@ public:
 
 	// @note: handle index is not entity index
 	SCHEMA_ADD_OFFSET(std::uint32_t, GetIndex, 0x10);
-	SCHEMA_ADD_FIELD(const char*, GetDesignerName, CS_XOR("CEntityIdentity->m_designerName"));
-	SCHEMA_ADD_FIELD(std::uint32_t, GetFlags, CS_XOR("CEntityIdentity->m_flags"));
+	SCHEMA_ADD_FIELD(const char*, GetDesignerName, "CEntityIdentity->m_designerName");
+	SCHEMA_ADD_FIELD(std::uint32_t, GetFlags, "CEntityIdentity->m_flags");
 
 	[[nodiscard]] bool IsValid()
 	{
@@ -78,7 +78,7 @@ public:
 		return CBaseHandle(pIdentity->GetEntryIndex(), pIdentity->GetSerialNumber() - (pIdentity->GetFlags() & 1));
 	}
 
-	SCHEMA_ADD_FIELD(CEntityIdentity*, GetIdentity, CS_XOR("CEntityInstance->m_pEntity"));
+	SCHEMA_ADD_FIELD(CEntityIdentity*, GetIdentity, "CEntityInstance->m_pEntity");
 };
 
 class CCollisionProperty
@@ -86,25 +86,31 @@ class CCollisionProperty
 public:
 	CS_CLASS_NO_INITIALIZER(CCollisionProperty);
 
-	SCHEMA_ADD_FIELD(Vector_t, GetMins, CS_XOR("CCollisionProperty->m_vecMins"));
-	SCHEMA_ADD_FIELD(Vector_t, GetMaxs, CS_XOR("CCollisionProperty->m_vecMaxs"));
+	SCHEMA_ADD_FIELD(Vector_t, GetMins, "CCollisionProperty->m_vecMins");
+	SCHEMA_ADD_FIELD(Vector_t, GetMaxs, "CCollisionProperty->m_vecMaxs");
 };
 
+class CSkeletonInstance;
 class CGameSceneNode
 {
 public:
 	CS_CLASS_NO_INITIALIZER(CGameSceneNode);
 
-	SCHEMA_ADD_FIELD(CTransform, GetNodeToWorld, CS_XOR("CGameSceneNode->m_nodeToWorld"));
-	SCHEMA_ADD_FIELD(CEntityInstance*, GetOwner, CS_XOR("CGameSceneNode->m_pOwner"));
+	SCHEMA_ADD_FIELD(CTransform, GetNodeToWorld, "CGameSceneNode->m_nodeToWorld");
+	SCHEMA_ADD_FIELD(CEntityInstance*, GetOwner, "CGameSceneNode->m_pOwner");
 
-	SCHEMA_ADD_FIELD(Vector_t, GetAbsOrigin, CS_XOR("CGameSceneNode->m_vecAbsOrigin"));
-	SCHEMA_ADD_FIELD(Vector_t, GetRenderOrigin, CS_XOR("CGameSceneNode->m_vRenderOrigin"));
+	SCHEMA_ADD_FIELD(Vector_t, GetAbsOrigin, "CGameSceneNode->m_vecAbsOrigin");
+	SCHEMA_ADD_FIELD(Vector_t, GetRenderOrigin, "CGameSceneNode->m_vRenderOrigin");
 
-	SCHEMA_ADD_FIELD(QAngle_t, GetAngleRotation, CS_XOR("CGameSceneNode->m_angRotation"));
-	SCHEMA_ADD_FIELD(QAngle_t, GetAbsAngleRotation, CS_XOR("CGameSceneNode->m_angAbsRotation"));
+	SCHEMA_ADD_FIELD(QAngle_t, GetAngleRotation, "CGameSceneNode->m_angRotation");
+	SCHEMA_ADD_FIELD(QAngle_t, GetAbsAngleRotation, "CGameSceneNode->m_angAbsRotation");
 
-	SCHEMA_ADD_FIELD(bool, IsDormant, CS_XOR("CGameSceneNode->m_bDormant"));
+	SCHEMA_ADD_FIELD(bool, IsDormant, "CGameSceneNode->m_bDormant");
+
+	CSkeletonInstance* GetSkeletonInstance()
+	{
+		return MEM::CallVFunc<CSkeletonInstance*, 8U>(this);
+	}
 };
 
 class C_BaseEntity : public CEntityInstance
@@ -135,20 +141,20 @@ public:
 	// get entity origin on scene
 	[[nodiscard]] const Vector_t& GetSceneOrigin();
 
-	SCHEMA_ADD_FIELD(CGameSceneNode*, GetGameSceneNode, CS_XOR("C_BaseEntity->m_pGameSceneNode"));
-	SCHEMA_ADD_FIELD(CCollisionProperty*, GetCollision, CS_XOR("C_BaseEntity->m_pCollision"));
-	SCHEMA_ADD_FIELD(std::uint8_t, GetTeam, CS_XOR("C_BaseEntity->m_iTeamNum"));
-	SCHEMA_ADD_FIELD(CBaseHandle, GetOwnerHandle, CS_XOR("C_BaseEntity->m_hOwnerEntity"));
-	SCHEMA_ADD_FIELD(Vector_t, GetBaseVelocity, CS_XOR("C_BaseEntity->m_vecBaseVelocity"));
-	SCHEMA_ADD_FIELD(Vector_t, GetAbsVelocity, CS_XOR("C_BaseEntity->m_vecAbsVelocity"));
-	SCHEMA_ADD_FIELD(bool, IsTakingDamage, CS_XOR("C_BaseEntity->m_bTakesDamage"));
-	SCHEMA_ADD_FIELD(std::uint32_t, GetFlags, CS_XOR("C_BaseEntity->m_fFlags"));
-	SCHEMA_ADD_FIELD(std::int32_t, GetEflags, CS_XOR("C_BaseEntity->m_iEFlags"));
-	SCHEMA_ADD_FIELD(std::int32_t, GetMoveType, CS_XOR("C_BaseEntity->m_MoveType"));
-	SCHEMA_ADD_FIELD(std::uint8_t, GetLifeState, CS_XOR("C_BaseEntity->m_lifeState"));
-	SCHEMA_ADD_FIELD(std::int32_t, GetHealth, CS_XOR("C_BaseEntity->m_iMaxHealth"));
-	SCHEMA_ADD_FIELD(std::int32_t, GetMaxHealth, CS_XOR("C_BaseEntity->m_iHealth"));
-	SCHEMA_ADD_FIELD(float, GetWaterLevel, CS_XOR("C_BaseEntity->m_flWaterLevel"));
+	SCHEMA_ADD_FIELD(CGameSceneNode*, GetGameSceneNode, "C_BaseEntity->m_pGameSceneNode");
+	SCHEMA_ADD_FIELD(CCollisionProperty*, GetCollision, "C_BaseEntity->m_pCollision");
+	SCHEMA_ADD_FIELD(std::uint8_t, GetTeam, "C_BaseEntity->m_iTeamNum");
+	SCHEMA_ADD_FIELD(CBaseHandle, GetOwnerHandle, "C_BaseEntity->m_hOwnerEntity");
+	SCHEMA_ADD_FIELD(Vector_t, GetBaseVelocity, "C_BaseEntity->m_vecBaseVelocity");
+	SCHEMA_ADD_FIELD(Vector_t, GetAbsVelocity, "C_BaseEntity->m_vecAbsVelocity");
+	SCHEMA_ADD_FIELD(bool, IsTakingDamage, "C_BaseEntity->m_bTakesDamage");
+	SCHEMA_ADD_FIELD(std::uint32_t, GetFlags, "C_BaseEntity->m_fFlags");
+	SCHEMA_ADD_FIELD(std::int32_t, GetEflags, "C_BaseEntity->m_iEFlags");
+	SCHEMA_ADD_FIELD(std::int32_t, GetMoveType, "C_BaseEntity->m_MoveType");
+	SCHEMA_ADD_FIELD(std::uint8_t, GetLifeState, "C_BaseEntity->m_lifeState");
+	SCHEMA_ADD_FIELD(std::int32_t, GetHealth, "C_BaseEntity->m_iHealth");
+	SCHEMA_ADD_FIELD(std::int32_t, GetMaxHealth, "C_BaseEntity->m_iMaxHealth");
+	SCHEMA_ADD_FIELD(float, GetWaterLevel, "C_BaseEntity->m_flWaterLevel");
 };
 
 class CGlowProperty;
@@ -158,14 +164,14 @@ class C_BaseModelEntity : public C_BaseEntity
 public:
 	CS_CLASS_NO_INITIALIZER(C_BaseModelEntity);
 
-	SCHEMA_ADD_FIELD(CCollisionProperty, GetCollisionInstance, CS_XOR("C_BaseModelEntity->m_Collision"));
-	SCHEMA_ADD_FIELD(CGlowProperty, GetGlowProperty, CS_XOR("C_BaseModelEntity->m_Glow"));
-	SCHEMA_ADD_FIELD(Vector_t, GetViewOffset, CS_XOR("C_BaseModelEntity->m_vecViewOffset"));
-	SCHEMA_ADD_FIELD(GameTime_t, GetCreationTime, CS_XOR("C_BaseModelEntity->m_flCreateTime"));
-	SCHEMA_ADD_FIELD(GameTick_t, GetCreationTick, CS_XOR("C_BaseModelEntity->m_nCreationTick"));
-	SCHEMA_ADD_FIELD(CBaseHandle, GetMoveParent, CS_XOR("C_BaseModelEntity->m_hOldMoveParent"));
-	SCHEMA_ADD_FIELD(std::float_t, GetAnimTime, CS_XOR("C_BaseModelEntity->m_flAnimTime"));
-	SCHEMA_ADD_FIELD(std::float_t, GetSimulationTime, CS_XOR("C_BaseModelEntity->m_flSimulationTime"));
+	SCHEMA_ADD_FIELD(CCollisionProperty, GetCollisionInstance, "C_BaseModelEntity->m_Collision");
+	SCHEMA_ADD_FIELD(CGlowProperty, GetGlowProperty, "C_BaseModelEntity->m_Glow");
+	SCHEMA_ADD_FIELD(Vector_t, GetViewOffset, "C_BaseModelEntity->m_vecViewOffset");
+	SCHEMA_ADD_FIELD(GameTime_t, GetCreationTime, "C_BaseModelEntity->m_flCreateTime");
+	SCHEMA_ADD_FIELD(GameTick_t, GetCreationTick, "C_BaseModelEntity->m_nCreationTick");
+	SCHEMA_ADD_FIELD(CBaseHandle, GetMoveParent, "C_BaseModelEntity->m_hOldMoveParent");
+	SCHEMA_ADD_FIELD(std::float_t, GetAnimTime, "C_BaseModelEntity->m_flAnimTime");
+	SCHEMA_ADD_FIELD(std::float_t, GetSimulationTime, "C_BaseModelEntity->m_flSimulationTime");
 };
 
 class CPlayer_WeaponServices;
@@ -177,10 +183,10 @@ class C_BasePlayerPawn : public C_BaseModelEntity
 public:
 	CS_CLASS_NO_INITIALIZER(C_BasePlayerPawn);
 
-	SCHEMA_ADD_FIELD(CBaseHandle, GetControllerHandle, CS_XOR("C_BasePlayerPawn->m_hController"));
-	SCHEMA_ADD_FIELD(CPlayer_WeaponServices*, GetWeaponServices, CS_XOR("C_BasePlayerPawn->m_pWeaponServices"));
-	SCHEMA_ADD_FIELD(CPlayer_ItemServices*, GetItemServices, CS_XOR("C_BasePlayerPawn->m_pItemServices"));
-	SCHEMA_ADD_FIELD(CPlayer_CameraServices*, GetCameraServices, CS_XOR("C_BasePlayerPawn->m_pCameraServices"));
+	SCHEMA_ADD_FIELD(CBaseHandle, GetControllerHandle, "C_BasePlayerPawn->m_hController");
+	SCHEMA_ADD_FIELD(CPlayer_WeaponServices*, GetWeaponServices, "C_BasePlayerPawn->m_pWeaponServices");
+	SCHEMA_ADD_FIELD(CPlayer_ItemServices*, GetItemServices, "C_BasePlayerPawn->m_pItemServices");
+	SCHEMA_ADD_FIELD(CPlayer_CameraServices*, GetCameraServices, "C_BasePlayerPawn->m_pCameraServices");
 };
 
 class CCSPlayer_ViewModelServices;
@@ -190,16 +196,16 @@ class C_CSPlayerPawnBase : public C_BasePlayerPawn
 public:
 	CS_CLASS_NO_INITIALIZER(C_CSPlayerPawnBase);
 
-	SCHEMA_ADD_FIELD(CCSPlayer_ViewModelServices*, GetViewModelServices, CS_XOR("C_CSPlayerPawnBase->m_pViewModelServices"));
-	SCHEMA_ADD_FIELD(bool, IsScoped, CS_XOR("C_CSPlayerPawnBase->m_bIsScoped"));
-	SCHEMA_ADD_FIELD(bool, IsDefusing, CS_XOR("C_CSPlayerPawnBase->m_bIsDefusing"));
-	SCHEMA_ADD_FIELD(bool, IsGrabbingHostage, CS_XOR("C_CSPlayerPawnBase->m_bIsGrabbingHostage"));
-	SCHEMA_ADD_FIELD(float, GetLowerBodyYawTarget, CS_XOR("C_CSPlayerPawnBase->m_flLowerBodyYawTarget"));
-	SCHEMA_ADD_FIELD(int, GetShotsFired, CS_XOR("C_CSPlayerPawnBase->m_iShotsFired"));
-	SCHEMA_ADD_FIELD(float, GetFlashMaxAlpha, CS_XOR("C_CSPlayerPawnBase->m_flFlashMaxAlpha"));
-	SCHEMA_ADD_FIELD(float, GetFlashDuration, CS_XOR("C_CSPlayerPawnBase->m_flFlashDuration"));
-	SCHEMA_ADD_FIELD(Vector_t, GetLastSmokeOverlayColor, CS_XOR("C_CSPlayerPawnBase->m_vLastSmokeOverlayColor"));
-	SCHEMA_ADD_FIELD(int, GetSurvivalTeam, CS_XOR("C_CSPlayerPawnBase->m_nSurvivalTeam")); // danger zone
+	SCHEMA_ADD_FIELD(CCSPlayer_ViewModelServices*, GetViewModelServices, "C_CSPlayerPawnBase->m_pViewModelServices");
+	SCHEMA_ADD_FIELD(bool, IsScoped, "C_CSPlayerPawnBase->m_bIsScoped");
+	SCHEMA_ADD_FIELD(bool, IsDefusing, "C_CSPlayerPawnBase->m_bIsDefusing");
+	SCHEMA_ADD_FIELD(bool, IsGrabbingHostage, "C_CSPlayerPawnBase->m_bIsGrabbingHostage");
+	SCHEMA_ADD_FIELD(float, GetLowerBodyYawTarget, "C_CSPlayerPawnBase->m_flLowerBodyYawTarget");
+	SCHEMA_ADD_FIELD(int, GetShotsFired, "C_CSPlayerPawnBase->m_iShotsFired");
+	SCHEMA_ADD_FIELD(float, GetFlashMaxAlpha, "C_CSPlayerPawnBase->m_flFlashMaxAlpha");
+	SCHEMA_ADD_FIELD(float, GetFlashDuration, "C_CSPlayerPawnBase->m_flFlashDuration");
+	SCHEMA_ADD_FIELD(Vector_t, GetLastSmokeOverlayColor, "C_CSPlayerPawnBase->m_vLastSmokeOverlayColor");
+	SCHEMA_ADD_FIELD(int, GetSurvivalTeam, "C_CSPlayerPawnBase->m_nSurvivalTeam"); // danger zone
 };
 
 class C_CSPlayerPawn : public C_CSPlayerPawnBase
@@ -216,9 +222,9 @@ class CBasePlayerController : public C_BaseModelEntity
 public:
 	CS_CLASS_NO_INITIALIZER(CBasePlayerController);
 
-	SCHEMA_ADD_FIELD(std::uint64_t, GetSteamId, CS_XOR("CBasePlayerController->m_steamID"));
-	SCHEMA_ADD_FIELD(CBaseHandle, GetPawnHandle, CS_XOR("CBasePlayerController->m_hPawn"));
-	SCHEMA_ADD_FIELD(bool, IsLocalPlayerController, CS_XOR("CBasePlayerController->m_bIsLocalPlayerController"));
+	SCHEMA_ADD_FIELD(std::uint64_t, GetSteamId, "CBasePlayerController->m_steamID");
+	SCHEMA_ADD_FIELD(CBaseHandle, GetPawnHandle, "CBasePlayerController->m_hPawn");
+	SCHEMA_ADD_FIELD(bool, IsLocalPlayerController, "CBasePlayerController->m_bIsLocalPlayerController");
 };
 
 class CCSPlayerController : public CBasePlayerController
@@ -231,12 +237,18 @@ public:
 	// @note: always get origin from pawn not controller
 	[[nodiscard]] const Vector_t& GetPawnOrigin();
 
-	SCHEMA_ADD_FIELD(std::uint32_t, GetPing, CS_XOR("CCSPlayerController->m_iPing"));
-	SCHEMA_ADD_FIELD(const char*, GetPlayerName, CS_XOR("CCSPlayerController->m_sSanitizedPlayerName"));
-	SCHEMA_ADD_FIELD(std::int32_t, GetPawnHealth, CS_XOR("CCSPlayerController->m_iPawnHealth"));
-	SCHEMA_ADD_FIELD(std::int32_t, GetPawnArmor, CS_XOR("CCSPlayerController->m_iPawnArmor"));
-	SCHEMA_ADD_FIELD(bool, IsPawnHasDefuser, CS_XOR("CCSPlayerController->m_bPawnHasDefuser"));
-	SCHEMA_ADD_FIELD(bool, IsPawnHasHelmet, CS_XOR("CCSPlayerController->m_bPawnHasHelmet"));
-	SCHEMA_ADD_FIELD(bool, IsPawnAlive, CS_XOR("CCSPlayerController->m_bPawnIsAlive"));
-	SCHEMA_ADD_FIELD(CBaseHandle, GetPlayerPawnHandle, CS_XOR("CCSPlayerController->m_hPlayerPawn"));
+	SCHEMA_ADD_FIELD(std::uint32_t, GetPing, "CCSPlayerController->m_iPing");
+	SCHEMA_ADD_FIELD(const char*, GetPlayerName, "CCSPlayerController->m_sSanitizedPlayerName");
+	SCHEMA_ADD_FIELD(std::int32_t, GetPawnHealth, "CCSPlayerController->m_iPawnHealth");
+	SCHEMA_ADD_FIELD(std::int32_t, GetPawnArmor, "CCSPlayerController->m_iPawnArmor");
+	SCHEMA_ADD_FIELD(bool, IsPawnHasDefuser, "CCSPlayerController->m_bPawnHasDefuser");
+	SCHEMA_ADD_FIELD(bool, IsPawnHasHelmet, "CCSPlayerController->m_bPawnHasHelmet");
+	SCHEMA_ADD_FIELD(bool, IsPawnAlive, "CCSPlayerController->m_bPawnIsAlive");
+	SCHEMA_ADD_FIELD(CBaseHandle, GetPlayerPawnHandle, "CCSPlayerController->m_hPlayerPawn");
+};
+
+class CSkeletonInstance : public CGameSceneNode
+{
+public:
+
 };

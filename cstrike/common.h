@@ -21,6 +21,10 @@
 #define LOCALIZE_DLL CS_XOR(L"localize.dll")
 #define DBGHELP_DLL CS_XOR(L"dbghelp.dll")
 #define GAMEOVERLAYRENDERER_DLL CS_XOR(L"GameOverlayRenderer64.dll")
+#define PARTICLES_DLL CS_XOR(L"particles.dll")
+#define SCENESYSTEM_DLL CS_XOR(L"scenesystem.dll")
+#define MATERIAL_SYSTEM2_DLL CS_XOR(L"materialsystem2.dll")
+#define MATCHMAKING_DLL CS_XOR(L"matchmaking.dll")
 
  /*
   * define to specify default string encryption

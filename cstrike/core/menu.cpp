@@ -85,7 +85,7 @@ void MENU::RenderMainWindow()
 			bRequireClamp = true;
 			vecWindowPos.x = 0.0f;
 		}
-		else if (pMainWindow->Size.x + pMainWindow->Pos.x >  vecScreenSize.x)
+		else if (pMainWindow->Size.x + pMainWindow->Pos.x > vecScreenSize.x)
 		{
 			bRequireClamp = true;
 			vecWindowPos.x = vecScreenSize.x - pMainWindow->Size.x;
@@ -226,7 +226,6 @@ void MENU::RenderWatermark()
 		static ImVec2 vecNameSize = ImGui::CalcTextSize(CS_XOR("asphyxia | " __DATE__ " " __TIME__));
 		ImGui::SameLine(ImGui::GetContentRegionMax().x - vecNameSize.x - style.FramePadding.x);
 		ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), CS_XOR("asphyxia | " __DATE__ " " __TIME__));
-
 	}
 	ImGui::EndMainMenuBar();
 	ImGui::PopFont();
@@ -359,7 +358,8 @@ void T::Visuals()
 
 	ImGui::Columns(2, CS_XOR("##visuals_collumns"), false);
 	{
-		ImGui::BeginChild(CS_XOR("visuals.overlay"), ImVec2{}, true, ImGuiWindowFlags_MenuBar);
+		static float flOverlayChildSize = 0.f;
+		ImGui::BeginChild(CS_XOR("visuals.overlay"), ImVec2(0.f, flOverlayChildSize), true, ImGuiWindowFlags_MenuBar);
 		{
 			if (ImGui::BeginMenuBar())
 			{
@@ -369,7 +369,7 @@ void T::Visuals()
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
 
-			ImGui::Checkbox(CS_XOR("enable"), &C_GET(bool, Vars.bVisualOverlay));
+			ImGui::Checkbox(CS_XOR("enable##overlay"), &C_GET(bool, Vars.bVisualOverlay));
 
 			ImGui::BeginDisabled(!C_GET(bool, Vars.bVisualOverlay));
 			{
@@ -379,6 +379,30 @@ void T::Visuals()
 				ImGui::Checkbox(CS_XOR("armor bar"), &C_GET(BarOverlayVar_t, Vars.overlayArmorBar).bEnable);
 			}
 			ImGui::EndDisabled();
+
+			ImGui::PopStyleVar();
+
+			flOverlayChildSize = ImGui::GetCursorPosY() + style.ItemSpacing.y;
+		}
+		ImGui::EndChild();
+
+		ImGui::BeginChild(CS_XOR("visuals.chams"), ImVec2{}, true, ImGuiWindowFlags_MenuBar);
+		{
+			if (ImGui::BeginMenuBar())
+			{
+				ImGui::TextUnformatted("chams");
+				ImGui::EndMenuBar();
+			}
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
+
+			ImGui::Checkbox(CS_XOR("enable##chams"), &C_GET(bool, Vars.bVisualChams));
+			ImGui::Combo(CS_XOR("materials"), &C_GET(int, Vars.nVisualChamMaterial), CS_XOR("white\0wireframe\0\0"));
+			ImGui::Checkbox(CS_XOR("enable invisible chams##chams"), &C_GET(bool, Vars.bVisualChamsIgnoreZ));
+
+			ImGui::ColorEdit4(CS_XOR("visible color"), &C_GET(Color_t, Vars.colVisualChams));
+			if (C_GET(bool, Vars.bVisualChamsIgnoreZ))
+				ImGui::ColorEdit4(CS_XOR("invisible color"), &C_GET(Color_t, Vars.colVisualChamsIgnoreZ));
 
 			ImGui::PopStyleVar();
 		}
@@ -634,9 +658,8 @@ void MENU::ParticleContext_t::AddParticle(const ImVec2& vecScreenSize)
 	// @note: random speed value
 	static constexpr float flSpeed = 100.f;
 	this->vecParticles.emplace_back(
-		ImVec2(MATH::fnRandomFloat(0.f, vecScreenSize.x), MATH::fnRandomFloat(0.f, vecScreenSize.y)),
-		ImVec2(MATH::fnRandomFloat(-flSpeed, flSpeed), MATH::fnRandomFloat(-flSpeed, flSpeed))
-	);
+	ImVec2(MATH::fnRandomFloat(0.f, vecScreenSize.x), MATH::fnRandomFloat(0.f, vecScreenSize.y)),
+	ImVec2(MATH::fnRandomFloat(-flSpeed, flSpeed), MATH::fnRandomFloat(-flSpeed, flSpeed)));
 }
 
 void MENU::ParticleContext_t::DrawParticle(ImDrawList* pDrawList, ParticleData_t& particle, const Color_t& colPrimary)

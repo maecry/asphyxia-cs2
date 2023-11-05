@@ -44,19 +44,20 @@ workspace "asphyxia"
 
 			-- general like: stb_X library, xor_str, etc...
 			"dependencies/*.h",
+			"dependencies/*.hpp",
 
 			-- imgui
 			"dependencies/imgui/**.cpp",
 			"dependencies/imgui/**.h",
 
-			-- safetyhook
+			-- minhook
 			"dependencies/minhook/**.h",
 			"dependencies/minhook/**.c",
 			"dependencies/minhook/hde/**.h",
 			"dependencies/minhook/hde/**.c",
 
             -- extension
-            "cstrike/extension/**.h",
+            "extension/**.h",
 
             -- resources [fonts, images, etc...]
 			"resources/*.h"
@@ -76,6 +77,9 @@ workspace "asphyxia"
 			{ ["dependencies/*"] = "dependencies/*" },
 			{ ["dependencies/imgui/*"] = "dependencies/imgui/*" },
 			{ ["dependencies/safetyhook/*"] = "dependencies/safetyhook/*" },
+
+			-- extension
+			{ ["extension/*"] = "extension/*" },
 
 			-- resources [fonts, images, etc...]
 			{ ["resources/*"] = "resources/*.h" }
@@ -101,9 +105,8 @@ workspace "asphyxia"
 		editandcontinue "off"
 		entrypoint "CoreEntryPoint"
 		exceptionhandling "off"
-		staticruntime "off"
+		staticruntime "on"
 		symbols "full"
-		vectorextensions "AVX2"
 
 		-- configuration specific
 		filter "configurations:Debug"
@@ -112,11 +115,12 @@ workspace "asphyxia"
 			justmycode "off"
 			rtti "on"
             links { "freetype_debug.lib" }
+			--sanitize { "Address" } --@test
 
 		filter "configurations:Release"
 			defines { "NDEBUG" }
-            links { "freetype.lib" }
 			flags { "LinkTimeOptimization" } -- @test: NoRuntimeChecks
 			optimize "speed"
 			rtti "off"
-			-- @test: "/Zc:threadSafeInit-" to disable thread-safe local static initialization ('__Init_thread_header'/'__Init_thread_footer' calls)
+            links { "freetype.lib" }
+			--buildoptions { "/Zc:threadSafeInit-" }-- @test: "/Zc:threadSafeInit-" to disable thread-safe local static initialization ('__Init_thread_header'/'__Init_thread_footer' calls)

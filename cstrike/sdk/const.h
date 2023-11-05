@@ -156,3 +156,11 @@ enum : int
 	WL_WAIST,
 	WL_EYES
 };
+
+enum ETeamID : int
+{
+	TEAM_UNK,
+	TEAM_SPECTATOR,
+	TEAM_TT,
+	TEAM_CT
+};

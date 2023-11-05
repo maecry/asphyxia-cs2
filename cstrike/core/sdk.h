@@ -17,6 +17,7 @@
 #pragma endregion
 
 class CCSPlayerController;
+class C_CSPlayerPawn;
 class CUserCmd;
 
 namespace SDK
@@ -27,6 +28,7 @@ namespace SDK
 	inline ViewMatrix_t ViewMatrix = ViewMatrix_t();
 	inline Vector_t CameraPosition = Vector_t();
 	inline CCSPlayerController* LocalController = nullptr;
+	inline C_CSPlayerPawn* LocalPawn = nullptr;
 	inline CUserCmd* Cmd = nullptr;
 
 	inline void(CS_CDECL* fnConColorMsg)(const Color_t&, const char*, ...) = nullptr;

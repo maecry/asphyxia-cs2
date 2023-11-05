@@ -21,6 +21,17 @@
 #include "sdk/datatypes/usercmd.h"
 #include "sdk/entity.h"
 
+bool F::Setup()
+{
+	if (!VISUALS::Setup())
+	{
+		L_PRINT(LOG_ERROR) << CS_XOR("failed to setup visuals");
+		return false;
+	}
+
+	return true;
+}
+
 void F::OnPresent()
 {
 	if (!D::bInitialized)
@@ -54,4 +65,9 @@ void F::OnCreateMove(CUserCmd* pCmd, CCSPlayerController* pLocalController)
 		return;
 
 	F::MISC::OnMove(pCmd, pLocalController, pLocalPawn);
+}
+
+bool F::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
+{
+	return VISUALS::OnDrawObject(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 }

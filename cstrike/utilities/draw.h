@@ -141,10 +141,10 @@ namespace ImGui
 
 	/* @section: wrappers */
 	bool ColorEdit3(const char* szLabel, Color_t* pColor, ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_DisplayHex);
-	bool ColorEdit4(const char* szLabel, Color_t* pColor, ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_DisplayHex);
+	bool ColorEdit4(const char* szLabel, Color_t* pColor, ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_DisplayHex | ImGuiColorEditFlags_AlphaBar);
 
 	bool ColorEdit3(const char* szLabel, ColorPickerVar_t* pColor, ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_DisplayHex);
-	bool ColorEdit4(const char* szLabel, ColorPickerVar_t* pColorVar, ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_DisplayHex);
+	bool ColorEdit4(const char* szLabel, ColorPickerVar_t* pColorVar, ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_DisplayHex | ImGuiColorEditFlags_AlphaBar);
 }
 
 /*

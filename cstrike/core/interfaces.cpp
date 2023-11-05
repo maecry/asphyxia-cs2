@@ -127,6 +127,13 @@ bool I::Setup()
 	Client = Capture<ISource2Client>(pClientRegister, SOURCE2_CLIENT);
 	bSuccess &= (Client != nullptr);
 
+	const auto pMaterialSystem2Register = GetRegisterList(MATERIAL_SYSTEM2_DLL);
+	if (pMaterialSystem2Register == nullptr)
+		return false;
+
+	MaterialSystem2 = Capture<IMaterialSystem2>(pMaterialSystem2Register, MATERIAL_SYSTEM2);
+	bSuccess &= (MaterialSystem2 != nullptr);
+
 #pragma endregion
 
 	// @ida:  #STR: "r_gpu_mem_stats", "-threads", "CTSListBase: Misaligned list\n", "CTSQueue: Misaligned queue\n", "Display GPU memory usage.", "-r_max_device_threads"
