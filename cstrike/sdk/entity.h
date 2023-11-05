@@ -90,6 +90,7 @@ public:
 	SCHEMA_ADD_FIELD(Vector_t, GetMaxs, "CCollisionProperty->m_vecMaxs");
 };
 
+class CSkeletonInstance;
 class CGameSceneNode
 {
 public:
@@ -105,6 +106,11 @@ public:
 	SCHEMA_ADD_FIELD(QAngle_t, GetAbsAngleRotation, "CGameSceneNode->m_angAbsRotation");
 
 	SCHEMA_ADD_FIELD(bool, IsDormant, "CGameSceneNode->m_bDormant");
+
+	CSkeletonInstance* GetSkeletonInstance()
+	{
+		return MEM::CallVFunc<CSkeletonInstance*, 8U>(this);
+	}
 };
 
 class C_BaseEntity : public CEntityInstance
@@ -146,8 +152,8 @@ public:
 	SCHEMA_ADD_FIELD(std::int32_t, GetEflags, "C_BaseEntity->m_iEFlags");
 	SCHEMA_ADD_FIELD(std::int32_t, GetMoveType, "C_BaseEntity->m_MoveType");
 	SCHEMA_ADD_FIELD(std::uint8_t, GetLifeState, "C_BaseEntity->m_lifeState");
-	SCHEMA_ADD_FIELD(std::int32_t, GetHealth, "C_BaseEntity->m_iMaxHealth");
-	SCHEMA_ADD_FIELD(std::int32_t, GetMaxHealth, "C_BaseEntity->m_iHealth");
+	SCHEMA_ADD_FIELD(std::int32_t, GetHealth, "C_BaseEntity->m_iHealth");
+	SCHEMA_ADD_FIELD(std::int32_t, GetMaxHealth, "C_BaseEntity->m_iMaxHealth");
 	SCHEMA_ADD_FIELD(float, GetWaterLevel, "C_BaseEntity->m_flWaterLevel");
 };
 
@@ -239,4 +245,10 @@ public:
 	SCHEMA_ADD_FIELD(bool, IsPawnHasHelmet, "CCSPlayerController->m_bPawnHasHelmet");
 	SCHEMA_ADD_FIELD(bool, IsPawnAlive, "CCSPlayerController->m_bPawnIsAlive");
 	SCHEMA_ADD_FIELD(CBaseHandle, GetPlayerPawnHandle, "CCSPlayerController->m_hPlayerPawn");
+};
+
+class CSkeletonInstance : public CGameSceneNode
+{
+public:
+
 };
