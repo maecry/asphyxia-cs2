@@ -159,7 +159,8 @@ enum : int
 
 enum ETeamID : int
 {
-	TEAM_SPECTATOR = 0,
+	TEAM_UNK,
+	TEAM_SPECTATOR,
 	TEAM_TT,
 	TEAM_CT
 };
