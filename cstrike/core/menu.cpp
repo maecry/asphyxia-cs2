@@ -177,6 +177,12 @@ void MENU::RenderOverlayPreviewWindow()
 			context.AddComponent(new CBarComponent(true, SIDE_LEFT, vecBox, flFactor, Vars.overlayHealthBar));
 		}
 
+		if (const auto& armorOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayArmorBar); armorOverlayConfig.bEnable)
+		{
+			const float flArmorFactor = M_SIN(ImGui::GetTime() * 5.f) * 0.55f + 0.45f;
+			context.AddComponent(new CBarComponent(false, SIDE_BOTTOM, vecBox, flArmorFactor, Vars.overlayArmorBar));
+		}
+
 		// only render context preview if overlay is enabled
 		context.Render(pDrawList, vecBox);
 
