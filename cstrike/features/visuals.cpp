@@ -36,6 +36,7 @@ void VISUALS::OnFrame(const int nStage)
 		 * this means that we should always reset draw data from previous frame and re-store it again
 		 */
 		D::ResetDrawData();
+
 		if (CCSPlayerController* pLocal = CCSPlayerController::GetLocalPlayerController(); pLocal != nullptr)
 		{
 			OVERLAY::OnFrameStageNotify(pLocal);
