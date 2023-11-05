@@ -3,6 +3,8 @@
 // used: game's interfaces
 #include "../../core/interfaces.h"
 #include "../../sdk/interfaces/imaterialsystem.h"
+#include "../../sdk/interfaces/igameresourceservice.h"
+#include "../../sdk/interfaces/cgameentitysystem.h"
 #include "../../core/sdk.h"
 #include "../../sdk/entity.h"
 
@@ -56,36 +58,16 @@ bool F::VISUALS::CHAMS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx
 	if (!C_GET(bool, Vars.bVisualChams))
 		return false;
 
-	// state showing when we've drawn custom model and don't need to draw original
-	// @note: you can also use it to not draw model at all
-	bool bDrawnModel = false;
+	const int nTeamId = SDK::LocalPawn->GetTeam();
+	if (nTeamId == TEAM_UNK)
+		return false;
 
-	switch (pMaterialData->pObjectInfo->nId)
-	{
-	case 113: // ct model
-		// no teammate chams
-		if (SDK::LocalPawn->GetTeam() == TEAM_CT)
-			break;
+	const int nObjectIdNeeded = nTeamId == TEAM_CT ? 104 : 113;
 
-		bDrawnModel = OverrideMaterial(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
+	if (pMaterialData->pObjectInfo->nId != nObjectIdNeeded)
+		return false;
 
-		break;
-	case 104: // t model
-		// no teammate chams
-		if (SDK::LocalPawn->GetTeam() == TEAM_TT)
-			break;
-
-		bDrawnModel = OverrideMaterial(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
-
-		break;
-	// case 38: arms model
-	//	break;
-	default:
-		bDrawnModel = false;
-		break;
-	}
-
-	return bDrawnModel;
+	return OverrideMaterial(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 }
 
 CMaterial2* F::VISUALS::CHAMS::CreateMaterial(const char* szName, const char* szMaterialVMAT, const char* szShaderType, bool bBlendMode, bool bTranslucent, bool bDisableZBuffering)
@@ -118,6 +100,7 @@ bool F::VISUALS::CHAMS::OverrideMaterial(void* pAnimatableSceneObjectDesc, void*
 		pMaterialData->pMaterial = customMaterial.pMaterialInvisible;
 		pMaterialData->colValue = C_GET(Color_t, Vars.colVisualChamsIgnoreZ);
 		H::hkDrawObject.CallOriginal(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
+		return true;
 	}
 
 	pMaterialData->pMaterial = customMaterial.pMaterial;
