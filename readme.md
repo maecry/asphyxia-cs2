@@ -1,4 +1,4 @@
-# ASPHYXIA: CS2
+﻿# ASPHYXIA: CS2
 
 ## Table of Contents :scroll:
 - [About](#about)
@@ -8,9 +8,8 @@
 - [License](#license)
 
 ## About :information_source:
-- Counter-Strike 2 Open Source DLL
-- Come with premake5.lua for .sln generation
-- x64-bit architecture
+- Asphyxia is a base that was intended to be a starting point. It is not a cheat itself, but rather a framework for building your own cheat.
+- C++ version: 20
 
 ## Contact :email:
 - **Discord**: user164asdfzxcq257(852617501140844564)
@@ -25,17 +24,15 @@
 - [unknowncheats](https://www.unknowncheats.me/) - for helping building this base
 
 ## Reminder
-- This project is for educational purposes only.
-- This project will receive updates and fixes if any crash/bug is found.
-- ~~Probably no features request as this is a base/template, User can add it by themselves.~~
-- Accepting basic features request. Currently todolist:
+- this project is for educational purposes only.
+- it will now be more focus on the 'base' rather than the 'cheat' itself.
+
+  [✓] ESP - basic esp feature like: name, hp, armor... (comes with interactive menu preview, not draggable)
   
-  [x] ESP - ~~Box~~, ~~Name~~, Health, Weapon (comes with interactive menu preview)
+  [✓] CHAMS - basic chams system
   
-  [x] AIMBOT
-  
-  [x] CHAMS
+  [x] AIMBOT - none...
 
 ## License
 
-- This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the�[LICENSE](LICENSE) file for details.
+- This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](LICENSE) file for details.
