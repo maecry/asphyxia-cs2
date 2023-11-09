@@ -137,24 +137,3 @@ private:
 	// original function
 	void* pOriginalFn = nullptr;
 };
-
-template <typename T>
-class CHookObject
-{ };
-
-// @todo: move directly to hooks.h/hooks.cpp
-/*
- * detour hooking method implementation
- * @todo: desc
- */
-template <typename T, typename... Args_t>
-class CHookObject<T(CS_FASTCALL*)(Args_t...)> : public CBaseHookObject<void*>
-{
-public:
-	/// @note: reference and const reference arguments must be forwarded as pointers or wrapped with 'std::ref'/'std::cref' calls!
-	/// @returns: call original function return value
-	CS_INLINE T CallOriginal(Args_t... argList)
-	{
-		return reinterpret_cast<T(CS_FASTCALL*)(Args_t...)>(this->GetOriginal())(argList...);
-	}
-};
