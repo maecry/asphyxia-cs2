@@ -35,8 +35,8 @@ namespace VTABLE
 		enum
 		{
 			CREATEMOVE = 5U,
-			MOUSEINPUTENABLED = 11U,
-			FRAMESTAGENOTIFY = 31U,
+			MOUSEINPUTENABLED = 12U,
+			FRAMESTAGENOTIFY = 32U,
 		};
 	}
 }
@@ -45,7 +45,7 @@ class CRenderGameSystem;
 class IViewRender;
 class CCSGOInput;
 class CViewSetup;
-class CMaterialData;
+class CMeshData;
 
 namespace H
 {
@@ -67,7 +67,7 @@ namespace H
 	__int64* CS_FASTCALL LevelInit(void* pClientModeShared, const char* szNewMap);
 	__int64 CS_FASTCALL LevelShutdown(void* pClientModeShared);
 	void CS_FASTCALL OverrideView(void* pClientModeCSNormal, CViewSetup* pSetup);
-	void CS_FASTCALL DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2);
+	void CS_FASTCALL DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2);
 
 
 	/* @section: managers */
@@ -76,13 +76,13 @@ namespace H
 	inline CBaseHookObject<decltype(&CreateSwapChain)> hkCreateSwapChain = {};
 	inline CBaseHookObject<decltype(&WndProc)> hkWndProc = {};
 
-	inline CHookObject<decltype(&GetMatrixForView)> hkGetMatrixForView = {};
-	inline CHookObject<decltype(&CreateMove)> hkCreateMove = {};
-	inline CHookObject<decltype(&MouseInputEnabled)> hkMouseInputEnabled = {};
-	inline CHookObject<decltype(&FrameStageNotify)> hkFrameStageNotify = {};
-	inline CHookObject<decltype(&LevelInit)> hkLevelInit = {};
-	inline CHookObject<decltype(&LevelShutdown)> hkLevelShutdown = {};
-	inline CHookObject<decltype(&OverrideView)> hkOverrideView = {};
+	inline CBaseHookObject<decltype(&GetMatrixForView)> hkGetMatrixForView = {};
+	inline CBaseHookObject<decltype(&CreateMove)> hkCreateMove = {};
+	inline CBaseHookObject<decltype(&MouseInputEnabled)> hkMouseInputEnabled = {};
+	inline CBaseHookObject<decltype(&FrameStageNotify)> hkFrameStageNotify = {};
+	inline CBaseHookObject<decltype(&LevelInit)> hkLevelInit = {};
+	inline CBaseHookObject<decltype(&LevelShutdown)> hkLevelShutdown = {};
+	inline CBaseHookObject<decltype(&OverrideView)> hkOverrideView = {};
 
-	inline CHookObject<decltype(&DrawObject)> hkDrawObject = {};
+	inline CBaseHookObject<decltype(&DrawObject)> hkDrawObject = {};
 }
