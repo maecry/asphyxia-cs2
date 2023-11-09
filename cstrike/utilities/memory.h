@@ -84,8 +84,9 @@ namespace MEM
 	{
 		return (*static_cast<T* const*>(thisptr))[nIndex];
 	}
-	// call virtual function of specified class at given index
-	// @note: references should be wrapped with std::ref call!
+	/// call virtual function of specified class at given index
+	/// @note: reference and const reference arguments must be forwarded as pointers or wrapped with 'std::ref'/'std::cref' calls!
+	/// @returns: result of virtual function call
 	template <typename T, std::size_t nIndex, class CBaseClass, typename... Args_t>
 	static CS_INLINE T CallVFunc(CBaseClass* thisptr, Args_t... argList)
 	{
@@ -93,7 +94,7 @@ namespace MEM
 		return (*reinterpret_cast<VirtualFn_t* const*>(reinterpret_cast<std::uintptr_t>(thisptr)))[nIndex](thisptr, argList...);
 	}
 	/* @section: search */
-	/// ida style pattern byte comparison in a specific module
+	/// ida style pattern byte comparison in a specific mo	dule
 	/// @param[in] wszModuleName module name where to search for pattern
 	/// @param[in] szPattern ida style pattern, e.g. "55 8B 40 ? 30", wildcard can be either '?' or "??", bytes always presented by two numbers in a row [00 .. FF], whitespaces can be omitted (wildcards in this case should be two-character)
 	/// @returns: pointer to address of the first found occurrence with equal byte sequence on success, null otherwise
