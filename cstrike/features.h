@@ -4,7 +4,7 @@
 
 class CUserCmd;
 class CCSPlayerController;
-class CMaterialData;
+class CMeshData;
 
 namespace F
 {
@@ -12,5 +12,5 @@ namespace F
 	void OnPresent();
 	void OnFrameStageNotify(int nStage);
 	void OnCreateMove(CUserCmd* pCmd, CCSPlayerController* pLocalController);
-	bool OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2);
+	bool OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2);
 }

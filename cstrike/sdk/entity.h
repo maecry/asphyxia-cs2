@@ -127,7 +127,7 @@ public:
 	// same with this
 	[[nodiscard]] bool IsWeapon()
 	{
-		return MEM::CallVFunc<bool, 149U>(this);
+		return MEM::CallVFunc<bool, 150U>(this);
 	}
 
 	// same with this

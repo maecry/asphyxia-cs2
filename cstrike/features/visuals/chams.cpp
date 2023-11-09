@@ -17,7 +17,7 @@
 struct CustomMaterial_t
 {
 	CMaterial2* pMaterial = nullptr;
-	CMaterial2* pMaterialInvisible = nullptr;
+	//CMaterial2* pMaterialInvisible = nullptr;
 
 	//bool bIsOwner = false;
 };
@@ -32,25 +32,25 @@ bool F::VISUALS::CHAMS::Initialize()
 
 	arrMaterials[VISUAL_MATERIAL_PRIMARY_WHITE] = CustomMaterial_t{
 		.pMaterial = CreateMaterial(CS_XOR("primary_white"), CS_XOR("materials/dev/primary_white.vmat"), CS_XOR("csgo_unlitgeneric.vfx"), true, true, false),
-		.pMaterialInvisible = CreateMaterial(CS_XOR("primary_white"), CS_XOR("materials/dev/primary_white.vmat"), CS_XOR("csgo_unlitgeneric.vfx"), true, true, true)
+		//.pMaterialInvisible = CreateMaterial(CS_XOR("primary_white_invisible"), CS_XOR("materials/dev/primary_white.vmat"), CS_XOR("csgo_unlitgeneric.vfx"), true, true, true)
 	};
 
 	arrMaterials[VISUAL_MATERIAL_WIREFRAME] = CustomMaterial_t{
 		.pMaterial = CreateMaterial(CS_XOR("wireframe"), CS_XOR("materials/dev/debug_wireframe.vmat"), CS_XOR("csgo_unlitgeneric.vfx"), true, true, false),
-		.pMaterialInvisible = CreateMaterial(CS_XOR("wireframe"), CS_XOR("materials/dev/debug_wireframe.vmat"), CS_XOR("csgo_unlitgeneric.vfx"), true, true, true)
+		//.pMaterialInvisible = CreateMaterial(CS_XOR("wireframe_invisible"), CS_XOR("materials/dev/debug_wireframe.vmat"), CS_XOR("csgo_unlitgeneric.vfx"), true, true, true)
 	};
 
 	bInitialized = true;
-	for (auto& [pMaterial, pMaterialInvisible] : arrMaterials)
+	for (auto& [pMaterial] : arrMaterials)
 	{
-		if (pMaterial == nullptr || pMaterialInvisible == nullptr)
+		if (pMaterial == nullptr)
 			bInitialized = false;
 	}
 
 	return bInitialized;
 }
 
-bool F::VISUALS::CHAMS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
+bool F::VISUALS::CHAMS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
 {
 	if (!bInitialized)
 		return false;
@@ -58,28 +58,52 @@ bool F::VISUALS::CHAMS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx
 	if (!C_GET(bool, Vars.bVisualChams))
 		return false;
 
-	const int nTeamId = SDK::LocalPawn->GetTeam();
-	if (nTeamId == TEAM_UNK)
+	if (arrMeshDraw == nullptr)
 		return false;
 
-	const int nObjectIdNeeded = nTeamId == TEAM_CT ? 104 : 113;
-
-	if (pMaterialData->pObjectInfo->nId != nObjectIdNeeded)
+	if (arrMeshDraw->pSceneAnimatableObject == nullptr)
 		return false;
 
-	return OverrideMaterial(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
+	CBaseHandle hOwner = arrMeshDraw->pSceneAnimatableObject->hOwner;
+
+	auto pEntity = I::GameResourceService->pGameEntitySystem->Get<C_BaseEntity>(hOwner);
+	if (pEntity == nullptr)
+		return false;
+
+	SchemaClassInfoData_t* pClassInfo;
+	pEntity->GetSchemaClassInfo(&pClassInfo);
+	if (pClassInfo == nullptr)
+		return false;
+
+	if (pEntity->IsViewModel() || pEntity->IsWeapon() || CRT::StringCompare(pClassInfo->szNname, CS_XOR("C_CSPlayerPawn")) != 0)
+		return false;
+
+	auto pPawn = I::GameResourceService->pGameEntitySystem->Get<C_CSPlayerPawn>(hOwner);
+	if (pPawn == nullptr)
+		return false;
+
+	if (!pPawn->IsOtherEnemy(SDK::LocalPawn))
+		return false;
+
+	// alive state
+	if (pPawn->GetHealth() == 0)
+		return false;
+
+	return OverrideMaterial(pAnimatableSceneObjectDesc, pDx11, arrMeshDraw, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 }
 
 CMaterial2* F::VISUALS::CHAMS::CreateMaterial(const char* szName, const char* szMaterialVMAT, const char* szShaderType, bool bBlendMode, bool bTranslucent, bool bDisableZBuffering)
 {
-	CMaterialData* pData = reinterpret_cast<CMaterialData*>(static_cast<std::byte*>(MEM_STACKALLOC(0x200)) + 0x50);
+	CMeshData* pData = reinterpret_cast<CMeshData*>(static_cast<std::byte*>(MEM_STACKALLOC(0x200)) + 0x50);
 	CMaterial2** pMatPrototype;
 
 	I::MaterialSystem2->FindOrCreateFromResource(&pMatPrototype, szMaterialVMAT);
 	if (pMatPrototype == nullptr)
 		return nullptr;
 
-	I::MaterialSystem2->SetCreateDataByMaterial(&pMatPrototype, pData);
+	// idk why SetCreateDataByMaterial failed on release build
+#ifdef _DEBUG
+	I::MaterialSystem2->SetCreateDataByMaterial(pData, &pMatPrototype);
 	pData->SetShaderType(szShaderType);
 
 	pData->SetMaterialFunction(CS_XOR("F_DISABLE_Z_BUFFERING"), bDisableZBuffering ? 1 : 0);
@@ -89,22 +113,18 @@ CMaterial2* F::VISUALS::CHAMS::CreateMaterial(const char* szName, const char* sz
 	CMaterial2** pMaterial;
 	I::MaterialSystem2->CreateMaterial(&pMaterial, szName, pData);
 	return *pMaterial;
+#endif
+	return *pMatPrototype;
 }
 
-bool F::VISUALS::CHAMS::OverrideMaterial(void* pAnimatableSceneObjectDesc, void* pDx11, CMaterialData* pMaterialData, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
+bool F::VISUALS::CHAMS::OverrideMaterial(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
 {
+	const auto oDrawObject = H::hkDrawObject.GetOriginal();
 	const CustomMaterial_t customMaterial = arrMaterials[C_GET(int, Vars.nVisualChamMaterial)];
 
-	if (C_GET(bool, Vars.bVisualChamsIgnoreZ))
-	{
-		pMaterialData->pMaterial = customMaterial.pMaterialInvisible;
-		pMaterialData->colValue = C_GET(Color_t, Vars.colVisualChamsIgnoreZ);
-		H::hkDrawObject.CallOriginal(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
-	}
-
-	pMaterialData->pMaterial = customMaterial.pMaterial;
-	pMaterialData->colValue = C_GET(Color_t, Vars.colVisualChams);
-	H::hkDrawObject.CallOriginal(pAnimatableSceneObjectDesc, pDx11, pMaterialData, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
+	arrMeshDraw->pMaterial = customMaterial.pMaterial;
+	arrMeshDraw->colValue = C_GET(Color_t, Vars.colVisualChams);
+	oDrawObject(pAnimatableSceneObjectDesc, pDx11, arrMeshDraw, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
 
 	return true;
 }
