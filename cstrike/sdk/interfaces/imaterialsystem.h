@@ -5,6 +5,11 @@
 
 // used: color_t
 #include "../datatypes/color.h"
+// used: stronghandle
+#include "../datatypes/stronghandle.h"
+// used: keyvalue3
+#include "../datatypes/keyvalue3.h"
+
 // used: cbasehandle
 #include "../entity_handle.h"
 
@@ -70,7 +75,7 @@ public:
 		CS_ASSERT(SetMaterialShaderType != nullptr);
 #endif
 
-		MaterialKeyVar_t shaderVar(CS_XOR("shader"), 0x162C1777);
+		MaterialKeyVar_t shaderVar(0x162C1777, CS_XOR("shader"));
 		SetMaterialShaderType(this, shaderVar, szShaderName, 0x18);
 	}
 

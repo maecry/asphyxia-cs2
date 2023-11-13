@@ -12,6 +12,8 @@
 #define LOCALIZE CS_XOR("Localize_00")
 #define NETWORK_CLIENT_SERVICE CS_XOR("NetworkClientService_00")
 #define MATERIAL_SYSTEM2 CS_XOR("VMaterialSystem2_00")
+#define RESOURCE_SYSTEM CS_XOR("ResourceSystem013")
+#define RESOURCE_HANDLE_UTILS CS_XOR("ResourceHandleUtils001")
 
 // @source: master/game/shared/shareddefs.h
 #define TICK_INTERVAL (SDK::GlobalVars->m_flIntervalPerTick)
@@ -34,6 +36,8 @@ class IEngineClient;
 class IEngineCVar;
 class INetworkClientService;
 class IMaterialSystem2;
+class IResourceSystem;
+class CResourceHandleUtils;
 
 // [d3d] struct
 struct ID3D11Device;
@@ -64,4 +68,6 @@ namespace I
 	inline IEngineCVar* Cvar = nullptr;
 	inline INetworkClientService* NetworkClientService = nullptr;
 	inline IMaterialSystem2* MaterialSystem2 = nullptr;
+	inline IResourceSystem* ResourceSystem = nullptr;
+	inline CResourceHandleUtils* ResourceHandleUtils = nullptr;
 }

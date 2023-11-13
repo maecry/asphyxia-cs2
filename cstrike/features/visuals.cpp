@@ -23,6 +23,11 @@ bool F::VISUALS::Setup()
 	return true;
 }
 
+void F::VISUALS::OnDestroy()
+{
+	CHAMS::Destroy();
+}
+
 void VISUALS::OnFrame(const int nStage)
 {
 	if (nStage == FRAME_RENDER_END)

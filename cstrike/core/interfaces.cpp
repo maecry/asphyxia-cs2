@@ -11,6 +11,7 @@
 
 // used: iswapchaindx11
 #include "../sdk/interfaces/iswapchaindx11.h"
+#include "../sdk/interfaces/iresourcesystem.h"
 
 #pragma region interfaces_get
 
@@ -133,6 +134,19 @@ bool I::Setup()
 
 	MaterialSystem2 = Capture<IMaterialSystem2>(pMaterialSystem2Register, MATERIAL_SYSTEM2);
 	bSuccess &= (MaterialSystem2 != nullptr);
+
+	const auto pResourceSystemRegisterList = GetRegisterList(RESOURCESYSTEM_DLL);
+	if (pResourceSystemRegisterList == nullptr)
+		return false;
+
+	ResourceSystem = Capture<IResourceSystem>(pResourceSystemRegisterList, RESOURCE_SYSTEM);
+	bSuccess &= (ResourceSystem != nullptr);
+
+	if (ResourceSystem != nullptr)
+	{
+		ResourceHandleUtils = reinterpret_cast<CResourceHandleUtils*>(ResourceSystem->QueryInterface(RESOURCE_HANDLE_UTILS));
+		bSuccess &= (ResourceHandleUtils != nullptr);
+	}
 
 #pragma endregion
 

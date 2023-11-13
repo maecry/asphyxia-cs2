@@ -161,9 +161,11 @@
     <ClInclude Include="features\visuals\overlay.h" />
     <ClInclude Include="sdk\const.h" />
     <ClInclude Include="sdk\datatypes\color.h" />
+    <ClInclude Include="sdk\datatypes\keyvalue3.h" />
     <ClInclude Include="sdk\datatypes\matrix.h" />
     <ClInclude Include="sdk\datatypes\qangle.h" />
     <ClInclude Include="sdk\datatypes\quaternion.h" />
+    <ClInclude Include="sdk\datatypes\stronghandle.h" />
     <ClInclude Include="sdk\datatypes\transform.h" />
     <ClInclude Include="sdk\datatypes\usercmd.h" />
     <ClInclude Include="sdk\datatypes\utlfixedmemory.h" />
@@ -189,6 +191,7 @@
     <ClInclude Include="sdk\interfaces\imaterialsystem.h" />
     <ClInclude Include="sdk\interfaces\imemalloc.h" />
     <ClInclude Include="sdk\interfaces\inetworkclientservice.h" />
+    <ClInclude Include="sdk\interfaces\iresourcesystem.h" />
     <ClInclude Include="sdk\interfaces\ischemasystem.h" />
     <ClInclude Include="sdk\interfaces\iswapchaindx11.h" />
     <ClInclude Include="sdk\interfaces\iviewrender.h" />

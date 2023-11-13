@@ -32,6 +32,11 @@ bool F::Setup()
 	return true;
 }
 
+void F::Destroy()
+{
+	VISUALS::OnDestroy();
+}
+
 void F::OnPresent()
 {
 	if (!D::bInitialized)

@@ -180,6 +180,9 @@ static void Destroy()
 	// destroy renderer backend
 	D::Destroy();
 
+	// destroy chams dependent stuff
+	F::Destroy();
+
 #ifdef CS_LOG_CONSOLE
 	L::DetachConsole();
 #endif

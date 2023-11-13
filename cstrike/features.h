@@ -9,6 +9,8 @@ class CMeshData;
 namespace F
 {
 	bool Setup();
+	void Destroy();
+
 	void OnPresent();
 	void OnFrameStageNotify(int nStage);
 	void OnCreateMove(CUserCmd* pCmd, CCSPlayerController* pLocalController);
