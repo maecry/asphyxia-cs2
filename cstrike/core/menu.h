@@ -89,6 +89,7 @@ namespace T
 
 	/* @section: tabs */
 	void RageBot();
+	void AntiAim();
 	void LegitBot();
 	void Visuals();
 	void Miscellaneous();

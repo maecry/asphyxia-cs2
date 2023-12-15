@@ -61,7 +61,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <PreprocessorDefinitions>NOMINMAX;_DEBUG;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)dependencies;$(SolutionDir)dependencies\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -75,6 +75,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,6 +155,7 @@
     <ClInclude Include="core\sdk.h" />
     <ClInclude Include="core\variables.h" />
     <ClInclude Include="features.h" />
+    <ClInclude Include="features\antiaim.h" />
     <ClInclude Include="features\misc.h" />
     <ClInclude Include="features\misc\movement.h" />
     <ClInclude Include="features\visuals.h" />
@@ -161,11 +163,9 @@
     <ClInclude Include="features\visuals\overlay.h" />
     <ClInclude Include="sdk\const.h" />
     <ClInclude Include="sdk\datatypes\color.h" />
-    <ClInclude Include="sdk\datatypes\keyvalue3.h" />
     <ClInclude Include="sdk\datatypes\matrix.h" />
     <ClInclude Include="sdk\datatypes\qangle.h" />
     <ClInclude Include="sdk\datatypes\quaternion.h" />
-    <ClInclude Include="sdk\datatypes\stronghandle.h" />
     <ClInclude Include="sdk\datatypes\transform.h" />
     <ClInclude Include="sdk\datatypes\usercmd.h" />
     <ClInclude Include="sdk\datatypes\utlfixedmemory.h" />
@@ -191,7 +191,6 @@
     <ClInclude Include="sdk\interfaces\imaterialsystem.h" />
     <ClInclude Include="sdk\interfaces\imemalloc.h" />
     <ClInclude Include="sdk\interfaces\inetworkclientservice.h" />
-    <ClInclude Include="sdk\interfaces\iresourcesystem.h" />
     <ClInclude Include="sdk\interfaces\ischemasystem.h" />
     <ClInclude Include="sdk\interfaces\iswapchaindx11.h" />
     <ClInclude Include="sdk\interfaces\iviewrender.h" />
@@ -230,6 +229,7 @@
     <ClCompile Include="core\schema.cpp" />
     <ClCompile Include="core\sdk.cpp" />
     <ClCompile Include="features.cpp" />
+    <ClCompile Include="features\antiaim.cpp" />
     <ClCompile Include="features\misc.cpp" />
     <ClCompile Include="features\misc\movement.cpp" />
     <ClCompile Include="features\visuals.cpp" />

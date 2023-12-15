@@ -87,6 +87,12 @@ namespace MATH
 		return value != 0 && (value & (value - 1)) == 0;
 	}
 
+	float random_angle(std::int32_t min, std::int32_t max);
+
+	float normalize_yaw(float yaw);
+	float angle_diff(float destAngle, float srcAngle);
+
+
 	/* @section: random using game's exports */
 	inline int(CS_CDECL* fnRandomSeed)(int iSeed) = nullptr;
 	inline float(CS_CDECL* fnRandomFloat)(float flMinValue, float flMaxValue) = nullptr;

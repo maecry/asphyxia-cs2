@@ -13,6 +13,7 @@
 // used: features callbacks
 #include "features/visuals.h"
 #include "features/misc.h"
+#include "features/antiaim.h"
 
 // used: interfaces
 #include "core/interfaces.h"
@@ -68,7 +69,7 @@ void F::OnCreateMove(CUserCmd* pCmd, CCSPlayerController* pLocalController)
 	C_CSPlayerPawn* pLocalPawn = I::GameResourceService->pGameEntitySystem->Get<C_CSPlayerPawn>(pLocalController->GetPawnHandle());
 	if (pLocalPawn == nullptr)
 		return;
-
+	antiaim::RunAA(pCmd);
 	F::MISC::OnMove(pCmd, pLocalController, pLocalPawn);
 }
 

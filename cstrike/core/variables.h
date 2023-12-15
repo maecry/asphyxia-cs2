@@ -49,6 +49,20 @@ enum EMenuAddition : MenuAddition_t
 
 struct Variables_t
 {
+#pragma region variables_ragebot
+	C_ADD_VARIABLE(bool, bRageBot, false);
+	C_ADD_VARIABLE(bool, bEnableAutowall, false);
+	C_ADD_VARIABLE(unsigned int, bRageHitboxes, NULL);
+#pragma endregion
+
+#pragma region variables_antiaim
+	C_ADD_VARIABLE(bool, bAntiAim, false);
+	C_ADD_VARIABLE(int, bBaseYawType, 0);
+	C_ADD_VARIABLE(int, bPitchType, 0);
+	C_ADD_VARIABLE(int, bJitterType, 0);
+	C_ADD_VARIABLE(int, bJitterRange, 0);
+#pragma endregion
+
 #pragma region variables_visuals
 	C_ADD_VARIABLE(bool, bVisualOverlay, false);
 

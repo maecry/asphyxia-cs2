@@ -1688,7 +1688,7 @@
 #define ICON_FA_UNIVERSAL_ACCESS "\xef\x8a\x9a"	// U+f29a
 #define ICON_FA_UNIVERSITY "\xef\x86\x9c"	// U+f19c
 #define ICON_FA_UNLINK "\xef\x84\xa7"	// U+f127
-#define ICON_FA_UNLOCK "\xef\x82\x9c"	// U+f09c
+#define ICON_FA_  "\xef\x82\x9c"	// U+f09c
 #define ICON_FA_UNLOCK_ALT "\xef\x84\xbe"	// U+f13e
 #define ICON_FA_UPLOAD "\xef\x82\x93"	// U+f093
 #define ICON_FA_USB_DRIVE "\xef\xa3\xa9"	// U+f8e9

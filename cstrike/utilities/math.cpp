@@ -28,3 +28,42 @@ bool MATH::Setup()
 
 	return bSuccess;
 }
+
+float MATH::normalize_yaw(float yaw)
+{
+	while (yaw < -180.f)
+		yaw += 360.f;
+	while (yaw > 180.f)
+		yaw -= 360.f;
+
+	return yaw;
+}
+
+float MATH::angle_diff(float destAngle, float srcAngle)
+{
+	float delta;
+
+	delta = fmodf(destAngle - srcAngle, 360.0f);
+	if (destAngle > srcAngle)
+	{
+		if (delta >= 180)
+			delta -= 360;
+	}
+	else
+	{
+		if (delta <= -180)
+			delta += 360;
+	}
+	return delta;
+}
+
+float MATH::random_angle(std::int32_t min, std::int32_t max)
+{
+	static bool first = true;
+	if (first)
+	{
+		std::srand(static_cast<std::uint32_t>(std::time(nullptr)));
+		first = false;
+	}
+	return static_cast<float>(min + std::rand() % ((max + 1) - min));
+}

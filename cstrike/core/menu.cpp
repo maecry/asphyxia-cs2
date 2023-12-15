@@ -36,6 +36,33 @@ static const std::pair<const char*, const std::size_t> arrColors[] = {
 	{ "[primitive] - border", Vars.colPrimtv4 },
 };
 
+static constexpr const char* Hitbox[] = {
+	"head",
+	"chest",
+	"arms",
+	"legs",
+};
+
+static constexpr const char* arrayBaseYawTypes[] = {
+	"Off",
+	"Backwards",
+	"Forwards"
+};
+
+static constexpr const char* arrayPitchTypes[] = {
+	"Off",
+	"Down",
+	"Up",
+	"Flick"
+};
+
+static constexpr const char* arrayJitterTypes[] = {
+	"Off",
+	"Center",
+	"3-Way",
+	"Spin"
+};
+
 static constexpr const char* arrMenuAddition[] = {
 	"dim",
 	"particle",
@@ -120,6 +147,7 @@ void MENU::RenderMainWindow()
 
 		static const CTab arrTabs[] = {
 			{ "ragebot", &T::RageBot },
+			{ "antiaim", &T::AntiAim },
 			{ "legitbot", &T::LegitBot },
 			{ "visuals", &T::Visuals },
 			{ "miscellaneous", &T::Miscellaneous },
@@ -352,7 +380,114 @@ void T::Render(const char* szTabBar, const CTab* arrTabs, const unsigned long lo
 }
 
 void T::RageBot()
-{ }
+{
+	ImGuiStyle& style = ImGui::GetStyle();
+
+	ImGui::Columns(2, CS_XOR("##ragebot_collumns"), false);
+	{
+		static float flOverlayChildSize = 0.f;
+		ImGui::BeginChild(CS_XOR("ragebot.general"), ImVec2(0.f, flOverlayChildSize), true, ImGuiWindowFlags_MenuBar);
+		{
+			if (ImGui::BeginMenuBar())
+			{
+				ImGui::TextUnformatted("ragebot");
+				ImGui::EndMenuBar();
+			}
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
+
+			ImGui::Checkbox(CS_XOR("enable##ragebot"), &C_GET(bool, Vars.bRageBot));
+
+			ImGui::BeginDisabled(!C_GET(bool, Vars.bRageBot));
+			{
+				ImGui::MultiCombo(CS_XOR("hitboxes"), &C_GET(unsigned int, Vars.bRageHitboxes), Hitbox, CS_ARRAYSIZE(Hitbox));
+
+				ImGui::Checkbox("AutoWall", &C_GET(bool, Vars.bEnableAutowall));
+			}
+			ImGui::EndDisabled();
+
+			ImGui::PopStyleVar();
+
+			flOverlayChildSize = ImGui::GetCursorPosY() + style.ItemSpacing.y;
+		}
+		ImGui::EndChild();
+	}
+	ImGui::NextColumn();
+	{
+	}
+	ImGui::Columns(1);
+}
+
+void T::AntiAim()
+{
+	ImGuiStyle& style = ImGui::GetStyle();
+
+	ImGui::Columns(2, CS_XOR("##antiaim_collumns"), false);
+	{
+		static float flOverlayChildSize = 0.f;
+		ImGui::BeginChild(CS_XOR("ragebot.antiaim"), ImVec2(0.f, flOverlayChildSize), true, ImGuiWindowFlags_MenuBar);
+		{
+			if (ImGui::BeginMenuBar())
+			{
+				ImGui::TextUnformatted("Anti Aim");
+				ImGui::EndMenuBar();
+			}
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
+
+			ImGui::Checkbox(CS_XOR("enable##antiaim"), &C_GET(bool, Vars.bAntiAim));
+
+			ImGui::BeginDisabled(!C_GET(bool, Vars.bAntiAim));
+			{
+				ImGui::Text("Pitch Type");
+				if (ImGui::BeginCombo(CS_XOR("##PitchType"), arrayPitchTypes[C_GET(int, Vars.bPitchType)]))
+				{
+					for (int i = 0; i < IM_ARRAYSIZE(arrayPitchTypes); i++)
+					{
+						if (ImGui::Selectable(arrayPitchTypes[i], (C_GET(int, Vars.bPitchType) == i)))
+							C_GET(int, Vars.bPitchType) = i;
+					}
+					ImGui::EndCombo();
+				}
+
+				ImGui::Text("Base Yaw Type");
+				if (ImGui::BeginCombo(CS_XOR("##BaseYawType"), arrayBaseYawTypes[C_GET(int, Vars.bBaseYawType)]))
+				{
+					for (int i = 0; i < IM_ARRAYSIZE(arrayBaseYawTypes); i++)
+					{
+						if (ImGui::Selectable(arrayBaseYawTypes[i], (C_GET(int, Vars.bBaseYawType) == i)))
+							C_GET(int, Vars.bBaseYawType) = i;
+					}
+					ImGui::EndCombo();
+				}
+
+				ImGui::Text("Jitter Type");
+				if (ImGui::BeginCombo(CS_XOR("##JitterType"), arrayJitterTypes[C_GET(int, Vars.bJitterType)]))
+				{
+					for (int i = 0; i < IM_ARRAYSIZE(arrayJitterTypes); i++)
+					{
+						if (ImGui::Selectable(arrayJitterTypes[i], (C_GET(int, Vars.bJitterType) == i)))
+							C_GET(int, Vars.bJitterType) = i;
+					}
+					ImGui::EndCombo();
+				}
+
+				ImGui::SliderInt("Jitter Range", &C_GET(int, Vars.bJitterRange), -90, 90);
+			}
+			ImGui::EndDisabled();
+
+			ImGui::PopStyleVar();
+
+			flOverlayChildSize = ImGui::GetCursorPosY() + style.ItemSpacing.y;
+		}
+		ImGui::EndChild();
+	}
+	ImGui::NextColumn();
+	{
+	}
+	ImGui::Columns(1);
+}
+
 
 void T::LegitBot()
 { }
@@ -438,12 +573,15 @@ void T::Miscellaneous()
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
 
 			ImGui::Checkbox(CS_XOR("watermark"), &C_GET(bool, Vars.bWatermark));
+			ImGui::Checkbox(CS_XOR("Fov Esp"), &C_GET(bool, Vars.bWatermark));
+
+
 
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 1.f, 0.f, 1.f));
 			if (ImGui::Button(CS_XOR("unlock hidden cvars"), ImVec2(-1, 15 * MENU::flDpiScale)))
 			{
 				I::Cvar->UnlockHiddenCVars();
-				NOTIFY::Push({ N_TYPE_INFO, CS_XOR("unlocked all hidden cvars") });
+				NOTIFY::Push({ N_TYPE_SUCCESS, CS_XOR("unlocked all hidden cvars") });
 			}
 
 			ImGui::PopStyleColor();

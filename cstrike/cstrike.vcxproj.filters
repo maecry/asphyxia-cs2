@@ -294,9 +294,9 @@
     <ClInclude Include="utilities\pe64.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\datatypes\stronghandle.h" />
-    <ClInclude Include="sdk\interfaces\iresourcesystem.h" />
-    <ClInclude Include="sdk\datatypes\keyvalue3.h" />
+    <ClInclude Include="features\antiaim.h">
+      <Filter>features</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dependencies\imgui\imgui.cpp">
@@ -405,6 +405,9 @@
     </ClCompile>
     <ClCompile Include="utilities\notify.cpp">
       <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="features\antiaim.cpp">
+      <Filter>features</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
