@@ -155,6 +155,17 @@ bool C::Setup(const wchar_t* wszDefaultFileName)
 		UserDataMember_t{ FNV1A::HashConst("colBackground"), FNV1A::HashConst("Color_t"), &BarOverlayVar_t::colBackground },
 		UserDataMember_t{ FNV1A::HashConst("colOutline"), FNV1A::HashConst("Color_t"), &BarOverlayVar_t::colOutline } 
 	});
+	AddUserType(FNV1A::HashConst("ArmorBarOverlayVar_t"),
+	{ UserDataMember_t{ FNV1A::HashConst("bEnable"), FNV1A::HashConst("bool"), &ArmorBarOverlayVar_t::bEnable },
+	UserDataMember_t{ FNV1A::HashConst("bGradient"), FNV1A::HashConst("bool"), &ArmorBarOverlayVar_t::bGradient },
+	UserDataMember_t{ FNV1A::HashConst("bUseFactorColor"), FNV1A::HashConst("bool"), &ArmorBarOverlayVar_t::bUseFactorColor },
+	UserDataMember_t{ FNV1A::HashConst("flThickness"), FNV1A::HashConst("float"), &ArmorBarOverlayVar_t::flThickness },
+	UserDataMember_t{ FNV1A::HashConst("colPrimary"), FNV1A::HashConst("Color_t"), &ArmorBarOverlayVar_t::colPrimary },
+	UserDataMember_t{ FNV1A::HashConst("colSecondary"), FNV1A::HashConst("Color_t"), &ArmorBarOverlayVar_t::colSecondary },
+	UserDataMember_t{ FNV1A::HashConst("colBackground"), FNV1A::HashConst("Color_t"), &ArmorBarOverlayVar_t::colBackground },
+	UserDataMember_t{ FNV1A::HashConst("colOutline"), FNV1A::HashConst("Color_t"), &ArmorBarOverlayVar_t::colOutline }
+	});
+
 
 	// create default configuration
 	if (!CreateFile(wszDefaultFileName))

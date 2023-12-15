@@ -129,6 +129,25 @@ struct BarOverlayVar_t
 	Color_t colOutline = Color_t{};
 };
 
+struct ArmorBarOverlayVar_t
+{
+	constexpr ArmorBarOverlayVar_t(const bool bEnable, const bool bGradient = false, const bool bUseFactorColor = false, const float flThickness = 1.f, const Color_t& colPrimary = Color_t(255, 255, 255), const Color_t& colSecondary = Color_t(255, 255, 255), const Color_t& colBackground = Color_t(), const Color_t& colOutline = Color_t()) :
+		bEnable(bEnable), bGradient(bGradient), bUseFactorColor(bUseFactorColor), flThickness(flThickness), colPrimary(colPrimary), colSecondary(colSecondary), colBackground(colBackground), colOutline(colOutline) { }
+
+	bool bEnable = false;
+	bool bGradient = false;
+	bool bUseFactorColor = false;
+
+	float flThickness = 1.f;
+
+	Color_t colPrimary = Color_t(255, 255, 255);
+	Color_t colSecondary = Color_t(255, 255, 255);
+
+	Color_t colBackground = Color_t{};
+	Color_t colOutline = Color_t{};
+};
+
+
 #pragma endregion
 
 /*

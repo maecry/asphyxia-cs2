@@ -65,6 +65,92 @@ ImVec2 OVERLAY::CBaseDirectionalComponent::GetBasePosition(const ImVec4& box) co
 	return vecBasePosition;
 }
 
+OVERLAY::CArmorBarComponent::CArmorBarComponent(const bool bIsMenuItem, const EAlignSide nAlignSide, const ImVec4& vecBox, const float flProgressFactor, const std::size_t uOverlayVarIndex) :
+	bIsMenuItem(bIsMenuItem), uOverlayVarIndex(uOverlayVarIndex), flProgressFactor(MATH::Clamp(flProgressFactor, 0.f, 1.f))
+{
+	this->nSide = nAlignSide;
+
+	const bool bIsHorizontal = ((nAlignSide & 1U) == 1U);
+
+	const ArmorBarOverlayVar_t& overlayConfig = C_GET(ArmorBarOverlayVar_t, uOverlayVarIndex);
+	this->vecSize = { (bIsHorizontal ? vecBox[SIDE_RIGHT] - vecBox[SIDE_LEFT] : overlayConfig.flThickness), (bIsHorizontal ? overlayConfig.flThickness : vecBox[SIDE_BOTTOM] - vecBox[SIDE_TOP]) };
+}
+
+void OVERLAY::CArmorBarComponent::Render(ImDrawList* pDrawList, const ImVec2& vecPosition)
+{
+	ArmorBarOverlayVar_t& overlayConfig = C_GET(ArmorBarOverlayVar_t, uOverlayVarIndex);
+	const ImVec2 vecThicknessOffset = { overlayConfig.flThickness, overlayConfig.flThickness };
+	ImVec2 vecMin = vecPosition, vecMax = vecPosition + this->vecSize;
+
+	// background glow
+	pDrawList->AddShadowRect(vecMin, vecMax, overlayConfig.colBackground.GetU32(), 1.f, ImVec2(0, 0));
+	// outline
+	pDrawList->AddRect(vecMin, vecMax, overlayConfig.colOutline.GetU32(), 0.f, ImDrawFlags_None, overlayConfig.flThickness);
+
+	// account outline offset
+	vecMin += vecThicknessOffset;
+	vecMax -= vecThicknessOffset;
+
+	const ImVec2 vecLineSize = vecMax - vecMin;
+
+	// modify active side axis by factor
+	if ((this->nSide & 1U) == 0U)
+		vecMin.y += vecLineSize.y * (1.0f - this->flProgressFactor);
+	else
+		vecMax.x -= vecLineSize.x * (1.0f - this->flProgressFactor);
+
+	// bar
+	if (overlayConfig.bGradient && !overlayConfig.bUseFactorColor)
+	{
+		if (this->nSide == SIDE_LEFT || this->nSide == SIDE_RIGHT)
+			pDrawList->AddRectFilledMultiColor(vecMin, vecMax, overlayConfig.colPrimary.GetU32(), overlayConfig.colPrimary.GetU32(), overlayConfig.colSecondary.GetU32(), overlayConfig.colSecondary.GetU32());
+		else
+			pDrawList->AddRectFilledMultiColor(vecMin, vecMax, overlayConfig.colSecondary.GetU32(), overlayConfig.colPrimary.GetU32(), overlayConfig.colPrimary.GetU32(), overlayConfig.colSecondary.GetU32());
+	}
+	else
+	{
+		const ImU32 u32Color = overlayConfig.bUseFactorColor ? Color_t::FromHSB((flProgressFactor * 120.f) / 360.f, 1.0f, 1.0f).GetU32() : overlayConfig.colPrimary.GetU32();
+		pDrawList->AddRectFilled(vecMin, vecMax, u32Color, 0.f, ImDrawFlags_None);
+	}
+
+	// only open menu item if menu is opened and overlay is enabled
+	bIsMenuItem &= (MENU::bMainWindowOpened && overlayConfig.bEnable);
+	if (bIsMenuItem)
+	{
+		// @note: padding 2.f incase the thickness is too small
+		this->bIsHovered = ImRect(vecPosition - ImVec2(2.f, 2.f), vecPosition + this->vecSize + ImVec2(2.f, 2.f)).Contains(ImGui::GetIO().MousePos);
+		// if component is hovered + right clicked
+		if (this->bIsHovered && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+			ImGui::OpenPopup(CS_XOR("context##component.Armorbar"));
+
+		if (ImGui::BeginPopup(CS_XOR("context##component.Armorbar"), ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, -1));
+
+			ImGui::Checkbox(CS_XOR("use factor color##component.Armorbar"), &overlayConfig.bUseFactorColor);
+			if (!overlayConfig.bUseFactorColor)
+				ImGui::Checkbox(CS_XOR("use gradient##component.Armorbar"), &overlayConfig.bGradient);
+
+			ImGui::ColorEdit3(CS_XOR("primary color##component.Armorbar"), &overlayConfig.colPrimary);
+			if (overlayConfig.bGradient && !overlayConfig.bUseFactorColor)
+				ImGui::ColorEdit3(CS_XOR("secondary color##component.Armorbar"), &overlayConfig.colSecondary);
+
+			ImGui::ColorEdit4(CS_XOR("outline color##component.Armorbar"), &overlayConfig.colOutline);
+			ImGui::ColorEdit4(CS_XOR("background color##component.Armorbar"), &overlayConfig.colBackground);
+
+			ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.75f);
+			ImGui::SliderFloat(CS_XOR("thickness##component.Armorbar"), &overlayConfig.flThickness, 1.0f, 10.0f, CS_XOR("%.1f"), ImGuiSliderFlags_NoInput);
+			ImGui::PopStyleVar();
+
+			ImGui::EndPopup();
+		}
+	}
+	else
+		// dont process hovered on menu close...
+		this->bIsHovered = false;
+}
+
+
 OVERLAY::CBarComponent::CBarComponent(const bool bIsMenuItem, const EAlignSide nAlignSide, const ImVec4& vecBox, const float flProgressFactor, const std::size_t uOverlayVarIndex) :
 	bIsMenuItem(bIsMenuItem), uOverlayVarIndex(uOverlayVarIndex), flProgressFactor(MATH::Clamp(flProgressFactor, 0.f, 1.f))
 {
@@ -175,13 +261,19 @@ void OVERLAY::CTextComponent::Render(ImDrawList* pDrawList, const ImVec2& vecPos
 	const ImVec2 vecOutlineOffset = { overlayConfig.flThickness, overlayConfig.flThickness };
 
 	// @test: used for spacing debugging
-	//pDrawList->AddRect(vecPosition, vecPosition + this->vecSize, IM_COL32(255, 255, 255, 255));
+	pDrawList->AddRect(vecPosition, vecPosition + this->vecSize, IM_COL32(255, 255, 255, 255));
 
 	// @todo: fix this cringe shit after gui merge
 	if (overlayConfig.flThickness >= 1.0f)
 	{
+		// Draw main text
 		pDrawList->AddText(this->pFont, this->pFont->FontSize, vecPosition, overlayConfig.colOutline.GetU32(), this->szText);
-		pDrawList->AddText(this->pFont, this->pFont->FontSize, vecPosition + vecOutlineOffset * 2.0f, overlayConfig.colOutline.GetU32(), this->szText);
+
+		// Calculate dynamic offset based on outline thickness
+		float outlineOffset = overlayConfig.flThickness * 2.0f;
+
+		// Draw text with outline
+		pDrawList->AddText(this->pFont, this->pFont->FontSize, vecPosition + ImVec2(outlineOffset, outlineOffset), overlayConfig.colOutline.GetU32(), this->szText);
 	}
 
 	pDrawList->AddText(this->pFont, this->pFont->FontSize, vecPosition + vecOutlineOffset, overlayConfig.colPrimary.GetU32(), this->szText);
@@ -191,7 +283,7 @@ void OVERLAY::CTextComponent::Render(ImDrawList* pDrawList, const ImVec2& vecPos
 	if (bIsMenuItem)
 	{
 		this->bIsHovered = ImRect(vecPosition, vecPosition + this->vecSize).Contains(ImGui::GetIO().MousePos);
-		//pDrawList->AddRect(vecPosition, vecPosition + this->vecSize, IM_COL32(this->bIsHovered ? 0 : 255, this->bIsHovered ? 255 : 0, 0, 255));
+		pDrawList->AddRect(vecPosition, vecPosition + this->vecSize, IM_COL32(this->bIsHovered ? 0 : 255, this->bIsHovered ? 255 : 0, 0, 255));
 
 		// if component is hovered + right clicked
 		if (this->bIsHovered && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
