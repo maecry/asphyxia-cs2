@@ -118,10 +118,10 @@ class C_BaseEntity : public CEntityInstance
 public:
 	CS_CLASS_NO_INITIALIZER(C_BaseEntity);
 
-	// @note: we shouldn't use this, just use GetSchemaClassInfo(...) and compare the class name instead
+	// @todo: rebuild this using getschemaclassinfo
 	[[nodiscard]] bool IsBasePlayerController()
 	{
-		return MEM::CallVFunc<bool, 144U>(this);
+		return MEM::CallVFunc<bool, 145U>(this);
 	}
 
 	// same with this
