@@ -168,6 +168,9 @@
     <ClInclude Include="sdk\datatypes\color.h">
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
+    <ClInclude Include="sdk\datatypes\keyvalue3.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
     <ClInclude Include="sdk\datatypes\matrix.h">
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
@@ -175,6 +178,9 @@
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
     <ClInclude Include="sdk\datatypes\quaternion.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\datatypes\stronghandle.h">
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
     <ClInclude Include="sdk\datatypes\transform.h">
@@ -252,6 +258,9 @@
     <ClInclude Include="sdk\interfaces\inetworkclientservice.h">
       <Filter>sdk\interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="sdk\interfaces\iresourcesystem.h">
+      <Filter>sdk\interfaces</Filter>
+    </ClInclude>
     <ClInclude Include="sdk\interfaces\ischemasystem.h">
       <Filter>sdk\interfaces</Filter>
     </ClInclude>
@@ -294,9 +303,6 @@
     <ClInclude Include="utilities\pe64.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="sdk\datatypes\stronghandle.h" />
-    <ClInclude Include="sdk\interfaces\iresourcesystem.h" />
-    <ClInclude Include="sdk\datatypes\keyvalue3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dependencies\imgui\imgui.cpp">
