@@ -76,7 +76,7 @@ bool SCHEMA::Setup(const wchar_t* wszFileName)
 		if (pDeclaredClassInfo->nFieldSize == 0)
 			continue;
 
-		CRT::String_t<MAX_PATH> szClassBuffer(CS_XOR("class %s\n"), pDeclaredClassInfo->szNname);
+		CRT::String_t<MAX_PATH> szClassBuffer(CS_XOR("class %s\n"), pDeclaredClassInfo->szName);
 		::WriteFile(hOutFile, szClassBuffer.Data(), szClassBuffer.Length(), nullptr, nullptr);
 
 		for (auto j = 0; j < pDeclaredClassInfo->nFieldSize; j++)
@@ -91,7 +91,7 @@ bool SCHEMA::Setup(const wchar_t* wszFileName)
 			::WriteFile(hOutFile, szFieldBuffer.Data(), szFieldBuffer.Length(), nullptr, nullptr);
 		}
 
-		//L_PRINT(LOG_INFO) << CS_XOR("dumped \"") << pDeclaredClassInfo->szNname << CS_XOR("\" (total: ") << pDeclaredClassInfo->nFieldSize << CS_XOR(" fields)");
+		//L_PRINT(LOG_INFO) << CS_XOR("dumped \"") << pDeclaredClassInfo->szName << CS_XOR("\" (total: ") << pDeclaredClassInfo->nFieldSize << CS_XOR(" fields)");
 	}
 
 	// free allocated memory

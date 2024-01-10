@@ -120,22 +120,29 @@ class C_BaseEntity : public CEntityInstance
 public:
 	CS_CLASS_NO_INITIALIZER(C_BaseEntity);
 
-	// @todo: rebuild this using getschemaclassinfo
 	[[nodiscard]] bool IsBasePlayerController()
 	{
-		return MEM::CallVFunc<bool, 145U>(this);
+		SchemaClassInfoData_t* pClassInfo;
+		GetSchemaClassInfo(&pClassInfo);
+		if (pClassInfo == nullptr)
+			return false;
+
+		return FNV1A::Hash(pClassInfo->szName) == FNV1A::HashConst("C_CSPlayerController");
 	}
 
-	// same with this
 	[[nodiscard]] bool IsWeapon()
 	{
-		return MEM::CallVFunc<bool, 150U>(this);
-	}
+		static SchemaClassInfoData_t* pWeaponBaseClass = nullptr;
+		if (pWeaponBaseClass == nullptr)
+		I::SchemaSystem->FindTypeScopeForModule(CS_XOR("client.dll"))->FindDeclaredClass(&pWeaponBaseClass, CS_XOR("C_CSWeaponBase"));
 
-	// same with this
-	[[nodiscard]] bool IsViewModel()
-	{
-		return MEM::CallVFunc<bool, 242U>(this);
+
+		SchemaClassInfoData_t* pClassInfo;
+		GetSchemaClassInfo(&pClassInfo);
+		if (pClassInfo == nullptr)
+			return false;
+
+	return (pClassInfo->InheritsFrom(pWeaponBaseClass));
 	}
 
 	static C_BaseEntity* GetLocalPlayer();

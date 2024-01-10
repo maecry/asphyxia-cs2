@@ -476,7 +476,7 @@ void OVERLAY::OnFrameStageNotify(CCSPlayerController* pLocalController)
 		if (pClassInfo == nullptr)
 			continue;
 
-		const FNV1A_t uHashedName = FNV1A::Hash(pClassInfo->szNname);
+		const FNV1A_t uHashedName = FNV1A::Hash(pClassInfo->szName);
 
 		ESortEntityType nEntityType = SORT_ENTITY_NONE;
 		Vector_t vecOrigin = Vector_t();

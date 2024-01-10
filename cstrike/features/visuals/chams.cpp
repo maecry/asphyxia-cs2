@@ -86,7 +86,7 @@ bool F::VISUALS::CHAMS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx
 	if (pClassInfo == nullptr)
 		return false;
 
-	if (pEntity->IsViewModel() || pEntity->IsWeapon() || CRT::StringCompare(pClassInfo->szNname, CS_XOR("C_CSPlayerPawn")) != 0)
+	if (CRT::StringCompare(pClassInfo->szName, CS_XOR("C_CSPlayerPawn")) != 0)
 		return false;
 
 	auto pPawn = I::GameResourceService->pGameEntitySystem->Get<C_CSPlayerPawn>(hOwner);
@@ -177,7 +177,7 @@ CStrongHandle<CMaterial2> F::VISUALS::CHAMS::CreateMaterialInvis(const char* szN
 
 CMaterial2* F::VISUALS::CHAMS::CreateMaterial(const char* szName, const char* szMaterialVMAT, const char* szShaderType, bool bBlendMode, bool bTranslucent, bool bDisableZBuffering)
 {
-	CMeshData* pData = reinterpret_cast<CMeshData*>(static_cast<std::byte*>(MEM_STACKALLOC(0x200)) + 0x50);
+	CMeshData* pData = reinterpret_cast<CMeshData*>(static_cast<std::byte*>(I::MemAlloc->Alloc(0x200)) + 0x50);
 	CMaterial2** pMatPrototype;
 
 	I::MaterialSystem2->FindOrCreateFromResource(&pMatPrototype, szMaterialVMAT);
@@ -194,6 +194,7 @@ CMaterial2* F::VISUALS::CHAMS::CreateMaterial(const char* szName, const char* sz
 
 	CMaterial2** pMaterial;
 	I::MaterialSystem2->CreateMaterial(&pMaterial, szName, pData);
+	I::MemAlloc->Free(pData);
 	return *pMaterial;
 #endif
 	return *pMatPrototype;
