@@ -194,6 +194,7 @@
     <ClInclude Include="sdk\interfaces\ischemasystem.h" />
     <ClInclude Include="sdk\interfaces\iswapchaindx11.h" />
     <ClInclude Include="sdk\interfaces\iviewrender.h" />
+    <ClInclude Include="sdk\vdata.h" />
     <ClInclude Include="utilities\crt.h" />
     <ClInclude Include="utilities\detourhook.h" />
     <ClInclude Include="utilities\draw.h" />

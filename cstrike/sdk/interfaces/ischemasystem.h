@@ -62,25 +62,54 @@ struct SchemaClassFieldData_t
 	SchemaMetadataEntryData_t* pMetaData; // 0x0018
 };
 
+struct SchemaClassInfoData_t;
+
+struct SchemaBaseClassInfoData_t
+{
+	int32_t nOffset;
+	SchemaClassInfoData_t* pClass;
+};
+
 struct SchemaClassInfoData_t
 {
-	MEM_PAD(0x8); // 0x0000
-
-	const char* szNname; // 0x0008
-	char* szModuleName; // 0x0010
+private:
+	void* pVtable; // 0x0000
+public:
+	const char* szName; // 0x0008
+	char* szDescription; // 0x0010
 
 	int m_nSize; // 0x0018
 	std::int16_t nFieldSize; // 0x001C
-
 	std::int16_t nStaticSize; // 0x001E
 	std::int16_t nMetadataSize; // 0x0020
-private:
-	std::int16_t unk1; // 0x0022
-	std::int16_t unk2; // 0x0024
-	std::int16_t unk3; // 0x0026
 
-public:
+	std::uint8_t nAlignOf; // 0x0022
+	std::uint8_t nBaseClassesCount; // 0x0023
+	char pad2[0x4]; // 0x0024
 	SchemaClassFieldData_t* pFields; // 0x0028
+	char pad3[0x8]; // 0x0030
+	SchemaBaseClassInfoData_t* pBaseClasses; // 0x0038
+	char pad4[0x28]; // 0x0040
+
+	//public:
+	//SchemaClassFieldData_t* pFields; // 0x0028
+
+	bool InheritsFrom(SchemaClassInfoData_t* pClassInfo)
+	{
+		if (pClassInfo == this && pClassInfo != nullptr)
+			return true;
+		else if (pBaseClasses == nullptr || pClassInfo == nullptr)
+			return false;
+
+		for (int i = 0; i < nBaseClassesCount; i++)
+		{
+			auto& baseClass = pBaseClasses[i];
+			if (baseClass.pClass->InheritsFrom(pClassInfo))
+				return true;
+		}
+
+		return false;
+	}
 };
 
 struct SchemaEnumeratorInfoData_t

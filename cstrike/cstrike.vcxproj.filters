@@ -258,6 +258,9 @@
     <ClInclude Include="sdk\interfaces\inetworkclientservice.h">
       <Filter>sdk\interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="sdk\interfaces\iresourcesystem.h">
+      <Filter>sdk\interfaces</Filter>
+    </ClInclude>
     <ClInclude Include="sdk\interfaces\ischemasystem.h">
       <Filter>sdk\interfaces</Filter>
     </ClInclude>
@@ -266,6 +269,9 @@
     </ClInclude>
     <ClInclude Include="sdk\interfaces\iviewrender.h">
       <Filter>sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\vdata.h">
+      <Filter>sdk</Filter>
     </ClInclude>
     <ClInclude Include="utilities\crt.h">
       <Filter>utilities</Filter>
