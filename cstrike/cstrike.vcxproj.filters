@@ -168,6 +168,9 @@
     <ClInclude Include="sdk\datatypes\color.h">
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
+    <ClInclude Include="sdk\datatypes\keyvalue3.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
     <ClInclude Include="sdk\datatypes\matrix.h">
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
@@ -175,6 +178,9 @@
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
     <ClInclude Include="sdk\datatypes\quaternion.h">
+      <Filter>sdk\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\datatypes\stronghandle.h">
       <Filter>sdk\datatypes</Filter>
     </ClInclude>
     <ClInclude Include="sdk\datatypes\transform.h">
