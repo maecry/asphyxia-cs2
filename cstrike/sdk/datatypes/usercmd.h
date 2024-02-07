@@ -50,7 +50,6 @@ class CCmdVector : public CBasePB
 public:
 	Vector4D_t vecValue; // 0x18
 };
-
 static_assert(sizeof(CCmdVector) == 0x28);
 
 class CCSGOInterpolationInfo : public CBasePB
@@ -60,7 +59,6 @@ public:
 	int nSrcTick; // 0x1C
 	int nDstTick; // 0x20
 };
-
 static_assert(sizeof(CCSGOInterpolationInfo) == 0x24);
 
 // credits: @patoke [uc:3872928-post1311]
@@ -91,7 +89,6 @@ struct ButtonState_t
 	uint64_t nValueChanged;
 	uint64_t nValueScroll;
 };
-
 static_assert(sizeof(ButtonState_t) == 0x20);
 
 class CBaseUserCmdPB : public CBasePB
@@ -99,20 +96,24 @@ class CBaseUserCmdPB : public CBasePB
 public:
 	MEM_PAD(0x20); // 0x18
 	ButtonState_t* pButtons; // 0x20
-	CCmdQAngle* pViewCmd; // 0x40
+	CCmdQAngle* pCmdView; // 0x40
+	int nCommandNumber; // 0x48
+	int nTickCount; // 0x4C
 	float flForwardMove; // 0x50
 	float flSideMove; // 0x54
 	float flUpMove; // 0x58
 	int32_t vnImpulse; // 0x5C
 	int32_t vnWeaponSelect; // 0x60
-	MEM_PAD(0x8);
 	int32_t nRandomSeed; // 0x64
 	int32_t nMousedX; // 0x68
 	int32_t nMousedY; // 0x6C
-	MEM_PAD(0x10);
+	uint32_t nConsumedServerAngleChanges; // 0x74
+	int32_t nCmdFlags; // 0x78
+	uint32_t hPawnEntity; // 0x7C
+	MEM_PAD(0x4);
 };
-
 static_assert(sizeof(CBaseUserCmdPB) == 0x80);
+
 
 class CUserCmd
 {
@@ -123,5 +124,4 @@ public:
 	ButtonState_t nButtons; // 0x4C
 	MEM_PAD(0x20); // 0x64
 };
-
 static_assert(sizeof(CUserCmd) == 0x88);
