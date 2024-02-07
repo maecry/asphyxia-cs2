@@ -11,37 +11,30 @@
 class CCSGOInput
 {
 public:
-	void* pVtable;
-	MEM_PAD(12344);
-	CUserCmd arrCommands[150];
-	int8_t N0000065C; //0x8E00
+	MEM_PAD(0x250);
+	CUserCmd arrCommands[MULTIPLAYER_BACKUP];
+	MEM_PAD(0x1);
 	bool bInThirdPerson;
-	MEM_PAD(6);
-	QAngle_t m_vecThridpersonAngles;
-	MEM_PAD(16);
-	int32_t nSequenceNumber;
-
-	int32_t iOldSequence; //0x8E28
-	uint32_t pad; //0x8E2C
-	double m_Unknown; //0x8E30 look's like a timer
-	uint64_t m_iButtonState1; //0x8E38
-	MEM_PAD(16);
-	uint64_t m_iButtonState2; //0x8E50
-	MEM_PAD(32);
-	int32_t N0000066A; //0x8E78 padding
-	MEM_PAD(12);
-	uint32_t N0000066C; //0x8E88 padding
-	MEM_PAD(164);
-	QAngle_t m_vecViewangles; //0x8F30
-	MEM_PAD(232);
-	uint32_t N0000069F; //0x9024 padding
-	uint32_t m_buttons; //0x9028
-	uint32_t N000006A0; //0x902C padding
-	MEM_PAD(20);
-	int32_t N000006A3; //0x9044 padding
-	int32_t N0000178A; //0x9048 padding
-	float m_flUnknownTimer; //0x904C
-	MEM_PAD(28);
+	MEM_PAD(0x22)
+	std::int32_t nSequenceNumber;
+	std::int32_t nOldSequenceNumber;
+	MEM_PAD(0x4);
+	double dbUnknown; // look's like a timer
+	std::uint64_t nButtonState1;
+	std::uint64_t nButtonState2;
+	std::uint64_t nButtonState3;
+	std::uint64_t nButtonState4; // ?
+	MEM_PAD(0xC);
+	std::int32_t nMouseDeltaX;
+	std::int32_t nMouseDeltaY;
+	MEM_PAD(0xC);
+	std::int64_t nOldPressedButton;
+	bool bIsButtonPressed;
+	MEM_PAD(0x10F);
+	QAngle_t angViewAngles;
+	MEM_PAD(0x8C);
+	bool bUnknownBool;
+	MEM_PAD(0x7);
 
 	CUserCmd* GetUserCmd()
 	{

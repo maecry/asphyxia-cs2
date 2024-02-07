@@ -1,8 +1,5 @@
 #pragma once
 
-// usd: qangle_t
-#include "qangle.h"
-
 // @source: master/game/shared/in_buttons.h
 enum ECommandButtons : int
 {
@@ -35,40 +32,25 @@ enum ECommandButtons : int
 	IN_USE_OR_RELOAD = (1 << 26)
 };
 
-template <typename T>
-struct RepeatedPtrField_t
-{
-	struct Rep_t
-	{
-		int nAllocatedSize;
-		T* tElements[(std::numeric_limits<int>::max() - 2 * sizeof(int)) / sizeof(void*)];
-	};
-
-	void* pArena;
-	int nCurrentSize;
-	int nTotalSize;
-	Rep_t* pRep;
-};
-
 class CBasePB
 {
-	void* pVTable; // 0x0
-	std::uint32_t nHasBits; // 0x8
-	std::uint64_t nCachedBits; // 0xC
+	MEM_PAD(0x18); // 0x0
 };
-static_assert(sizeof(CBasePB) == 0x18);
 
-class CMsgQAngle : public CBasePB
+class CCmdQAngle : public CBasePB
 {
 public:
 	QAngle_t angValue; // 0x18
 };
 
-class CMsgVector : public CBasePB
+static_assert(sizeof(CCmdQAngle) == 0x24);
+
+class CCmdVector : public CBasePB
 {
 public:
 	Vector4D_t vecValue; // 0x18
 };
+static_assert(sizeof(CCmdVector) == 0x28);
 
 class CCSGOInterpolationInfo : public CBasePB
 {
@@ -77,19 +59,20 @@ public:
 	int nSrcTick; // 0x1C
 	int nDstTick; // 0x20
 };
+static_assert(sizeof(CCSGOInterpolationInfo) == 0x24);
 
 // credits: @patoke [uc:3872928-post1311]
 class CCSGOInputHistoryEntryPB : public CBasePB
 {
 public:
-	CMsgQAngle* pViewCmd; // 0x18
-	CMsgVector* pShootOriginCmd; // 0x20
-	CMsgVector* pTargetHeadOriginCmd; // 0x28
-	CMsgVector* pTargetAbsOriginCmd; // 0x30
-	CMsgQAngle* pTargetViewCmd; // 0x38
+	CCmdQAngle* pViewCmd; // 0x18
+	CCmdVector* pShootOriginCmd; // 0x20
+	CCmdVector* pTargetHeadOriginCmd; // 0x28
+	CCmdVector* pTargetAbsOriginCmd; // 0x30
+	CCmdQAngle* pTargetViewCmd; // 0x38
 	CCSGOInterpolationInfo* cl_interp; // 0x40
 	CCSGOInterpolationInfo* sv_interp0; // 0x48
-	CCSGOInterpolationInfo* sv_interp1; // 0x50	
+	CCSGOInterpolationInfo* sv_interp1; // 0x50
 	CCSGOInterpolationInfo* player_interp; // 0x58
 	int nRenderTickCount; // 0x60
 	float flRenderTickFraction; // 0x64
@@ -99,71 +82,46 @@ public:
 	int nTargetEntIndex; // 0x74
 };
 
-struct CSubtickMoveStep : CBasePB
+struct ButtonState_t
 {
-	uint64_t nButton;
-	bool bPressed;
-	float flWhen;
+	MEM_PAD(0x8);
+	uint64_t nValue;
+	uint64_t nValueChanged;
+	uint64_t nValueScroll;
 };
-
-struct CInButtonStatePB : CBasePB
-{
-	std::uint64_t State1;
-	std::uint64_t State2;
-	std::uint64_t State3;
-};
+static_assert(sizeof(ButtonState_t) == 0x20);
 
 class CBaseUserCmdPB : public CBasePB
 {
 public:
-	RepeatedPtrField_t<CSubtickMoveStep> subtickMovesField;
-	const char* szMoveCrc;
-	CInButtonStatePB* pInButtonState;
-	CMsgQAngle* pViewangles;
-	int32_t nCommandNumber;
-	int32_t nTickCount;
-	float flForwardMove;
-	float flSideMove;
-	float flUpMove;
-	int32_t nImpulse;
-	int32_t nWeaponSelect;
-	int32_t nRandomSeed;
-	int32_t nMousedX;
-	int32_t nMousedY;
-	//bool bHasBeenPredicted;
-	uint32_t nConsumedServerAngleChanges;
-	int32_t nCmdFlags;
-	uint32_t nPawnEntityHandle;
+	MEM_PAD(0x20); // 0x18
+	ButtonState_t* pButtons; // 0x20
+	CCmdQAngle* pCmdView; // 0x40
+	int nCommandNumber; // 0x48
+	int nTickCount; // 0x4C
+	float flForwardMove; // 0x50
+	float flSideMove; // 0x54
+	float flUpMove; // 0x58
+	int32_t vnImpulse; // 0x5C
+	int32_t vnWeaponSelect; // 0x60
+	int32_t nRandomSeed; // 0x64
+	int32_t nMousedX; // 0x68
+	int32_t nMousedY; // 0x6C
+	uint32_t nConsumedServerAngleChanges; // 0x74
+	int32_t nCmdFlags; // 0x78
+	uint32_t hPawnEntity; // 0x7C
+	MEM_PAD(0x4);
 };
+static_assert(sizeof(CBaseUserCmdPB) == 0x80);
 
-class CCSGOUserCmdPB
-{
-public:
-	std::uint32_t nHasBits;
-	std::uint64_t nCachedSize;
-	RepeatedPtrField_t<CCSGOInputHistoryEntryPB> inputHistoryField;
-	CBaseUserCmdPB* pBase;
-	int32_t nWeaponDecision;
-	int32_t nWeaponDecisionWeapon;
-	int32_t nAttack3StartHhistoryIndex;
-	int32_t nAttack1StartHhistoryIndex;
-	int32_t nAttack2StartHhistoryIndex;
-};
-
-// not protobufs
-struct CInButtonState
-{
-	void* pVTable;
-	uint64_t nButtonState1;
-	uint64_t nButtonState2;
-	uint64_t nButtonState3;
-};
 
 class CUserCmd
 {
 public:
-	void* pVTable;
-	CCSGOUserCmdPB cmd;
-	CInButtonState buttonStates;
-	MEM_PAD(48);
+	MEM_PAD(0x30);
+	CBaseUserCmdPB* pBaseCmd; // 0x30
+	MEM_PAD(0x10); // 0x38
+	ButtonState_t nButtons; // 0x4C
+	MEM_PAD(0x20); // 0x64
 };
+static_assert(sizeof(CUserCmd) == 0x88);
