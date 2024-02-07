@@ -68,7 +68,7 @@ public:
 
 	void GetSchemaClassInfo(SchemaClassInfoData_t** pReturn)
 	{
-		return MEM::CallVFunc<void, 34U>(this, pReturn);
+		return MEM::CallVFunc<void, 36U>(this, pReturn);
 	}
 
 	[[nodiscard]] CBaseHandle GetRefEHandle()

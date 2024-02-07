@@ -20,7 +20,7 @@ void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CCSPlayerController* pLocalContro
 	if (!pLocalController->IsPawnAlive())
 		return;
 
-	CBaseUserCmdPB* pBaseCmd = pCmd->cmd.pBase;
+	CBaseUserCmdPB* pBaseCmd = pCmd->pBaseCmd;
 	if (pBaseCmd == nullptr)
 		return;
 
@@ -56,11 +56,11 @@ void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_CSP
 	//// bypass of possible SMAC/VAC server anticheat detection
 	//if (static bool bShouldFakeJump = false; bShouldFakeJump)
 	//{
-	//	pCmd->buttonStates.nButtonState1 |= IN_JUMP;
+	//	pCmd->nButtons.nValue |= IN_JUMP;
 	//	bShouldFakeJump = false;
 	//}
 	//// check is player want to jump
-	//else if (pCmd->buttonStates.nButtonState1 & IN_JUMP)
+	//else if (pCmd->nButtons.nValue & IN_JUMP)
 	//{
 	//	// check is player on the ground
 	//	if (pLocalPawn->GetFlags() & FL_ONGROUND)
@@ -68,12 +68,12 @@ void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_CSP
 	//		bShouldFakeJump = true;
 	//	// check did random jump chance passed
 	//	else if (MATH::fnRandomInt(0, 100) <= C_GET(int, Vars.nAutoBHopChance))
-	//		pCmd->buttonStates.nButtonState1 &= ~IN_JUMP;
+	//		pCmd->nButtons.nValue &= ~IN_JUMP;
 	//}
 
 	// im lazy so yea :D
 	if (pLocalPawn->GetFlags() & FL_ONGROUND)
-		pCmd->buttonStates.nButtonState1 &= ~IN_JUMP;
+		pCmd->nButtons.nValue &= ~IN_JUMP;
 }
 
 void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, CCSGOInputHistoryEntryPB* pInputEntry)
@@ -100,18 +100,18 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUse
 
 	// correct movement buttons while player move have different to buttons values
 	// clear all of the move buttons states
-	pCmd->buttonStates.nButtonState1 &= (~IN_FORWARD | ~IN_BACK | ~IN_LEFT | ~IN_RIGHT);
+	pCmd->nButtons.nValue &= (~IN_FORWARD | ~IN_BACK | ~IN_LEFT | ~IN_RIGHT);
 
 	// re-store buttons by active forward/side moves
 	if (pUserCmd->flForwardMove > 0.0f)
-		pCmd->buttonStates.nButtonState1 |= IN_FORWARD;
+		pCmd->nButtons.nValue |= IN_FORWARD;
 	else if (pUserCmd->flForwardMove < 0.0f)
-		pCmd->buttonStates.nButtonState1 |= IN_BACK;
+		pCmd->nButtons.nValue |= IN_BACK;
 
 	if (pUserCmd->flSideMove > 0.0f)
-		pCmd->buttonStates.nButtonState1 |= IN_RIGHT;
+		pCmd->nButtons.nValue |= IN_RIGHT;
 	else if (pUserCmd->flSideMove < 0.0f)
-		pCmd->buttonStates.nButtonState1 |= IN_LEFT;
+		pCmd->nButtons.nValue |= IN_LEFT;
 		
 	if (!pInputEntry->pViewCmd->angValue.IsZero())
 	{

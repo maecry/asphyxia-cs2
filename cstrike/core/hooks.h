@@ -34,8 +34,8 @@ namespace VTABLE
 	{
 		enum
 		{
-			CREATEMOVE = 14U,
-			MOUSEINPUTENABLED = 12U,
+			MOUSEINPUTENABLED = 13U,
+			CREATEMOVE = 15U,
 			FRAMESTAGENOTIFY = 33U,
 		};
 	}
@@ -61,7 +61,7 @@ namespace H
 
 	// game's functions
 	ViewMatrix_t* CS_FASTCALL GetMatrixForView(CRenderGameSystem* pRenderGameSystem, IViewRender* pViewRender, ViewMatrix_t* pOutWorldToView, ViewMatrix_t* pOutViewToProjection, ViewMatrix_t* pOutWorldToProjection, ViewMatrix_t* pOutWorldToPixels);
-	bool CS_FASTCALL CreateMove(CCSGOInput* pInput, unsigned int nSlot, std::int64_t nUnk, std::int8_t nUnk2);
+	bool CS_FASTCALL CreateMove(CCSGOInput* pInput, int nSlot, bool bActive, std::byte unk);
 	bool CS_FASTCALL MouseInputEnabled(void* pThisptr);
 	void CS_FASTCALL FrameStageNotify(void* rcx, int nFrameStage);
 	__int64* CS_FASTCALL LevelInit(void* pClientModeShared, const char* szNewMap);
