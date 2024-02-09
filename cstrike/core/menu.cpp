@@ -465,6 +465,8 @@ void T::Miscellaneous()
 			if (C_GET(bool, Vars.bAutoBHop))
 				ImGui::SliderInt(CS_XOR("chance"), &C_GET(int, Vars.nAutoBHopChance), 0, 100, CS_XOR("%d%%"));
 
+			ImGui::Checkbox(CS_XOR("auto strafe"), &C_GET(bool, Vars.bAutoStrafe));
+
 			ImGui::PopStyleVar();
 		}
 		ImGui::EndChild();

@@ -70,6 +70,8 @@ struct Variables_t
 
 	C_ADD_VARIABLE(bool, bAutoBHop, false);
 	C_ADD_VARIABLE(int, nAutoBHopChance, 100);
+
+	C_ADD_VARIABLE(bool, bAutoStrafe, false);
 #pragma endregion
 
 #pragma region variables_menu

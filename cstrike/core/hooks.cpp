@@ -192,10 +192,10 @@ ViewMatrix_t* CS_FASTCALL H::GetMatrixForView(CRenderGameSystem* pRenderGameSyst
 	return matResult;
 }
 
-bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, bool bActive, std::byte unk)
+bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, bool bActive)
 {
 	const auto oCreateMove = hkCreateMove.GetOriginal();
-	const bool bResult = oCreateMove(pInput, nSlot, bActive, unk);
+	const bool bResult = oCreateMove(pInput, nSlot, bActive);
 
 	if (!I::Engine->IsConnected() || !I::Engine->IsInGame())
 		return bResult;
