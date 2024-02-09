@@ -82,6 +82,26 @@ public:
 	int nTargetEntIndex; // 0x74
 };
 
+class CCSGOUserCmdPB
+{
+public:
+	int32_t nTickCount; // 0x0
+	MEM_PAD(0x4); // 0x4
+	void* pInputHistory; // 0x8
+
+	CCSGOInputHistoryEntryPB* GetInputHistoryEntry(std::int32_t nTick)
+	{
+		if (nTick < this->nTickCount)
+		{
+			CCSGOInputHistoryEntryPB** arrTickList = reinterpret_cast<CCSGOInputHistoryEntryPB**>(reinterpret_cast<std::uintptr_t>(pInputHistory) + 0x8);
+			return arrTickList[nTick];
+		}
+
+		return nullptr;
+	}
+};
+static_assert(sizeof(CCSGOUserCmdPB) == 0x10);
+
 struct ButtonState_t
 {
 	MEM_PAD(0x8);
@@ -114,14 +134,29 @@ public:
 };
 static_assert(sizeof(CBaseUserCmdPB) == 0x80);
 
-
 class CUserCmd
 {
 public:
-	MEM_PAD(0x30);
+	MEM_PAD(0x20);
+	CCSGOUserCmdPB csgoUserCmd; // 0x20
 	CBaseUserCmdPB* pBaseCmd; // 0x30
 	MEM_PAD(0x10); // 0x38
 	ButtonState_t nButtons; // 0x4C
 	MEM_PAD(0x20); // 0x64
+
+	void SetSubTickAngle(const QAngle_t& angView)
+	{
+		for (int i = 0; i < this->csgoUserCmd.nTickCount; i++)
+		{
+			CCSGOInputHistoryEntryPB* pInputEntry = this->csgoUserCmd.GetInputHistoryEntry(i);
+			if (pInputEntry == nullptr)
+				continue;
+
+			if (pInputEntry->pViewCmd == nullptr)
+				continue;
+
+			pInputEntry->pViewCmd->angValue = angView;
+		}
+	}
 };
 static_assert(sizeof(CUserCmd) == 0x88);
