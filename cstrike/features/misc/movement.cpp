@@ -29,20 +29,21 @@ void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CCSPlayerController* pLocalContro
 		return;
 
 	BunnyHop(pCmd, pBaseCmd, pLocalPawn);
+	AutoStrafe(pBaseCmd, pLocalPawn);
 
 	// loop through all tick commands
-	//for (int nTick = 0; nTick < pBaseCmd->nTickCount; nTick++)
-	//{
-	//	CCSGOInputHistoryEntryPB* pInputEntry = pCmd->cmd.inputHistoryField.pRep->tElements[nTick];
-	//	if (pInputEntry == nullptr)
-	//		continue;
+	for (int nTick = 0; nTick < pBaseCmd->nTickCount; nTick++)
+	{
+		CCSGOInputHistoryEntryPB* pInputEntry = pCmd->csgoUserCmd.GetInputHistoryEntry(nTick);
+		if (pInputEntry == nullptr)
+			continue;
 
-	//	// save view angles for movement correction
-	//	angCorrectionView = pInputEntry->pViewCmd->angValue;
+		// save view angles for movement correction
+		angCorrectionView = pInputEntry->pViewCmd->angValue;
 
-	//	// movement correction & anti-untrusted
-	//	ValidateUserCommand(pCmd, pBaseCmd, pInputEntry);
-	//}
+		// movement correction & anti-untrusted
+		ValidateUserCommand(pCmd, pBaseCmd, pInputEntry);
+	}
 }
 
 void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLocalPawn)
@@ -74,6 +75,14 @@ void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_CSP
 	// im lazy so yea :D
 	if (pLocalPawn->GetFlags() & FL_ONGROUND)
 		pCmd->nButtons.nValue &= ~IN_JUMP;
+}
+
+void F::MISC::MOVEMENT::AutoStrafe(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLocalPawn)
+{
+	if (!C_GET(bool, Vars.bAutoStrafe) || pLocalPawn->GetFlags() & FL_ONGROUND)
+		return;
+
+	pUserCmd->flSideMove = pUserCmd->nMousedX > 0 ? -1.0f : 1.0f; // a bit yanky, but works
 }
 
 void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, CCSGOInputHistoryEntryPB* pInputEntry)
