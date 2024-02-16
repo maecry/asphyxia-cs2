@@ -45,7 +45,7 @@ public:
 	{
 		// @ida: this got called before GetMatricesForView
 		using fnSetViewAngle = std::int64_t(CS_FASTCALL*)(void*, std::int32_t, QAngle_t&);
-		static auto oSetViewAngle = reinterpret_cast<fnSetViewAngle>(MEM::FindPattern(CLIENT_DLL, CS_XOR("F2 41 0F 10 00 4C 63 CA")));
+		static auto oSetViewAngle = reinterpret_cast<fnSetViewAngle>(MEM::FindPattern(CLIENT_DLL, CS_XOR("85 D2 75 3F 48")));
 
 #ifdef CS_PARANOID
 		CS_ASSERT(oSetViewAngle != nullptr);
