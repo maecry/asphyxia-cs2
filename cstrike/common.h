@@ -7,6 +7,13 @@
 
 #define CS_VERSION 1000
 
+/*
+ * current build of CS2
+ * - used to verify game version
+ */
+
+#define CS_PRODUCTSTRINGVERSION CS_XOR("1.39.9.4")
+
  /*
  * game's modules
  */
