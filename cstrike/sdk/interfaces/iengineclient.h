@@ -62,6 +62,6 @@ public:
 
 	[[nodiscard]] const char* GetProductVersionString()
 	{
-		return MEM::CallVFunc<const char*, 77U>(this);
+		return MEM::CallVFunc<const char*, 78U>(this);
 	}
 };
