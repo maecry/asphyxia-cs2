@@ -2,6 +2,9 @@
 
 #include "../common.h"
 
+// used: globalvariables
+#include "../sdk/interfaces/iglobalvars.h"
+
 #pragma region sdk_definitons
 #define GAME_RESOURCE_SERVICE_CLIENT CS_XOR("GameResourceServiceClientV00")
 #define SOURCE2_CLIENT CS_XOR("Source2Client00")
@@ -16,7 +19,7 @@
 #define RESOURCE_HANDLE_UTILS CS_XOR("ResourceHandleUtils001")
 
 // @source: master/game/shared/shareddefs.h
-#define TICK_INTERVAL (SDK::GlobalVars->m_flIntervalPerTick)
+#define TICK_INTERVAL (I::GlobalVars->flIntervalPerTick)
 #define TIME_TO_TICKS(TIME) (static_cast<int>(0.5f + static_cast<float>(TIME) / TICK_INTERVAL))
 #define TICKS_TO_TIME(TICKS) (TICK_INTERVAL * static_cast<float>(TICKS))
 #define ROUND_TO_TICKS(TIME) (TICK_INTERVAL * TIME_TO_TICKS(TIME))
@@ -28,7 +31,6 @@ class ISwapChainDx11;
 class IMemAlloc;
 class CCSGOInput;
 class ISchemaSystem;
-class IGlobalVars;
 class IInputSystem;
 class IGameResourceService;
 class ISource2Client;

@@ -4,6 +4,8 @@
 #include "../sdk/datatypes/matrix.h"
 // used: color_t
 #include "../sdk/datatypes/color.h"
+// used: cmd
+#include "../sdk/datatypes/usercmd.h"
 
 #pragma region sdk_definitions
 // @source: master/public/worldsize.h
@@ -18,7 +20,6 @@
 
 class CCSPlayerController;
 class C_CSPlayerPawn;
-class CUserCmd;
 
 namespace SDK
 {
