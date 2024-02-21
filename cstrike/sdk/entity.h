@@ -228,6 +228,9 @@ public:
 	SCHEMA_ADD_FIELD(Vector_t, GetLastSmokeOverlayColor, "C_CSPlayerPawnBase->m_vLastSmokeOverlayColor");
 	SCHEMA_ADD_FIELD(int, GetSurvivalTeam, "C_CSPlayerPawnBase->m_nSurvivalTeam"); // danger zone
 	SCHEMA_ADD_FIELD(std::int32_t, GetArmorValue, "C_CSPlayerPawnBase->m_ArmorValue");
+	SCHEMA_ADD_FIELD(bool, IsWaitForNoAttack, "C_CSPlayerPawnBase->m_bWaitForNoAttack");
+
+	[[nodiscard]] bool CanAttack(const float flServerTime);
 };
 
 class C_CSPlayerPawn : public C_CSPlayerPawnBase
@@ -378,6 +381,9 @@ public:
 	SCHEMA_ADD_FIELD(std::int32_t, GetBurstShotsRemaining, "C_CSWeaponBaseGun->m_iBurstShotsRemaining");
 	SCHEMA_ADD_FIELD(bool, IsBurstMode, "C_CSWeaponBase->m_bBurstMode");
 	SCHEMA_ADD_FIELD(float, GetPostponeFireReadyFrac, "C_CSWeaponBase->m_flPostponeFireReadyFrac");
+
+	[[nodiscard]] bool CanPrimaryAttack(const int nWeaponType, const float flServerTime);
+	[[nodiscard]] bool CanSecondaryAttack(const int nWeaponType, const float flServerTime);
 };
 
 class C_BaseCSGrenade : public C_CSWeaponBase

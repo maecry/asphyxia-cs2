@@ -165,7 +165,8 @@ enum ETeamID : int
 	TEAM_CT
 };
 
-enum EItemDefinitionIndexes : std::uint16_t
+using ItemDefinitionIndex_t = std::uint16_t;
+enum EItemDefinitionIndexes : ItemDefinitionIndex_t
 {
 	WEAPON_NONE,
 	WEAPON_DESERT_EAGLE,
