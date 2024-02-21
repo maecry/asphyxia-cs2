@@ -25,7 +25,7 @@
 // used: entity vdata
 #include "vdata.h"
 
-using GameTime_t = std::int32_t;
+using GameTime_t = std::float_t;
 using GameTick_t = std::int32_t;
 
 class CEntityInstance;
@@ -164,7 +164,7 @@ public:
 	SCHEMA_ADD_FIELD(std::int32_t, GetHealth, "C_BaseEntity->m_iHealth");
 	SCHEMA_ADD_FIELD(std::int32_t, GetMaxHealth, "C_BaseEntity->m_iMaxHealth");
 	SCHEMA_ADD_FIELD(float, GetWaterLevel, "C_BaseEntity->m_flWaterLevel");
-	SCHEMA_ADD_FIELD_OFFSET(void*, GetVData, "C_BaseEntity::m_nSubclassID", 0x8);
+	SCHEMA_ADD_FIELD_OFFSET(void*, GetVData, "C_BaseEntity->m_nSubclassID", 0x8);
 };
 
 class CGlowProperty;
@@ -184,9 +184,20 @@ public:
 	SCHEMA_ADD_FIELD(std::float_t, GetSimulationTime, "C_BaseModelEntity->m_flSimulationTime");
 };
 
-class CPlayer_WeaponServices;
 class CPlayer_ItemServices;
 class CPlayer_CameraServices;
+
+class CPlayer_WeaponServices
+{
+public:
+	SCHEMA_ADD_FIELD(CBaseHandle, GetActiveWeapon, "CPlayer_WeaponServices->m_hActiveWeapon");
+};
+
+class CCSPlayer_WeaponServices : public CPlayer_WeaponServices
+{
+public:
+	SCHEMA_ADD_FIELD(GameTime_t, GetNextAttack, "CCSPlayer_WeaponServices->m_flNextAttack");
+}; 
 
 class C_BasePlayerPawn : public C_BaseModelEntity
 {
@@ -194,7 +205,7 @@ public:
 	CS_CLASS_NO_INITIALIZER(C_BasePlayerPawn);
 
 	SCHEMA_ADD_FIELD(CBaseHandle, GetControllerHandle, "C_BasePlayerPawn->m_hController");
-	SCHEMA_ADD_FIELD(CPlayer_WeaponServices*, GetWeaponServices, "C_BasePlayerPawn->m_pWeaponServices");
+	SCHEMA_ADD_FIELD(CCSPlayer_WeaponServices*, GetWeaponServices, "C_BasePlayerPawn->m_pWeaponServices");
 	SCHEMA_ADD_FIELD(CPlayer_ItemServices*, GetItemServices, "C_BasePlayerPawn->m_pItemServices");
 	SCHEMA_ADD_FIELD(CPlayer_CameraServices*, GetCameraServices, "C_BasePlayerPawn->m_pCameraServices");
 };
@@ -217,6 +228,9 @@ public:
 	SCHEMA_ADD_FIELD(Vector_t, GetLastSmokeOverlayColor, "C_CSPlayerPawnBase->m_vLastSmokeOverlayColor");
 	SCHEMA_ADD_FIELD(int, GetSurvivalTeam, "C_CSPlayerPawnBase->m_nSurvivalTeam"); // danger zone
 	SCHEMA_ADD_FIELD(std::int32_t, GetArmorValue, "C_CSPlayerPawnBase->m_ArmorValue");
+	SCHEMA_ADD_FIELD(bool, IsWaitForNoAttack, "C_CSPlayerPawnBase->m_bWaitForNoAttack");
+
+	[[nodiscard]] bool CanAttack(const float flServerTime);
 };
 
 class C_CSPlayerPawn : public C_CSPlayerPawnBase
@@ -234,10 +248,14 @@ public:
 	CS_CLASS_NO_INITIALIZER(CBasePlayerController);
 
 	SCHEMA_ADD_FIELD(std::uint64_t, GetSteamId, "CBasePlayerController->m_steamID");
+	SCHEMA_ADD_FIELD(std::uint32_t, GetTickBase, "CBasePlayerController->m_nTickBase");
 	SCHEMA_ADD_FIELD(CBaseHandle, GetPawnHandle, "CBasePlayerController->m_hPawn");
 	SCHEMA_ADD_FIELD(bool, IsLocalPlayerController, "CBasePlayerController->m_bIsLocalPlayerController");
 };
 
+// forward decleration
+class C_CSWeaponBaseGun;
+class C_BasePlayerWeapon;
 class CCSPlayerController : public CBasePlayerController
 {
 public:
@@ -300,7 +318,7 @@ class C_AttributeContainer : public CAttributeManager
 public:
 	CS_CLASS_NO_INITIALIZER(C_AttributeContainer);
 
-	SCHEMA_ADD_FIELD(C_EconItemView, GetItem, "C_AttributeContainer::m_Item");
+	SCHEMA_ADD_PFIELD(C_EconItemView, GetItem, "C_AttributeContainer->m_Item");
 };
 
 class C_EconEntity : public C_BaseFlex
@@ -308,7 +326,7 @@ class C_EconEntity : public C_BaseFlex
 public:
 	CS_CLASS_NO_INITIALIZER(C_EconEntity);
 
-	SCHEMA_ADD_FIELD(C_AttributeContainer, GetAttributeManager, "C_EconEntity->m_AttributeManager");
+	SCHEMA_ADD_PFIELD(C_AttributeContainer, GetAttributeManager, "C_EconEntity->m_AttributeManager");
 	SCHEMA_ADD_FIELD(std::uint32_t, GetOriginalOwnerXuidLow, "C_EconEntity->m_OriginalOwnerXuidLow");
 	SCHEMA_ADD_FIELD(std::uint32_t, GetOriginalOwnerXuidHigh, "C_EconEntity->m_OriginalOwnerXuidHigh");
 	SCHEMA_ADD_FIELD(std::int32_t, GetFallbackPaintKit, "C_EconEntity->m_nFallbackPaintKit");
@@ -361,6 +379,20 @@ public:
 
 	SCHEMA_ADD_FIELD(std::int32_t, GetZoomLevel, "C_CSWeaponBaseGun->m_zoomLevel");
 	SCHEMA_ADD_FIELD(std::int32_t, GetBurstShotsRemaining, "C_CSWeaponBaseGun->m_iBurstShotsRemaining");
+	SCHEMA_ADD_FIELD(bool, IsBurstMode, "C_CSWeaponBase->m_bBurstMode");
+	SCHEMA_ADD_FIELD(float, GetPostponeFireReadyFrac, "C_CSWeaponBase->m_flPostponeFireReadyFrac");
+
+	[[nodiscard]] bool CanPrimaryAttack(const int nWeaponType, const float flServerTime);
+	[[nodiscard]] bool CanSecondaryAttack(const int nWeaponType, const float flServerTime);
+};
+
+class C_BaseCSGrenade : public C_CSWeaponBase
+{
+public:
+	SCHEMA_ADD_FIELD(bool, IsHeldByPlayer, "C_BaseCSGrenade->m_bIsHeldByPlayer");
+	SCHEMA_ADD_FIELD(bool, IsPinPulled, "C_BaseCSGrenade->m_bPinPulled");
+	SCHEMA_ADD_FIELD(GameTime_t, GetThrowTime, "C_BaseCSGrenade->m_fThrowTime");
+	SCHEMA_ADD_FIELD(float, GetThrowStrength, "C_BaseCSGrenade->m_flThrowStrength");
 };
 
 class C_BaseGrenade : public C_BaseFlex

@@ -5,6 +5,9 @@
 // used: rop
 #include "../utilities/memory.h"
 
+using CFiringModeFloat = std::float_t[2];
+using CSkillFloat = std::float_t[4];
+
 class CBasePlayerVData
 {
 public:

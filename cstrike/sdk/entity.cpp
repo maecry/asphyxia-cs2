@@ -72,3 +72,65 @@ int C_CSPlayerPawn::GetAssociatedTeam()
 
 	return nTeam;
 }
+
+bool C_CSPlayerPawnBase::CanAttack(const float flServerTime)
+{
+	// check is player ready to attack
+	if (CCSPlayer_WeaponServices* pWeaponServices = this->GetWeaponServices(); pWeaponServices != nullptr)
+		if (this->IsWaitForNoAttack() || pWeaponServices->GetNextAttack() > flServerTime)
+			return false;
+
+	return true;
+}
+
+bool C_CSWeaponBaseGun::CanPrimaryAttack(const int nWeaponType, const float flServerTime)
+{
+	// check are weapon support burst mode and it's ready to attack
+	if (this->IsBurstMode())
+	{
+		// check is it ready to attack
+		if (this->GetBurstShotsRemaining() > 0 /*&& this->GetNextBurstShotTime() <= flServerTime*/)
+			return true;
+	}
+
+		// check is weapon ready to attack
+	if (this->GetNextPrimaryAttackTick() > TIME_TO_TICKS(flServerTime))
+		return false;
+
+	// we doesn't need additional checks for knives
+	if (nWeaponType == WEAPONTYPE_KNIFE)
+		return true;
+
+		// check do weapon have ammo
+	if (this->GetClip1() <= 0)
+		return false;
+
+	const ItemDefinitionIndex_t nDefinitionIndex = this->GetAttributeManager()->GetItem()->GetItemDefinitionIndex();
+
+	// check for revolver cocking ready
+	if (nDefinitionIndex == WEAPON_R8_REVOLVER && this->GetPostponeFireReadyFrac() > flServerTime)
+		return false;
+
+	return true;
+}
+
+bool C_CSWeaponBaseGun::CanSecondaryAttack(const int nWeaponType, const float flServerTime)
+{
+	// check is weapon ready to attack
+	if (this->GetNextSecondaryAttackTick() > TIME_TO_TICKS(flServerTime))
+		return false;
+
+	// we doesn't need additional checks for knives
+	if (nWeaponType == WEAPONTYPE_KNIFE)
+		return true;
+
+	// check do weapon have ammo
+	if (this->GetClip1() <= 0)
+		return false;
+
+	// only revolver is allowed weapon for secondary attack
+	if (this->GetAttributeManager()->GetItem()->GetItemDefinitionIndex() != WEAPON_R8_REVOLVER)
+		return false;
+
+	return true;
+}

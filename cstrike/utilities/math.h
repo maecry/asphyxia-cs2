@@ -5,7 +5,6 @@
 #include <type_traits>
 // used: sin, cos, pow, abs, sqrt
 #include <corecrt_math.h>// used: MATH::Sin, cos, MATH::Pow, abs, sqrt
-#include <corecrt_math.h>
 // used: rand, srand
 #include <cstdlib>
 // used: time

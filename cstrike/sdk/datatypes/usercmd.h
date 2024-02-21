@@ -1,5 +1,10 @@
 #pragma once
 
+// used: QAngle_t
+#include "qangle.h"
+// used: MEM_PAD
+#include "../../utilities/memory.h"
+
 // @source: master/game/shared/in_buttons.h
 enum ECommandButtons : int
 {
