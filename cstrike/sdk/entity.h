@@ -263,9 +263,6 @@ public:
 	// @note: always get origin from pawn not controller
 	[[nodiscard]] const Vector_t& GetPawnOrigin();
 
-	[[nodiscard]] bool CanShoot(C_CSWeaponBaseGun* pBaseWeapon);
-	[[nodiscard]] bool IsFiring(C_CSWeaponBaseGun* pBaseWeapon);
-
 	SCHEMA_ADD_FIELD(std::uint32_t, GetPing, "CCSPlayerController->m_iPing");
 	SCHEMA_ADD_FIELD(const char*, GetPlayerName, "CCSPlayerController->m_sSanitizedPlayerName");
 	SCHEMA_ADD_FIELD(std::int32_t, GetPawnHealth, "CCSPlayerController->m_iPawnHealth");
