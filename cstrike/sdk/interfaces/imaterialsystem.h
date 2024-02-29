@@ -95,10 +95,10 @@ public:
 	MEM_PAD(0x18); // 0x0
 	CSceneAnimatableObject* pSceneAnimatableObject; // 0x18
 	CMaterial2* pMaterial; // 0x20
-	MEM_PAD(0x20); // 0x28
-	Color_t colValue; // 0x48
-	MEM_PAD(0x4); // 0x4C
-	CObjectInfo* pObjectInfo; // 0x50
+	MEM_PAD(0x18); // 0x28
+	Color_t colValue; // 0x40
+	MEM_PAD(0x4); // 0x44
+	CObjectInfo* pObjectInfo; // 0x48
 };
 
 class IMaterialSystem2
