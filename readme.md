@@ -11,11 +11,6 @@
 - Asphyxia is a base that was intended to be a starting point. It is not a cheat itself, but rather a framework for building your own cheat.
 - C++ version: 20
 
-## Contact :email:
-- **Discord**: user164asdfzxcq257(852617501140844564)
-
-[![](https://dcbadge.vercel.app/api/server/tABmXQe3mm)](https://discord.gg/tABmXQe3mm)
-
 ## Credits
 - [imgui](https://github.com/ocornut/imgui) - framework
 - [freetype](https://freetype.org/) - font rasterizer
