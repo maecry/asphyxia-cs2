@@ -8,7 +8,7 @@
 #include "../../utilities/memory.h"
 
 #define SCHEMASYSTEM_TYPE_SCOPES_OFFSET 0x190
-#define SCHEMASYSTEMTYPESCOPE_OFF1 0x4B0
+#define SCHEMASYSTEMTYPESCOPE_OFF1 0x4B8
 #define SCHEMASYSTEMTYPESCOPE_OFF2 0x2808
 
 using SchemaString_t = const char*;
