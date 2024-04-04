@@ -23,7 +23,7 @@ struct SchemaData_t
 
 static std::vector<SchemaData_t> vecSchemaData;
 
-bool SCHEMA::Setup(const wchar_t* wszFileName)
+bool SCHEMA::Setup(const wchar_t* wszFileName, const char* szModuleName)
 {
 	wchar_t wszDumpFilePath[MAX_PATH];
 	if (!CORE::GetWorkingPath(wszDumpFilePath))
@@ -45,15 +45,15 @@ bool SCHEMA::Setup(const wchar_t* wszFileName)
 	// write current date, time and info
 	::WriteFile(hOutFile, szTimeBuffer.Data(), szTimeBuffer.Length(), nullptr, nullptr);
 
-	CSchemaSystemTypeScope* pTypeScope = I::SchemaSystem->FindTypeScopeForModule(CS_XOR("client.dll"));
+	CSchemaSystemTypeScope* pTypeScope = I::SchemaSystem->FindTypeScopeForModule(szModuleName);
 	if (pTypeScope == nullptr)
 		return false;
 
 	const int nTableSize = pTypeScope->hashClasses.Count();
 	L_PRINT(LOG_INFO) << CS_XOR("found \"") << nTableSize << CS_XOR("\" schema classes in module");
-	
+
 	// allocate memory for elements
-	UtlTSHashHandle_t* pElements =  new UtlTSHashHandle_t[nTableSize + 1U];
+	UtlTSHashHandle_t* pElements = new UtlTSHashHandle_t[nTableSize + 1U];
 	const auto nElements = pTypeScope->hashClasses.GetElements(0, nTableSize, pElements);
 
 	for (int i = 0; i < nElements; i++)
@@ -85,13 +85,14 @@ bool SCHEMA::Setup(const wchar_t* wszFileName)
 			CRT::String_t<MAX_PATH> szFieldClassBuffer(CS_XOR("%s->%s"), pClassBinding->szBinaryName, pFields[j].szName);
 			// store field info
 			vecSchemaData.emplace_back(FNV1A::Hash(szFieldClassBuffer.Data()), pFields[j].nSingleInheritanceOffset);
-			
+
 			CRT::String_t<MAX_PATH> szFieldBuffer(CS_XOR("    %s %s = 0x%X\n"), pFields[j].pSchemaType->szName, pFields[j].szName, pFields[j].nSingleInheritanceOffset);
 			// write field info
 			::WriteFile(hOutFile, szFieldBuffer.Data(), szFieldBuffer.Length(), nullptr, nullptr);
 		}
-
-		//L_PRINT(LOG_INFO) << CS_XOR("dumped \"") << pDeclaredClassInfo->szName << CS_XOR("\" (total: ") << pDeclaredClassInfo->nFieldSize << CS_XOR(" fields)");
+		#ifdef _DEBUG
+		L_PRINT(LOG_INFO) << CS_XOR("dumped \"") << pDeclaredClassInfo->szName << CS_XOR("\" (total: ") << pDeclaredClassInfo->nFieldSize << CS_XOR(" fields)");
+		#endif
 	}
 
 	// free allocated memory
@@ -105,7 +106,9 @@ bool SCHEMA::Setup(const wchar_t* wszFileName)
 
 std::uint32_t SCHEMA::GetOffset(const FNV1A_t uHashedFieldName)
 {
-	if (const auto it = std::ranges::find_if(vecSchemaData, [uHashedFieldName](const SchemaData_t& data) { return data.uHashedFieldName == uHashedFieldName; }); it != vecSchemaData.end())
+	if (const auto it = std::ranges::find_if(vecSchemaData, [uHashedFieldName](const SchemaData_t& data)
+		{ return data.uHashedFieldName == uHashedFieldName; });
+		it != vecSchemaData.end())
 		return it->uOffset;
 
 	L_PRINT(LOG_ERROR) << CS_XOR("failed to find offset for field with hash: ") << L::AddFlags(LOG_MODE_INT_FORMAT_HEX | LOG_MODE_INT_SHOWBASE) << uHashedFieldName;
@@ -145,15 +148,15 @@ std::uint32_t SCHEMA::GetForeignOffset(const char* szModulenName, const FNV1A_t 
 
 		if (pDeclaredClassInfo->nFieldSize == 0)
 			continue;
-				
+
 		for (auto j = 0; j < pDeclaredClassInfo->nFieldSize; j++)
 		{
 			SchemaClassFieldData_t* pFields = pDeclaredClassInfo->pFields;
 			if (pFields == nullptr)
 				continue;
-			
+
 			SchemaClassFieldData_t field = pFields[j];
-			if (FNV1A::Hash(pClassBinding->szBinaryName) == uHashedClassName && FNV1A::Hash(field.szName) == uHashedFieldName )
+			if (FNV1A::Hash(pClassBinding->szBinaryName) == uHashedClassName && FNV1A::Hash(field.szName) == uHashedFieldName)
 				uOffset = field.nSingleInheritanceOffset;
 		}
 	}

@@ -135,11 +135,16 @@ static bool Setup(HMODULE hModule)
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("features initialization completed");
 
-	if (!SCHEMA::Setup(CS_XOR(L"schema.txt")))
+	if (!SCHEMA::Setup(CS_XOR(L"schema_client.txt"), CS_XOR("client.dll")))
 	{
 		CS_ASSERT(false); // failed to setup schema system
 		return false;
 	}
+	//if (!SCHEMA::Setup(CS_XOR(L"schema_server.txt"), CS_XOR("server.dll")))
+	//{
+	//	CS_ASSERT(false); // failed to setup schema system
+	//	return false;
+	//}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("schema system initialization completed");
 
 	if (!CONVAR::Dump(CS_XOR(L"convars.txt")))

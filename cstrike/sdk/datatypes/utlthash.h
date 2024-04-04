@@ -117,7 +117,6 @@ public:
 			const HashBucket_t& hashBucket = aBuckets[nBucketIndex];
 
 			HashFixedData_t* pElement = hashBucket.pFirstUncommited;
-
 			for (; pElement; pElement = pElement->GetNext())
 			{
 				if (--nFirstElement >= 0)
@@ -173,7 +172,7 @@ private:
 
 		HashFixedDataInternal_t<tData>* GetNext()
 		{
-			return *reinterpret_cast<HashFixedDataInternal_t<tData>**>(reinterpret_cast<std::uintptr_t>(this) + (0x20));
+			return *reinterpret_cast<HashFixedDataInternal_t<tData>**>(reinterpret_cast<std::uintptr_t>(this) + (0x8));
 		}
 	};
 
@@ -201,6 +200,7 @@ private:
 	}
 
 	CUtlMemoryPool EntryMemory;
+	MEM_PAD(0x40);
 	HashBucket_t aBuckets[nBucketCount];
 	bool bNeedsCommit;
 };

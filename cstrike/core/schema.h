@@ -33,7 +33,7 @@ namespace SCHEMA
 {
 	// store the offset of the field in the class
 	// dump stored data to file
-	bool Setup(const wchar_t* wszFileName);
+	bool Setup(const wchar_t* wszFileName, const char* szModuleName);
 
 	/* @section: get */
 	// get offset of the field in the class
