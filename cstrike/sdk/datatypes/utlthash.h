@@ -117,7 +117,7 @@ public:
 			const HashBucket_t& hashBucket = aBuckets[nBucketIndex];
 
 			HashFixedData_t* pElement = hashBucket.pFirstUncommited;
-			for (; pElement; pElement = pElement->GetNext())
+			for (; pElement; pElement = pElement->pNext)
 			{
 				if (--nFirstElement >= 0)
 					continue;
@@ -134,7 +134,7 @@ public:
 
 	tElement Element(UtlTSHashHandle_t hHash)
 	{
-		return ((HashFixedData_t*)(hHash))->GetData();
+		return ((HashFixedData_t*)(hHash))->Data;
 	}
 
 	const tElement& Element(UtlTSHashHandle_t hHash) const
@@ -164,16 +164,6 @@ private:
 		tKey uiKey;
 		HashFixedDataInternal_t<tData>* pNext;
 		tData Data;
-
-		tData GetData()
-		{
-			return *reinterpret_cast<tData*>(reinterpret_cast<std::uintptr_t>(this) + (0x10));
-		}
-
-		HashFixedDataInternal_t<tData>* GetNext()
-		{
-			return *reinterpret_cast<HashFixedDataInternal_t<tData>**>(reinterpret_cast<std::uintptr_t>(this) + (0x8));
-		}
 	};
 
 	using HashFixedData_t = HashFixedDataInternal_t<tElement>;
