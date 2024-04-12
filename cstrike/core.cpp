@@ -98,7 +98,7 @@ static bool Setup(HMODULE hModule)
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("interfaces initialization completed");
 
-	// verify game version
+	// @note: this doesn't affect much, but it's good to know if we're using different version of the game
 	if (CRT::StringCompare(I::Engine->GetProductVersionString(), CS_PRODUCTSTRINGVERSION) != 0)
 		L_PRINT(LOG_WARNING) << L::SetColor(LOG_COLOR_FORE_YELLOW | LOG_COLOR_FORE_INTENSITY) << CS_XOR("version mismatch! local CS2 version: ") << CS_PRODUCTSTRINGVERSION << CS_XOR(", current CS2 version: ") << I::Engine->GetProductVersionString() << CS_XOR(". asphyxia might not function as normal.");
 
