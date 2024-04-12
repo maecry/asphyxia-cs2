@@ -36,8 +36,8 @@
 
 bool CORE::GetWorkingPath(wchar_t* wszDestination)
 {
-	if (GetModuleFileNameW(static_cast<HMODULE>(hDll), wszDestination, MAX_PATH) == 0)
-		return false;
+	const wchar_t* wszModuleName = MEM::GetModuleBaseFileName(static_cast<HMODULE>(hDll), true);
+	CRT::StringCopy(wszDestination, wszModuleName);
 
 	// remove the module name
 	if (wchar_t* pwszLastSlash = CRT::StringCharR(wszDestination, L'\\'); pwszLastSlash != nullptr)

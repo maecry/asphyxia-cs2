@@ -42,7 +42,7 @@ namespace MEM
 	/// alternative of 'GetModuleFileName()'
 	/// @param[in] hModuleBase module base to search filename for, null means current process
 	/// @returns: name of given module if it's valid, null otherwise
-	[[nodiscard]] const wchar_t* GetModuleBaseFileName(const void* hModuleBase);
+	[[nodiscard]] const wchar_t* GetModuleBaseFileName(const void* hModuleBase, const bool bGetFullPath = false);
 	/// alternative of 'GetProcAddress()'
 	/// @remarks: doesn't support forwarded exports, this means you may need to manual call 'LoadLibrary'/'FreeLibrary' for export library
 	/// @returns: pointer to exported procedure

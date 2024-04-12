@@ -129,7 +129,7 @@ void* MEM::GetModuleBaseHandle(const wchar_t* wszModuleName)
 	return pModuleBase;
 }
 
-const wchar_t* MEM::GetModuleBaseFileName(const void* hModuleBase)
+const wchar_t* MEM::GetModuleBaseFileName(const void* hModuleBase, const bool bGetFullPath)
 {
 	const _PEB* pPEB = reinterpret_cast<_PEB*>(__readgsqword(0x60));
 
@@ -145,7 +145,7 @@ const wchar_t* MEM::GetModuleBaseFileName(const void* hModuleBase)
 
 		if (pEntry->DllBase == hModuleBase)
 		{
-			wszModuleName = pEntry->BaseDllName.Buffer;
+			wszModuleName = bGetFullPath ? pEntry->FullDllName.Buffer : pEntry->BaseDllName.Buffer;
 			break;
 		}
 	}
