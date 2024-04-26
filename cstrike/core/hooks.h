@@ -36,7 +36,7 @@ namespace VTABLE
 		{
 			CREATEMOVE = 5U, // The createmove that was at 14 is now at 15, however I personally prefer hooking the one at 5 :)
 			MOUSEINPUTENABLED = 13U,
-			FRAMESTAGENOTIFY = 33U,
+			FRAMESTAGENOTIFY = 35U,
 		};
 	}
 }

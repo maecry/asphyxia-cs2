@@ -227,7 +227,6 @@ public:
 	SCHEMA_ADD_FIELD(float, GetFlashDuration, "C_CSPlayerPawnBase->m_flFlashDuration");
 	SCHEMA_ADD_FIELD(Vector_t, GetLastSmokeOverlayColor, "C_CSPlayerPawnBase->m_vLastSmokeOverlayColor");
 	SCHEMA_ADD_FIELD(int, GetSurvivalTeam, "C_CSPlayerPawnBase->m_nSurvivalTeam"); // danger zone
-	SCHEMA_ADD_FIELD(std::int32_t, GetArmorValue, "C_CSPlayerPawnBase->m_ArmorValue");
 	SCHEMA_ADD_FIELD(bool, IsWaitForNoAttack, "C_CSPlayerPawnBase->m_bWaitForNoAttack");
 
 	[[nodiscard]] bool CanAttack(const float flServerTime);
@@ -240,6 +239,8 @@ public:
 
 	[[nodiscard]] bool IsOtherEnemy(C_CSPlayerPawn* pOther);
 	[[nodiscard]] int GetAssociatedTeam();
+
+	SCHEMA_ADD_FIELD(std::int32_t, GetArmorValue, "C_CSPlayerPawn->m_ArmorValue");
 };
 
 class CBasePlayerController : public C_BaseModelEntity
