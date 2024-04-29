@@ -19,7 +19,7 @@
 #define RESOURCE_HANDLE_UTILS CS_XOR("ResourceHandleUtils001")
 
 // @source: master/game/shared/shareddefs.h
-#define TICK_INTERVAL (I::GlobalVars->flIntervalPerTick)
+#define TICK_INTERVAL 0.015625f
 #define TIME_TO_TICKS(TIME) (static_cast<int>(0.5f + static_cast<float>(TIME) / TICK_INTERVAL))
 #define TICKS_TO_TIME(TICKS) (TICK_INTERVAL * static_cast<float>(TICKS))
 #define ROUND_TO_TICKS(TIME) (TICK_INTERVAL * TIME_TO_TICKS(TIME))
