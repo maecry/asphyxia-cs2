@@ -20,7 +20,7 @@ void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CCSPlayerController* pLocalContro
 	if (!pLocalController->IsPawnAlive())
 		return;
 
-	CBaseUserCmdPB* pBaseCmd = pCmd->pBaseCmd;
+	CBaseUserCmdPB* pBaseCmd = pCmd->csgoUserCmd.pBaseCmd;
 	if (pBaseCmd == nullptr)
 		return;
 
@@ -34,12 +34,12 @@ void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CCSPlayerController* pLocalContro
 	// loop through all tick commands
 	for (int nTick = 0; nTick < pBaseCmd->nTickCount; nTick++)
 	{
-		CCSGOInputHistoryEntryPB* pInputEntry = pCmd->csgoUserCmd.GetInputHistoryEntry(nTick);
+		CCSGOInputHistoryEntryPB* pInputEntry = pCmd->GetInputHistoryEntry(nTick);
 		if (pInputEntry == nullptr)
 			continue;
 
 		// save view angles for movement correction
-		angCorrectionView = pInputEntry->pViewCmd->angValue;
+		angCorrectionView = pInputEntry->pViewAngles->angValue;
 
 		// movement correction & anti-untrusted
 		ValidateUserCommand(pCmd, pBaseCmd, pInputEntry);
@@ -93,14 +93,14 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUse
 	// clamp angle to avoid untrusted angle
 	if (C_GET(bool, Vars.bAntiUntrusted))
 	{
-		if (pInputEntry->pViewCmd->angValue.IsValid())
+		if (pInputEntry->pViewAngles->angValue.IsValid())
 		{
-			pInputEntry->pViewCmd->angValue.Clamp();
-			pInputEntry->pViewCmd->angValue.z = 0.f;
+			pInputEntry->pViewAngles->angValue.Clamp();
+			pInputEntry->pViewAngles->angValue.z = 0.f;
 		}
 		else
 		{
-			pInputEntry->pViewCmd->angValue = {};
+			pInputEntry->pViewAngles->angValue = {};
 			L_PRINT(LOG_WARNING) << CS_XOR("view angles have a NaN component, the value is reset");
 		}
 	}
@@ -122,10 +122,10 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUse
 	else if (pUserCmd->flSideMove < 0.0f)
 		pCmd->nButtons.nValue |= IN_LEFT;
 		
-	if (!pInputEntry->pViewCmd->angValue.IsZero())
+	if (!pInputEntry->pViewAngles->angValue.IsZero())
 	{
-		const float flDeltaX = std::remainderf(pInputEntry->pViewCmd->angValue.x - angCorrectionView.x, 360.f);
-		const float flDeltaY = std::remainderf(pInputEntry->pViewCmd->angValue.y - angCorrectionView.y, 360.f);
+		const float flDeltaX = std::remainderf(pInputEntry->pViewAngles->angValue.x - angCorrectionView.x, 360.f);
+		const float flDeltaY = std::remainderf(pInputEntry->pViewAngles->angValue.y - angCorrectionView.y, 360.f);
 
 		float flPitch = CONVAR::m_pitch->value.fl;
 		float flYaw = CONVAR::m_yaw->value.fl;
@@ -155,7 +155,7 @@ void F::MISC::MOVEMENT::MovementCorrection(CBaseUserCmdPB* pUserCmd, CCSGOInputH
 	vecUp.NormalizeInPlace();
 
 	Vector_t vecOldForward = {}, vecOldRight = {}, vecOldUp = {};
-	pInputEntry->pViewCmd->angValue.ToDirections(&vecOldForward, &vecOldRight, &vecOldUp);
+	pInputEntry->pViewAngles->angValue.ToDirections(&vecOldForward, &vecOldRight, &vecOldUp);
 
 	// we don't attempt on forward/right roll, and on up pitch/yaw
 	vecOldForward.z = vecOldRight.z = vecOldUp.x = vecOldUp.y = 0.0f;

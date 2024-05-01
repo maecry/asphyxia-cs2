@@ -37,48 +37,65 @@ enum ECommandButtons : int
 	IN_USE_OR_RELOAD = (1 << 26)
 };
 
-class CBasePB
+template <typename T>
+struct RepeatedPtrField_t
 {
-	MEM_PAD(0x18); // 0x0
+	struct Rep_t
+	{
+		int nAllocatedSize;
+		T* tElements[(std::numeric_limits<int>::max() - 2 * sizeof(int)) / sizeof(void*)];
+	};
+
+	void* pArena;
+	int nCurrentSize;
+	int nTotalSize;
+	Rep_t* pRep;
 };
 
-class CCmdQAngle : public CBasePB
+class CBasePB
+{
+	MEM_PAD(0x8) // 0x0 VTABLE
+	std::uint32_t nHasBits; // 0x8
+	std::uint64_t nCachedBits; // 0xC
+};
+
+static_assert(sizeof(CBasePB) == 0x18);
+
+class CMsgQAngle : public CBasePB
 {
 public:
 	QAngle_t angValue; // 0x18
 };
+static_assert(sizeof(CMsgQAngle) == 0x28);
 
-static_assert(sizeof(CCmdQAngle) == 0x24);
-
-class CCmdVector : public CBasePB
+class CMsgVector : public CBasePB
 {
 public:
 	Vector4D_t vecValue; // 0x18
 };
-static_assert(sizeof(CCmdVector) == 0x28);
+static_assert(sizeof(CMsgVector) == 0x28);
 
-class CCSGOInterpolationInfo : public CBasePB
+class CCSGOInterpolationInfoPB : public CBasePB
 {
 public:
 	float flFraction; // 0x18
 	int nSrcTick; // 0x1C
 	int nDstTick; // 0x20
 };
-static_assert(sizeof(CCSGOInterpolationInfo) == 0x24);
+static_assert(sizeof(CCSGOInterpolationInfoPB) == 0x28);
 
-// credits: @patoke [uc:3872928-post1311]
 class CCSGOInputHistoryEntryPB : public CBasePB
 {
 public:
-	CCmdQAngle* pViewCmd; // 0x18
-	CCmdVector* pShootOriginCmd; // 0x20
-	CCmdVector* pTargetHeadOriginCmd; // 0x28
-	CCmdVector* pTargetAbsOriginCmd; // 0x30
-	CCmdQAngle* pTargetViewCmd; // 0x38
-	CCSGOInterpolationInfo* cl_interp; // 0x40
-	CCSGOInterpolationInfo* sv_interp0; // 0x48
-	CCSGOInterpolationInfo* sv_interp1; // 0x50
-	CCSGOInterpolationInfo* player_interp; // 0x58
+	CMsgQAngle* pViewAngles; // 0x18
+	CMsgVector* pShootPosition; // 0x20
+	CMsgVector* pTargetHeadPositionCheck; // 0x28
+	CMsgVector* pTargetAbsPositionCheck; // 0x30
+	CMsgQAngle* pTargetAngPositionCheck; // 0x38
+	CCSGOInterpolationInfoPB* cl_interp; // 0x40
+	CCSGOInterpolationInfoPB* sv_interp0; // 0x48
+	CCSGOInterpolationInfoPB* sv_interp1; // 0x50
+	CCSGOInterpolationInfoPB* player_interp; // 0x58
 	int nRenderTickCount; // 0x60
 	float flRenderTickFraction; // 0x64
 	int nPlayerTickCount; // 0x68
@@ -86,81 +103,99 @@ public:
 	int nFrameNumber; // 0x70
 	int nTargetEntIndex; // 0x74
 };
+static_assert(sizeof(CCSGOInputHistoryEntryPB) == 0x78);
 
-class CCSGOUserCmdPB
+struct CInButtonStatePB : CBasePB
+{
+	std::uint64_t nValue;
+	std::uint64_t nValueChanged;
+	std::uint64_t nValueScroll;
+};
+static_assert(sizeof(CInButtonStatePB) == 0x30);
+
+struct CSubtickMoveStep : CBasePB
 {
 public:
-	int32_t nTickCount; // 0x0
-	MEM_PAD(0x4); // 0x4
-	void* pInputHistory; // 0x8
-
-	CCSGOInputHistoryEntryPB* GetInputHistoryEntry(std::int32_t nTick)
-	{
-		if (nTick < this->nTickCount)
-		{
-			CCSGOInputHistoryEntryPB** arrTickList = reinterpret_cast<CCSGOInputHistoryEntryPB**>(reinterpret_cast<std::uintptr_t>(pInputHistory) + 0x8);
-			return arrTickList[nTick];
-		}
-
-		return nullptr;
-	}
+	std::uint64_t nButton;
+	bool bPressed;
+	float flWhen;
+	float flAnalogForwardDelta;
+	float flAnalogLeftDelta;
 };
-static_assert(sizeof(CCSGOUserCmdPB) == 0x10);
-
-struct ButtonState_t
-{
-	MEM_PAD(0x8);
-	uint64_t nValue;
-	uint64_t nValueChanged;
-	uint64_t nValueScroll;
-};
-static_assert(sizeof(ButtonState_t) == 0x20);
+static_assert(sizeof(CSubtickMoveStep) == 0x30);
 
 class CBaseUserCmdPB : public CBasePB
 {
 public:
-	MEM_PAD(0x20); // 0x18
-	ButtonState_t* pButtons; // 0x20
-	CCmdQAngle* pCmdView; // 0x40
-	int nCommandNumber; // 0x48
-	int nTickCount; // 0x4C
-	float flForwardMove; // 0x50
-	float flSideMove; // 0x54
-	float flUpMove; // 0x58
-	int32_t vnImpulse; // 0x5C
-	int32_t vnWeaponSelect; // 0x60
-	int32_t nRandomSeed; // 0x64
-	int32_t nMousedX; // 0x68
-	int32_t nMousedY; // 0x6C
-	uint32_t nConsumedServerAngleChanges; // 0x74
-	int32_t nCmdFlags; // 0x78
-	uint32_t hPawnEntity; // 0x7C
-	MEM_PAD(0x4);
+	RepeatedPtrField_t<CSubtickMoveStep> subtickMovesField;
+	const char* szMoveCrc;
+	CInButtonStatePB* pInButtonState;
+	CMsgQAngle* pViewAngles;
+	std::int32_t nCommandNumber;
+	std::int32_t nTickCount;
+	float flForwardMove;
+	float flSideMove;
+	float flUpMove;
+	std::int32_t nImpulse;
+	std::int32_t nWeaponSelect;
+	std::int32_t nRandomSeed;
+	std::int32_t nMousedX;
+	std::int32_t nMousedY;
+	std::uint32_t nConsumedServerAngleChanges;
+	std::int32_t nCmdFlags;
+	std::uint32_t nPawnEntityHandle;
 };
 static_assert(sizeof(CBaseUserCmdPB) == 0x80);
+
+class CCSGOUserCmdPB
+{
+public:
+	std::uint32_t nHasBits;
+	std::uint64_t nCachedSize;
+	RepeatedPtrField_t<CCSGOInputHistoryEntryPB> inputHistoryField;
+	CBaseUserCmdPB* pBaseCmd;
+	bool bLeftHandDesired;
+	std::int32_t nAttack3StartHistoryIndex;
+	std::int32_t nAttack1StartHistoryIndex;
+	std::int32_t nAttack2StartHistoryIndex;
+};
+static_assert(sizeof(CCSGOUserCmdPB) == 0x40);
+
+struct CInButtonState
+{
+public:
+	MEM_PAD(0x8) // 0x0 VTABLE
+	std::uint64_t nValue; // 0x8
+	std::uint64_t nValueChanged; // 0x10
+	std::uint64_t nValueScroll; // 0x18
+};
+static_assert(sizeof(CInButtonState) == 0x20);
 
 class CUserCmd
 {
 public:
-	MEM_PAD(0x20);
-	CCSGOUserCmdPB csgoUserCmd; // 0x20
-	CBaseUserCmdPB* pBaseCmd; // 0x30
-	MEM_PAD(0x10); // 0x38
-	ButtonState_t nButtons; // 0x4C
-	MEM_PAD(0x20); // 0x64
+	MEM_PAD(0x8) // 0x0 VTABLE
+	CCSGOUserCmdPB csgoUserCmd; // 0x8
+	CInButtonState nButtons; // 0x28
+	MEM_PAD(0x20); // 0x50
+
+	CCSGOInputHistoryEntryPB* GetInputHistoryEntry(int nIndex)
+	{
+		if (nIndex >= csgoUserCmd.inputHistoryField.pRep->nAllocatedSize || nIndex >= csgoUserCmd.inputHistoryField.nCurrentSize)
+			return nullptr;
+
+		return csgoUserCmd.inputHistoryField.pRep->tElements[nIndex];
+	}
 
 	void SetSubTickAngle(const QAngle_t& angView)
 	{
-		for (int i = 0; i < this->csgoUserCmd.nTickCount; i++)
+		for (int i = 0; i < this->csgoUserCmd.inputHistoryField.pRep->nAllocatedSize; i++)
 		{
-			CCSGOInputHistoryEntryPB* pInputEntry = this->csgoUserCmd.GetInputHistoryEntry(i);
-			if (pInputEntry == nullptr)
+			CCSGOInputHistoryEntryPB* pInputEntry = this->GetInputHistoryEntry(i);
+			if (!pInputEntry || !pInputEntry->pViewAngles)
 				continue;
 
-			if (pInputEntry->pViewCmd == nullptr)
-				continue;
-
-			pInputEntry->pViewCmd->angValue = angView;
+			pInputEntry->pViewAngles->angValue = angView;
 		}
 	}
 };
