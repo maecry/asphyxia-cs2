@@ -27,17 +27,17 @@ class IEngineClient
 public:
 	int GetMaxClients()
 	{
-		return MEM::CallVFunc<int, 31U>(this);
+		return MEM::CallVFunc<int, 34U>(this);
 	}
 
 	bool IsInGame()
 	{
-		return MEM::CallVFunc<bool, 32U>(this);
+		return MEM::CallVFunc<bool, 35U>(this);
 	}
 
 	bool IsConnected()
 	{
-		return MEM::CallVFunc<bool, 33U>(this);
+		return MEM::CallVFunc<bool, 36U>(this);
 	}
 
 	// return CBaseHandle index
@@ -45,23 +45,23 @@ public:
 	{
 		int nIndex = -1;
 
-		MEM::CallVFunc<void, 44U>(this, std::ref(nIndex), 0);
+		MEM::CallVFunc<void, 47U>(this, std::ref(nIndex), 0);
 
 		return nIndex + 1;
 	}
 
 	[[nodiscard]] const char* GetLevelName()
 	{
-		return MEM::CallVFunc<const char*, 53U>(this);
+		return MEM::CallVFunc<const char*, 56U>(this);
 	}
 
 	[[nodiscard]] const char* GetLevelNameShort()
 	{
-		return MEM::CallVFunc<const char*, 54U>(this);
+		return MEM::CallVFunc<const char*, 57U>(this);
 	}
 
 	[[nodiscard]] const char* GetProductVersionString()
 	{
-		return MEM::CallVFunc<const char*, 78U>(this);
+		return MEM::CallVFunc<const char*, 81U>(this);
 	}
 };
