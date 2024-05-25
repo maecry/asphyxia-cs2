@@ -73,7 +73,7 @@ int C_CSPlayerPawn::GetAssociatedTeam()
 	return nTeam;
 }
 
-bool C_CSPlayerPawnBase::CanAttack(const float flServerTime)
+bool C_CSPlayerPawn::CanAttack(const float flServerTime)
 {
 	// check is player ready to attack
 	if (CCSPlayer_WeaponServices* pWeaponServices = this->GetWeaponServices(); pWeaponServices != nullptr)

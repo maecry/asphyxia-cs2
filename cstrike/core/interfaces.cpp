@@ -151,7 +151,7 @@ bool I::Setup()
 #pragma endregion
 
 	// @ida:  #STR: "r_gpu_mem_stats", "-threads", "CTSListBase: Misaligned list\n", "CTSQueue: Misaligned queue\n", "Display GPU memory usage.", "-r_max_device_threads"
-	SwapChain = **reinterpret_cast<ISwapChainDx11***>(MEM::ResolveRelativeAddress(MEM::FindPattern(RENDERSYSTEM_DLL, CS_XOR("66 0F 7F 05 ? ? ? ? 66 0F 7F 0D ? ? ? ? 48 89 2D ? ? ? ? 0F 1F 80")), 0x4, 0x8));
+	SwapChain = **reinterpret_cast<ISwapChainDx11***>(MEM::ResolveRelativeAddress(MEM::FindPattern(RENDERSYSTEM_DLL, CS_XOR("66 0F 7F 0D ? ? ? ? 66 0F 7F 05 ? ? ? ? 0F 1F 40")), 0x4, 0x8));
 	bSuccess &= (SwapChain != nullptr);
 
 	// grab's d3d11 interfaces for later use

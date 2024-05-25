@@ -11,13 +11,10 @@ public:
 	float flFrameTime; //0x0008
 	float flFrameTime2; //0x000C
 	int32_t nMaxClients; //0x0010
-	MEM_PAD(0x14);
-	float flFrameTime3; //0x0028
-	float flCurrentTime; //0x002C
-	float flCurrentTime2; //0x0030
-	MEM_PAD(0xC); //0x0034
-	int32_t nTickCount; //0x0040
-	MEM_PAD(0x138); //0x0044
-	char* szCurrentMap; //0x017C
-	char* szCurrentMapName; //0x0180
+	MEM_PAD(0x1C);
+	float flFrameTime3; //0x0030
+	float flCurrentTime; //0x0034
+	float flCurrentTime2; //0x0038
+	MEM_PAD(0xC);
+	int32_t nTickCount; //0x0048
 };

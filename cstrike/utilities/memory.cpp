@@ -28,8 +28,8 @@ bool MEM::Setup()
 	fnSetRelativeMouseMode = reinterpret_cast<decltype(fnSetRelativeMouseMode)>(GetExportAddress(hSDL3, "SDL_SetRelativeMouseMode"));
 	bSuccess &= (fnSetRelativeMouseMode != nullptr);
 
-	fnSetWindowGrab = reinterpret_cast<decltype(fnSetWindowGrab)>(GetExportAddress(hSDL3, "SDL_SetWindowGrab"));
-	bSuccess &= (fnSetWindowGrab != nullptr);
+	fnSetWindowMouseGrab = reinterpret_cast<decltype(fnSetWindowMouseGrab)>(GetExportAddress(hSDL3, "SDL_SetWindowMouseGrab"));
+	bSuccess &= (fnSetWindowMouseGrab != nullptr);
 
 	fnWarpMouseInWindow = reinterpret_cast<decltype(fnWarpMouseInWindow)>(GetExportAddress(hSDL3, "SDL_WarpMouseInWindow"));
 	bSuccess &= (fnWarpMouseInWindow != nullptr);

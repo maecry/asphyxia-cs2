@@ -32,9 +32,9 @@ void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CCSPlayerController* pLocalContro
 	AutoStrafe(pBaseCmd, pLocalPawn);
 
 	// loop through all tick commands
-	for (int nTick = 0; nTick < pBaseCmd->nTickCount; nTick++)
+	for (int nSubTick = 0; nSubTick < pCmd->csgoUserCmd.inputHistoryField.pRep->nAllocatedSize; nSubTick++)
 	{
-		CCSGOInputHistoryEntryPB* pInputEntry = pCmd->GetInputHistoryEntry(nTick);
+		CCSGOInputHistoryEntryPB* pInputEntry = pCmd->GetInputHistoryEntry(nSubTick);
 		if (pInputEntry == nullptr)
 			continue;
 

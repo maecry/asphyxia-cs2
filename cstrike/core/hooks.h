@@ -34,9 +34,9 @@ namespace VTABLE
 	{
 		enum
 		{
-			CREATEMOVE = 5U, // The createmove that was at 14 is now at 15, however I personally prefer hooking the one at 5 :)
+			CREATEMOVE = 5U,
 			MOUSEINPUTENABLED = 13U,
-			FRAMESTAGENOTIFY = 35U,
+			FRAMESTAGENOTIFY = 36U,
 		};
 	}
 }

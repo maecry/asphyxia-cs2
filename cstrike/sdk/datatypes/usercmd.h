@@ -132,7 +132,7 @@ public:
 	CInButtonStatePB* pInButtonState;
 	CMsgQAngle* pViewAngles;
 	std::int32_t nCommandNumber;
-	std::int32_t nTickCount;
+	std::int32_t nClientTick;
 	float flForwardMove;
 	float flSideMove;
 	float flUpMove;

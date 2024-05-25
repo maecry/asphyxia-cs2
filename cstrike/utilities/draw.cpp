@@ -524,7 +524,7 @@ bool D::OnWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			// set input system mouse mode
 			MEM::fnSetRelativeMouseMode(!MENU::bMainWindowOpened);
 			// set input system window grab state
-			MEM::fnSetWindowGrab(I::InputSystem->GetSDLWindow(), !MENU::bMainWindowOpened);
+			MEM::fnSetWindowMouseGrab(I::InputSystem->GetSDLWindow(), !MENU::bMainWindowOpened);
 			// warp our cursor into middle of the screen
 			const ImVec2 vecScreenCenter = ImGui::GetIO().DisplaySize / 2.f;
 			MEM::fnWarpMouseInWindow(nullptr, vecScreenCenter.x, vecScreenCenter.y);

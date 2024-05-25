@@ -68,7 +68,7 @@ public:
 
 	void GetSchemaClassInfo(SchemaClassInfoData_t** pReturn)
 	{
-		return MEM::CallVFunc<void, 36U>(this, pReturn);
+		return MEM::CallVFunc<void, 38U>(this, pReturn);
 	}
 
 	[[nodiscard]] CBaseHandle GetRefEHandle()
@@ -218,18 +218,11 @@ public:
 	CS_CLASS_NO_INITIALIZER(C_CSPlayerPawnBase);
 
 	SCHEMA_ADD_FIELD(CCSPlayer_ViewModelServices*, GetViewModelServices, "C_CSPlayerPawnBase->m_pViewModelServices");
-	SCHEMA_ADD_FIELD(bool, IsScoped, "C_CSPlayerPawnBase->m_bIsScoped");
-	SCHEMA_ADD_FIELD(bool, IsDefusing, "C_CSPlayerPawnBase->m_bIsDefusing");
-	SCHEMA_ADD_FIELD(bool, IsGrabbingHostage, "C_CSPlayerPawnBase->m_bIsGrabbingHostage");
 	SCHEMA_ADD_FIELD(float, GetLowerBodyYawTarget, "C_CSPlayerPawnBase->m_flLowerBodyYawTarget");
-	SCHEMA_ADD_FIELD(int, GetShotsFired, "C_CSPlayerPawnBase->m_iShotsFired");
 	SCHEMA_ADD_FIELD(float, GetFlashMaxAlpha, "C_CSPlayerPawnBase->m_flFlashMaxAlpha");
 	SCHEMA_ADD_FIELD(float, GetFlashDuration, "C_CSPlayerPawnBase->m_flFlashDuration");
 	SCHEMA_ADD_FIELD(Vector_t, GetLastSmokeOverlayColor, "C_CSPlayerPawnBase->m_vLastSmokeOverlayColor");
 	SCHEMA_ADD_FIELD(int, GetSurvivalTeam, "C_CSPlayerPawnBase->m_nSurvivalTeam"); // danger zone
-	SCHEMA_ADD_FIELD(bool, IsWaitForNoAttack, "C_CSPlayerPawnBase->m_bWaitForNoAttack");
-
-	[[nodiscard]] bool CanAttack(const float flServerTime);
 };
 
 class C_CSPlayerPawn : public C_CSPlayerPawnBase
@@ -239,7 +232,13 @@ public:
 
 	[[nodiscard]] bool IsOtherEnemy(C_CSPlayerPawn* pOther);
 	[[nodiscard]] int GetAssociatedTeam();
+	[[nodiscard]] bool CanAttack(const float flServerTime);
 
+	SCHEMA_ADD_FIELD(bool, IsScoped, "C_CSPlayerPawn->m_bIsScoped");
+	SCHEMA_ADD_FIELD(bool, IsDefusing, "C_CSPlayerPawn->m_bIsDefusing");
+	SCHEMA_ADD_FIELD(bool, IsGrabbingHostage, "C_CSPlayerPawn->m_bIsGrabbingHostage");
+	SCHEMA_ADD_FIELD(bool, IsWaitForNoAttack, "C_CSPlayerPawn->m_bWaitForNoAttack");
+	SCHEMA_ADD_FIELD(int, GetShotsFired, "C_CSPlayerPawn->m_iShotsFired");
 	SCHEMA_ADD_FIELD(std::int32_t, GetArmorValue, "C_CSPlayerPawn->m_ArmorValue");
 };
 

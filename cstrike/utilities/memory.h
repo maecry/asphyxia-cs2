@@ -142,7 +142,7 @@ namespace MEM
 	// SDL window stuffs
 	// @note: helpful for doing our mouse cursor like force show it when our menu is opened
 	inline int(CS_STDCALL* fnSetRelativeMouseMode)(int) = nullptr;
-	inline int(CS_STDCALL* fnSetWindowGrab)(void*, int) = nullptr;
+	inline int(CS_STDCALL* fnSetWindowMouseGrab)(void*, int) = nullptr;
 	inline int(CS_STDCALL* fnWarpMouseInWindow)(void*, float, float) = nullptr;
 	inline bool(CS_FASTCALL* fnLoadKV3)(CKeyValues3*, void*, const char*, const KV3ID_t*, const char*);
 	inline std::int64_t(CS_FASTCALL* fnCreateMaterial)(void*, void*, const char*, void*, unsigned int, unsigned int);
