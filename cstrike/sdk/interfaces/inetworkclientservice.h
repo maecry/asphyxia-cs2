@@ -6,14 +6,14 @@ class CNetworkGameClient
 public:
 	bool IsConnected()
 	{
-		return MEM::CallVFunc<bool, 13U>(this);
+		return MEM::CallVFunc<bool, 12U>(this);
 	}
 
 	// force game to clear cache and reset delta tick
 	void FullUpdate()
 	{
 		// @ida: #STR: "Requesting full game update (%s)...\n"
-		MEM::CallVFunc<void, 31U>(this, CS_XOR("unk"));
+		MEM::CallVFunc<void, 28U>(this, CS_XOR("unk"));
 	}
 
 	int GetDeltaTick()
@@ -27,8 +27,8 @@ public:
 class INetworkClientService
 {
 public:
-	CNetworkGameClient* GetNetworkGameClient()
+	[[nodiscard]] CNetworkGameClient* GetNetworkGameClient()
 	{
-		return *reinterpret_cast<CNetworkGameClient**>(reinterpret_cast<std::uintptr_t>(this) + 0xB8);
+		return MEM::CallVFunc<CNetworkGameClient*, 23U>(this);
 	}
 };
