@@ -37,6 +37,64 @@ enum ECommandButtons : int
 	IN_USE_OR_RELOAD = (1 << 26)
 };
 
+// compiled protobuf messages and looked at what bits are used in them
+enum ESubtickMoveStepBits : std::uint32_t
+{
+	MOVESTEP_BITS_BUTTON = 0x1U,
+	MOVESTEP_BITS_PRESSED = 0x2U,
+	MOVESTEP_BITS_WHEN = 0x4U,
+	MOVESTEP_BITS_ANALOG_FORWARD_DELTA = 0x8U,
+	MOVESTEP_BITS_ANALOG_LEFT_DELTA = 0x10U
+};
+
+enum EInputHistoryBits : std::uint32_t
+{
+	INPUT_HISTORY_BITS_VIEWANGLES = 0x1U,
+	INPUT_HISTORY_BITS_SHOOTPOSITION = 0x2U,
+	INPUT_HISTORY_BITS_TARGETHEADPOSITIONCHECK = 0x4U,
+	INPUT_HISTORY_BITS_TARGETABSPOSITIONCHECK = 0x8U,
+	INPUT_HISTORY_BITS_TARGETANGCHECK = 0x10U,
+	INPUT_HISTORY_BITS_CL_INTERP = 0x20U,
+	INPUT_HISTORY_BITS_SV_INTERP0 = 0x40U,
+	INPUT_HISTORY_BITS_SV_INTERP1 = 0x80U,
+	INPUT_HISTORY_BITS_PLAYER_INTERP = 0x100U,
+	INPUT_HISTORY_BITS_RENDERTICKCOUNT = 0x200U,
+	INPUT_HISTORY_BITS_RENDERTICKFRACTION = 0x400U,
+	INPUT_HISTORY_BITS_PLAYERTICKCOUNT = 0x800U,
+	INPUT_HISTORY_BITS_PLAYERTICKFRACTION = 0x1000U,
+	INPUT_HISTORY_BITS_FRAMENUMBER = 0x2000U,
+	INPUT_HISTORY_BITS_TARGETENTINDEX = 0x4000U
+};
+
+enum EBaseCmdBits : std::uint32_t
+{
+	BASE_BITS_MOVE_CRC = 0x1U,
+	BASE_BITS_BUTTONPB = 0x2U,
+	BASE_BITS_VIEWANGLES = 0x4U,
+	BASE_BITS_COMMAND_NUMBER = 0x8U,
+	BASE_BITS_CLIENT_TICK = 0x10U,
+	BASE_BITS_FORWARDMOVE = 0x20U,
+	BASE_BITS_LEFTMOVE = 0x40U,
+	BASE_BITS_UPMOVE = 0x80U,
+	BASE_BITS_IMPULSE = 0x100U,
+	BASE_BITS_WEAPON_SELECT = 0x200U,
+	BASE_BITS_RANDOM_SEED = 0x400U,
+	BASE_BITS_MOUSEDX = 0x800U,
+	BASE_BITS_MOUSEDY = 0x1000U,
+	BASE_BITS_CONSUMED_SERVER_ANGLE = 0x2000U,
+	BASE_BITS_CMD_FLAGS = 0x4000U,
+	BASE_BITS_ENTITY_HANDLE = 0x8000U
+};
+
+enum ECSGOUserCmdBits : std::uint32_t
+{
+	CSGOUSERCMD_BITS_BASECMD = 0x1U,
+	CSGOUSERCMD_BITS_LEFTHAND = 0x2U,
+	CSGOUSERCMD_BITS_ATTACK3START = 0x4U,
+	CSGOUSERCMD_BITS_ATTACK1START = 0x8U,
+	CSGOUSERCMD_BITS_ATTACK2START = 0x10U
+};
+
 template <typename T>
 struct RepeatedPtrField_t
 {
@@ -54,9 +112,17 @@ struct RepeatedPtrField_t
 
 class CBasePB
 {
+public:
 	MEM_PAD(0x8) // 0x0 VTABLE
 	std::uint32_t nHasBits; // 0x8
 	std::uint64_t nCachedBits; // 0xC
+
+	// @note: this function is used to check if the bits are set and set them if they are not
+	void CheckAndSetBits(std::uint64_t nBits)
+	{
+		if (!(nCachedBits & nBits))
+			nCachedBits |= nBits;
+	}
 };
 
 static_assert(sizeof(CBasePB) == 0x18);
@@ -158,6 +224,13 @@ public:
 	std::int32_t nAttack3StartHistoryIndex;
 	std::int32_t nAttack1StartHistoryIndex;
 	std::int32_t nAttack2StartHistoryIndex;
+
+	// @note: this function is used to check if the bits are set and set them if they are not
+	void CheckAndSetBits(std::uint32_t nBits)
+	{
+		if (!(nHasBits & nBits))
+			nHasBits |= nBits;
+	}
 };
 static_assert(sizeof(CCSGOUserCmdPB) == 0x40);
 
@@ -196,6 +269,7 @@ public:
 				continue;
 
 			pInputEntry->pViewAngles->angValue = angView;
+			pInputEntry->CheckAndSetBits(EInputHistoryBits::INPUT_HISTORY_BITS_VIEWANGLES);
 		}
 	}
 };
