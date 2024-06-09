@@ -63,13 +63,13 @@ void F::OnFrameStageNotify(int nStage)
 	F::VISUALS::OnFrame(nStage);
 }
 
-void F::OnCreateMove(CUserCmd* pCmd, CCSPlayerController* pLocalController)
+void F::OnCreateMove(CUserCmd* pCmd, CBaseUserCmdPB* pBaseCmd, CCSPlayerController* pLocalController)
 {
 	C_CSPlayerPawn* pLocalPawn = I::GameResourceService->pGameEntitySystem->Get<C_CSPlayerPawn>(pLocalController->GetPawnHandle());
 	if (pLocalPawn == nullptr)
 		return;
 
-	F::MISC::OnMove(pCmd, pLocalController, pLocalPawn);
+	F::MISC::OnMove(pCmd, pBaseCmd, pLocalController, pLocalPawn);
 }
 
 bool F::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)

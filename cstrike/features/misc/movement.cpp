@@ -15,13 +15,9 @@
 // movement correction angles
 static QAngle_t angCorrectionView = {};
 
-void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CCSPlayerController* pLocalController, C_CSPlayerPawn* pLocalPawn)
+void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CBaseUserCmdPB* pBaseCmd, CCSPlayerController* pLocalController, C_CSPlayerPawn* pLocalPawn)
 {
 	if (!pLocalController->IsPawnAlive())
-		return;
-
-	CBaseUserCmdPB* pBaseCmd = pCmd->csgoUserCmd.pBaseCmd;
-	if (pBaseCmd == nullptr)
 		return;
 
 	// check if player is in noclip or on ladder or in water
@@ -74,7 +70,10 @@ void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_CSP
 
 	// im lazy so yea :D
 	if (pLocalPawn->GetFlags() & FL_ONGROUND)
-		pCmd->nButtons.nValue &= ~IN_JUMP;
+	{
+		pUserCmd->pInButtonState->CheckAndSetBits(EButtonStatePBBits::BUTTON_STATE_PB_BITS_BUTTONSTATE1);
+		pUserCmd->pInButtonState->nValue &= ~IN_JUMP;
+	}
 }
 
 void F::MISC::MOVEMENT::AutoStrafe(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLocalPawn)
@@ -111,18 +110,19 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUse
 
 	// correct movement buttons while player move have different to buttons values
 	// clear all of the move buttons states
-	pCmd->nButtons.nValue &= (~IN_FORWARD | ~IN_BACK | ~IN_LEFT | ~IN_RIGHT);
+	pUserCmd->pInButtonState->CheckAndSetBits(EButtonStatePBBits::BUTTON_STATE_PB_BITS_BUTTONSTATE1);
+	pUserCmd->pInButtonState->nValue &= (~IN_FORWARD | ~IN_BACK | ~IN_LEFT | ~IN_RIGHT);
 
 	// re-store buttons by active forward/side moves
 	if (pUserCmd->flForwardMove > 0.0f)
-		pCmd->nButtons.nValue |= IN_FORWARD;
+		pUserCmd->pInButtonState->nValue |= IN_FORWARD;
 	else if (pUserCmd->flForwardMove < 0.0f)
-		pCmd->nButtons.nValue |= IN_BACK;
+		pUserCmd->pInButtonState->nValue |= IN_BACK;
 
 	if (pUserCmd->flSideMove > 0.0f)
-		pCmd->nButtons.nValue |= IN_RIGHT;
+		pUserCmd->pInButtonState->nValue |= IN_RIGHT;
 	else if (pUserCmd->flSideMove < 0.0f)
-		pCmd->nButtons.nValue |= IN_LEFT;
+		pUserCmd->pInButtonState->nValue |= IN_LEFT;
 		
 	if (!pInputEntry->pViewAngles->angValue.IsZero())
 	{

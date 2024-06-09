@@ -154,6 +154,7 @@
     <ClInclude Include="core\sdk.h" />
     <ClInclude Include="core\variables.h" />
     <ClInclude Include="features.h" />
+    <ClInclude Include="features\CRC.h" />
     <ClInclude Include="features\misc.h" />
     <ClInclude Include="features\misc\movement.h" />
     <ClInclude Include="features\visuals.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="sdk\datatypes\stronghandle.h" />
     <ClInclude Include="sdk\datatypes\transform.h" />
     <ClInclude Include="sdk\datatypes\usercmd.h" />
+    <ClInclude Include="sdk\datatypes\utlbuffer.h" />
     <ClInclude Include="sdk\datatypes\utlfixedmemory.h" />
     <ClInclude Include="sdk\datatypes\utllinkedlist.h" />
     <ClInclude Include="sdk\datatypes\utlmap.h" />

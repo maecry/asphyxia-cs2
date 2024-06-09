@@ -25,13 +25,13 @@ bool MEM::Setup()
 	fnUnDecorateSymbolName = reinterpret_cast<decltype(fnUnDecorateSymbolName)>(GetExportAddress(hDbgHelp, CS_XOR("UnDecorateSymbolName")));
 	bSuccess &= (fnUnDecorateSymbolName != nullptr);
 
-	fnSetRelativeMouseMode = reinterpret_cast<decltype(fnSetRelativeMouseMode)>(GetExportAddress(hSDL3, "SDL_SetRelativeMouseMode"));
+	fnSetRelativeMouseMode = reinterpret_cast<decltype(fnSetRelativeMouseMode)>(GetExportAddress(hSDL3, CS_XOR("SDL_SetRelativeMouseMode")));
 	bSuccess &= (fnSetRelativeMouseMode != nullptr);
 
-	fnSetWindowMouseGrab = reinterpret_cast<decltype(fnSetWindowMouseGrab)>(GetExportAddress(hSDL3, "SDL_SetWindowMouseGrab"));
+	fnSetWindowMouseGrab = reinterpret_cast<decltype(fnSetWindowMouseGrab)>(GetExportAddress(hSDL3, CS_XOR("SDL_SetWindowMouseGrab")));
 	bSuccess &= (fnSetWindowMouseGrab != nullptr);
 
-	fnWarpMouseInWindow = reinterpret_cast<decltype(fnWarpMouseInWindow)>(GetExportAddress(hSDL3, "SDL_WarpMouseInWindow"));
+	fnWarpMouseInWindow = reinterpret_cast<decltype(fnWarpMouseInWindow)>(GetExportAddress(hSDL3, CS_XOR("SDL_WarpMouseInWindow")));
 	bSuccess &= (fnWarpMouseInWindow != nullptr);
 
 	fnLoadKV3 = reinterpret_cast<decltype(fnLoadKV3)>(GetExportAddress(hTier0, CS_XOR("?LoadKV3@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBDAEBUKV3ID_t@@2@Z")));
@@ -39,6 +39,12 @@ bool MEM::Setup()
 
 	fnCreateMaterial = reinterpret_cast<decltype(fnCreateMaterial)>(FindPattern(MATERIAL_SYSTEM2_DLL, CS_XOR("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 81 EC ? ? ? ? 48 8B 05")));
 	bSuccess &= (fnCreateMaterial != nullptr);
+
+	fnUtlBufferInit = reinterpret_cast<decltype(fnUtlBufferInit)>(GetExportAddress(hTier0, CS_XOR("??0CUtlBuffer@@QEAA@HHH@Z")));
+	bSuccess &= (fnUtlBufferInit != nullptr);
+
+	fnUtlBufferEnsureCapacity = reinterpret_cast<decltype(fnUtlBufferEnsureCapacity)>(GetExportAddress(hTier0, CS_XOR("?EnsureCapacity@CUtlBuffer@@QEAAXH@Z")));
+	bSuccess &= (fnUtlBufferEnsureCapacity != nullptr);
 
 	return bSuccess;
 }

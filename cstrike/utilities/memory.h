@@ -21,6 +21,7 @@ private:												\
 public:
 #pragma endregion
 
+class CUtlBuffer;
 namespace MEM
 {
 	bool Setup();
@@ -146,4 +147,8 @@ namespace MEM
 	inline int(CS_STDCALL* fnWarpMouseInWindow)(void*, float, float) = nullptr;
 	inline bool(CS_FASTCALL* fnLoadKV3)(CKeyValues3*, void*, const char*, const KV3ID_t*, const char*);
 	inline std::int64_t(CS_FASTCALL* fnCreateMaterial)(void*, void*, const char*, void*, unsigned int, unsigned int);
+
+	inline void(__stdcall* fnUtlBufferInit)(CUtlBuffer*, int, int, int) = NULL;
+	inline void(__stdcall* fnUtlBufferPutString)(CUtlBuffer*, const char*) = NULL;
+	inline void(__stdcall* fnUtlBufferEnsureCapacity)(CUtlBuffer*, int) = NULL;
 }

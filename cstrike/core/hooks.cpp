@@ -29,6 +29,8 @@
 
 // used: features callbacks
 #include "../features.h"
+// used: CRC rebuild
+#include "../features/CRC.h"
 
 // used: game's interfaces
 #include "interfaces.h"
@@ -204,6 +206,10 @@ bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, bool bActive)
 	if (pCmd == nullptr)
 		return bResult;
 
+	CBaseUserCmdPB* pBaseCmd = pCmd->csgoUserCmd.pBaseCmd;
+	if (pBaseCmd == nullptr)
+		return bResult;
+
 	SDK::LocalController = CCSPlayerController::GetLocalPlayerController();
 	if (SDK::LocalController == nullptr)
 		return bResult;
@@ -212,7 +218,11 @@ bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, bool bActive)
 	if (SDK::LocalPawn == nullptr)
 		return bResult;
 
-	F::OnCreateMove(pCmd, SDK::LocalController);
+	F::OnCreateMove(pCmd, pBaseCmd, SDK::LocalController);
+
+	CRC::Save(pBaseCmd);
+	if (CRC::CalculateCRC(pBaseCmd) == true)
+		CRC::Apply(pCmd);
 
 	return bResult;
 }

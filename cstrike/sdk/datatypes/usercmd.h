@@ -4,6 +4,9 @@
 #include "qangle.h"
 // used: MEM_PAD
 #include "../../utilities/memory.h"
+// used: memalloc
+#include "../../core/interfaces.h"
+#include "../interfaces/imemalloc.h"
 
 // @source: master/game/shared/in_buttons.h
 enum ECommandButtons : int
@@ -64,6 +67,13 @@ enum EInputHistoryBits : std::uint32_t
 	INPUT_HISTORY_BITS_PLAYERTICKFRACTION = 0x1000U,
 	INPUT_HISTORY_BITS_FRAMENUMBER = 0x2000U,
 	INPUT_HISTORY_BITS_TARGETENTINDEX = 0x4000U
+};
+
+enum EButtonStatePBBits : uint32_t
+{
+	BUTTON_STATE_PB_BITS_BUTTONSTATE1 = 0x1U,
+	BUTTON_STATE_PB_BITS_BUTTONSTATE2 = 0x2U,
+	BUTTON_STATE_PB_BITS_BUTTONSTATE3 = 0x4U
 };
 
 enum EBaseCmdBits : std::uint32_t
@@ -194,7 +204,7 @@ class CBaseUserCmdPB : public CBasePB
 {
 public:
 	RepeatedPtrField_t<CSubtickMoveStep> subtickMovesField;
-	const char* szMoveCrc;
+	std::string* strMoveCrc;
 	CInButtonStatePB* pInButtonState;
 	CMsgQAngle* pViewAngles;
 	std::int32_t nCommandNumber;
@@ -210,6 +220,11 @@ public:
 	std::uint32_t nConsumedServerAngleChanges;
 	std::int32_t nCmdFlags;
 	std::uint32_t nPawnEntityHandle;
+
+	int CalculateCmdCRCSize()
+	{
+		return MEM::CallVFunc<int, 7U>(this);
+	}
 };
 static_assert(sizeof(CBaseUserCmdPB) == 0x80);
 
