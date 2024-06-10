@@ -53,7 +53,7 @@ namespace CRC
 	inline bool CalculateCRC(CBaseUserCmdPB* pBaseCmd)
 	{
 		int nCalcualtedCRCSize = pBaseCmd->CalculateCmdCRCSize();
-		CUtlBuffer protobufBuffer = CUtlBuffer::CUtlBuffer(0, 0, 0);
+		CUtlBuffer protobufBuffer(0, 0, 0);
 		protobufBuffer.EnsureCapacity(nCalcualtedCRCSize + 1);
 
 		using fnSerializePartialToArray = bool(__fastcall*)(CBaseUserCmdPB*, CUtlBuffer, int);
