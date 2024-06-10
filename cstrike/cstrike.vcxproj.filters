@@ -417,5 +417,6 @@
     <ClCompile Include="utilities\notify.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
+    <ClCompile Include="sdk\datatypes\keyvalues3.cpp" />
   </ItemGroup>
 </Project>

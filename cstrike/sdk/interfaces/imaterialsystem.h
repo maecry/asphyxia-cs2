@@ -9,6 +9,8 @@
 #include "../datatypes/stronghandle.h"
 // used: keyvalue3
 #include "../datatypes/keyvalue3.h"
+// used vector4d_t
+#include "../datatypes/vector.h"
 
 // used: cbasehandle
 #include "../entity_handle.h"

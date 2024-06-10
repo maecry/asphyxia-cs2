@@ -15,6 +15,7 @@
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>cstrike</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -238,6 +239,7 @@
     <ClCompile Include="features\visuals.cpp" />
     <ClCompile Include="features\visuals\chams.cpp" />
     <ClCompile Include="features\visuals\overlay.cpp" />
+    <ClCompile Include="sdk\datatypes\keyvalues3.cpp" />
     <ClCompile Include="sdk\datatypes\matrix.cpp" />
     <ClCompile Include="sdk\datatypes\qangle.cpp" />
     <ClCompile Include="sdk\datatypes\vector.cpp" />

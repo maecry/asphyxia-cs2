@@ -6,8 +6,6 @@
 
 #include "../common.h"
 
-#include "../sdk/datatypes/keyvalue3.h"
-
 #pragma region memory_definitions
 #pragma warning(push)
 #pragma warning(disable: 6255) // '_alloca' indicates failure by raising a stack overflow exception. consider using '_malloca' instead
@@ -22,6 +20,9 @@ public:
 #pragma endregion
 
 class CUtlBuffer;
+class CKeyValues3;
+struct KV3ID_t;
+
 namespace MEM
 {
 	bool Setup();
@@ -148,7 +149,7 @@ namespace MEM
 	inline bool(CS_FASTCALL* fnLoadKV3)(CKeyValues3*, void*, const char*, const KV3ID_t*, const char*);
 	inline std::int64_t(CS_FASTCALL* fnCreateMaterial)(void*, void*, const char*, void*, unsigned int, unsigned int);
 
-	inline void(__stdcall* fnUtlBufferInit)(CUtlBuffer*, int, int, int) = NULL;
-	inline void(__stdcall* fnUtlBufferPutString)(CUtlBuffer*, const char*) = NULL;
-	inline void(__stdcall* fnUtlBufferEnsureCapacity)(CUtlBuffer*, int) = NULL;
+	inline void(CS_FASTCALL* fnUtlBufferInit)(CUtlBuffer*, int, int, int);
+	inline void(CS_FASTCALL* fnUtlBufferPutString)(CUtlBuffer*, const char*);
+	inline void(CS_FASTCALL* fnUtlBufferEnsureCapacity)(CUtlBuffer*, int);
 }

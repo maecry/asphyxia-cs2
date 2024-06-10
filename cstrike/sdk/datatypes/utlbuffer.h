@@ -1,5 +1,5 @@
 #pragma once
-// used: mem_pad
+// used: MEM_PAD
 #include "../../utilities/memory.h"
 
 class CUtlBuffer
@@ -14,6 +14,15 @@ public:
 		#endif
 
 		MEM::fnUtlBufferInit(this, a1, nSize, a3);
+	}
+
+	void PutString(const char* szString)
+	{
+		#ifdef CS_PARANOID
+		CS_ASSERT(MEM::fnUtlBufferPutString != nullptr);
+		#endif
+
+		MEM::fnUtlBufferPutString(this, szString);
 	}
 
 	void EnsureCapacity(int nSize)

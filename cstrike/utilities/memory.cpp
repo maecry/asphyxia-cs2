@@ -43,6 +43,9 @@ bool MEM::Setup()
 	fnUtlBufferInit = reinterpret_cast<decltype(fnUtlBufferInit)>(GetExportAddress(hTier0, CS_XOR("??0CUtlBuffer@@QEAA@HHH@Z")));
 	bSuccess &= (fnUtlBufferInit != nullptr);
 
+	fnUtlBufferPutString = reinterpret_cast<decltype(fnUtlBufferPutString)>(GetExportAddress(hTier0, CS_XOR("?PutString@CUtlBuffer@@QEAAXPEBD@Z")));
+	bSuccess &= (fnUtlBufferPutString != nullptr);
+
 	fnUtlBufferEnsureCapacity = reinterpret_cast<decltype(fnUtlBufferEnsureCapacity)>(GetExportAddress(hTier0, CS_XOR("?EnsureCapacity@CUtlBuffer@@QEAAXH@Z")));
 	bSuccess &= (fnUtlBufferEnsureCapacity != nullptr);
 

@@ -17,7 +17,7 @@ using VisualChamMaterial_t = int;
 enum EVisualsChamMaterials : VisualChamMaterial_t
 {
 	VISUAL_MATERIAL_PRIMARY_WHITE = 0,
-	VISUAL_MATERIAL_WIREFRAME,
+	VISUAL_MATERIAL_ILLUMINATE,
 	VISUAL_MATERIAL_MAX
 };
 

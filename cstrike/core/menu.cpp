@@ -403,7 +403,7 @@ void T::Visuals()
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
 
 			ImGui::Checkbox(CS_XOR("enable##chams"), &C_GET(bool, Vars.bVisualChams));
-			ImGui::Combo(CS_XOR("materials"), &C_GET(int, Vars.nVisualChamMaterial), CS_XOR("white\0wireframe\0"));
+			ImGui::Combo(CS_XOR("materials"), &C_GET(int, Vars.nVisualChamMaterial), CS_XOR("white\0illuminate\0"));
 			ImGui::Checkbox(CS_XOR("enable invisible chams##chams"), &C_GET(bool, Vars.bVisualChamsIgnoreZ));
 
 			ImGui::ColorEdit4(CS_XOR("visible color"), &C_GET(Color_t, Vars.colVisualChams));
