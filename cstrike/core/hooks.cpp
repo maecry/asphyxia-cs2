@@ -102,7 +102,7 @@ bool H::Setup()
 	L_PRINT(LOG_INFO) << CS_XOR("\"LevelInit\" hook has been created");
 
 	// @ida: ClientModeShared -> #STR: "map_shutdown"
-	if (!hkLevelShutdown.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 83 EC ? 48 8B 0D ? ? ? ? 48 8D 15 ? ? ? ? 45 33 C9 45 33 C0 48 8B 01 FF 50 ? 48 85 C0 74 ? 48 8B 0D ? ? ? ? 48 8B D0 4C 8B 01 48 83 C4 ? 49 FF 60 ? 48 83 C4 ? C3 CC CC CC 48 83 EC ? 4C 8B D9")), reinterpret_cast<void*>(&LevelShutdown)))
+	if (!hkLevelShutdown.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 83 EC ? 48 8B 0D ? ? ? ? 48 8D 15 ? ? ? ? 45 33 C9 45 33 C0 48 8B 01 FF 50 ? 48 85 C0 74 ? 48 8B 0D ? ? ? ? 48 8B D0 4C 8B 01 41 FF 50 ? 48 83 C4")), reinterpret_cast<void*>(&LevelShutdown)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"LevelShutdown\" hook has been created");
 
