@@ -9,7 +9,7 @@ public:
 	bool IsRelativeMouseMode()
 	{
 		// @ida: 'IInputSystem::SetRelativeMouseMode'.
-		return *reinterpret_cast<bool*>(reinterpret_cast<std::uintptr_t>(this) + 0x53);
+		return MEM::fnGetRelativeMouseMode();
 	}
 
 	void* GetSDLWindow()
