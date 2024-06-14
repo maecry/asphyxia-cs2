@@ -15,6 +15,6 @@ public:
 	void* GetSDLWindow()
 	{
 		// @ida: IInputSystem::DebugSpew -> #STR: "Current coordinate bias %s: %g,%g scale %g,%g\n"
-		return *reinterpret_cast<void**>(reinterpret_cast<std::uintptr_t>(this) + 0x2678);
+		return *reinterpret_cast<void**>(reinterpret_cast<std::uintptr_t>(this) + 0x26A8);
 	}
 };
