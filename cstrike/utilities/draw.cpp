@@ -26,6 +26,8 @@
 // used: iinputsystem
 #include "../core/interfaces.h"
 #include "../sdk/interfaces/iinputsystem.h"
+//used: IsInGame
+#include "../sdk/interfaces/iengineclient.h"
 // used: bMainWindowOpened
 #include "../core/menu.h"
 
@@ -518,19 +520,22 @@ bool D::OnWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		MENU::bMainWindowOpened = !MENU::bMainWindowOpened;
 		// update animation
 		MENU::animMenuDimBackground.Switch();
-		// handle mouse input when menu is opened
-		if (I::InputSystem->IsRelativeMouseMode())
+		// checking for being in the match
+		if (I::Engine->IsInGame())
 		{
-			// set input system mouse mode
-			MEM::fnSetRelativeMouseMode(!MENU::bMainWindowOpened);
-			// set input system window grab state
-			MEM::fnSetWindowMouseGrab(I::InputSystem->GetSDLWindow(), !MENU::bMainWindowOpened);
-			// warp our cursor into middle of the screen
-			const ImVec2 vecScreenCenter = ImGui::GetIO().DisplaySize / 2.f;
-			MEM::fnWarpMouseInWindow(nullptr, vecScreenCenter.x, vecScreenCenter.y);
+			// handle mouse input when menu is opened
+			if (I::InputSystem->IsRelativeMouseMode())
+			{
+				// set input system mouse mode
+				MEM::fnSetRelativeMouseMode(!MENU::bMainWindowOpened);
+				// set input system window grab state
+				MEM::fnSetWindowMouseGrab(I::InputSystem->GetSDLWindow(), !MENU::bMainWindowOpened);
+				// warp our cursor into middle of the screen
+				const ImVec2 vecScreenCenter = ImGui::GetIO().DisplaySize / 2.f;
+				MEM::fnWarpMouseInWindow(nullptr, vecScreenCenter.x, vecScreenCenter.y);
+			}
 		}
 	}
-
 	// handle ImGui's window messages and block game's input if menu is opened
 	return ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam) || MENU::bMainWindowOpened;
 }
