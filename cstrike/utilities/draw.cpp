@@ -523,6 +523,7 @@ bool D::OnWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		// being in the match at the moment
 		if (I::Engine->IsInGame())
 		{
+			// handle mouse input when menu is opened
 			if (I::InputSystem->IsRelativeMouseMode())
 			{
 				// set input system mouse mode
