@@ -12,9 +12,9 @@
  * - used to verify game version
  */
 
-#define CS_PRODUCTSTRINGVERSION CS_XOR("1.40.1.5")
+#define CS_PRODUCTSTRINGVERSION CS_XOR("1.40.1.7")
 
- /*
+/*
  * game's modules
  */
 #define CLIENT_DLL CS_XOR(L"client.dll")
@@ -33,14 +33,14 @@
 #define MATERIAL_SYSTEM2_DLL CS_XOR(L"materialsystem2.dll")
 #define MATCHMAKING_DLL CS_XOR(L"matchmaking.dll")
 #define RESOURCESYSTEM_DLL CS_XOR(L"resourcesystem.dll")
- /*
+/*
   * define to specify default string encryption
   */
 #ifdef _DEBUG
 #define CS_XOR(STRING) STRING
 #else
 #define JM_XORSTR_DISABLE_AVX_INTRINSICS
-  // used: string encryption
+// used: string encryption
 #include "xorstr.h"
 #define CS_XOR(STRING) xorstr_(STRING)
 #endif
@@ -63,14 +63,14 @@
  * - useful for keeping patterns up to date and preventing possible inconsistent behavior
  */
 #ifdef _DEBUG
- #define CS_PARANOID_PATTERN_UNIQUENESS
+#define CS_PARANOID_PATTERN_UNIQUENESS
 #endif
 
 /*
  * define to overwrite configuration file formatter implementation
  */
 #define CS_CONFIGURATION_BINARY
- // name of the default configuration file
+// name of the default configuration file
 #define CS_CONFIGURATION_DEFAULT_FILE_NAME L"default"
 
 // define to force disable behavior based on "Run-Time Type Information", even if available
@@ -103,7 +103,7 @@ static_assert(false, "could not determine the target architecture, consider defi
 
 #ifdef CS_COMPILER_MSC
 // treat "discarding return value of function with 'nodiscard' attribute" warning as error
-#pragma warning(error: 4834)
+#pragma warning(error : 4834)
 #endif
 
 #ifdef CS_COMPILER_CLANG
@@ -228,25 +228,25 @@ static_assert(false, "it is expected you to define one of the available configur
  * explicitly delete the following constructors, to prevent attempts on using them:
  * constructor, move-constructor, copy-constructor
  */
-#define CS_CLASS_NO_CONSTRUCTOR(CLASS)	\
-CLASS() = delete;						\
-CLASS(CLASS&&) = delete;				\
-CLASS(const CLASS&) = delete;
+#define CS_CLASS_NO_CONSTRUCTOR(CLASS) \
+	CLASS() = delete;                  \
+	CLASS(CLASS&&) = delete;           \
+	CLASS(const CLASS&) = delete;
 
- /*
+/*
   * explicitly delete the following assignment operators, to prevent attempts on using them:
   * move-assignment, copy-assignment
   */
-#define CS_CLASS_NO_ASSIGNMENT(CLASS)	\
-CLASS& operator=(CLASS&&) = delete;		\
-CLASS& operator=(const CLASS&) = delete;
+#define CS_CLASS_NO_ASSIGNMENT(CLASS)   \
+	CLASS& operator=(CLASS&&) = delete; \
+	CLASS& operator=(const CLASS&) = delete;
 
-  // explicitly delete any class initializer to prevent attempts on using them
-#define CS_CLASS_NO_INITIALIZER(CLASS)	\
-CS_CLASS_NO_CONSTRUCTOR(CLASS)			\
-CS_CLASS_NO_ASSIGNMENT(CLASS)
+// explicitly delete any class initializer to prevent attempts on using them
+#define CS_CLASS_NO_INITIALIZER(CLASS) \
+	CS_CLASS_NO_CONSTRUCTOR(CLASS)     \
+	CS_CLASS_NO_ASSIGNMENT(CLASS)
 
 // explicitly delete class heap allocator and deallocator, to prevent attempts on using class at heap memory
-#define CS_CLASS_NO_ALLOC()								\
-void* operator new(const std::size_t nSize) = delete;	\
-void operator delete(void* pMemory) = delete;
+#define CS_CLASS_NO_ALLOC()                               \
+	void* operator new(const std::size_t nSize) = delete; \
+	void operator delete(void* pMemory) = delete;
