@@ -506,8 +506,12 @@ void T::Miscellaneous()
 							for (std::size_t i = 0U; i < C::vecFileNames.size(); i++)
 							{
 								// @todo: imgui cant work with wstring
-								CRT::String_t<MAX_PATH> szFileName(C::vecFileNames[i]);
-								if (ImGui::Selectable(szFileName.Data(), (nSelectedConfig == i)))
+								const wchar_t* wszFileName = C::vecFileNames[i];
+
+								char szFileName[MAX_PATH] = {};
+								CRT::StringUnicodeToMultiByte(szFileName, CS_ARRAYSIZE(szFileName), wszFileName);
+
+								if (ImGui::Selectable(szFileName, (nSelectedConfig == i)))
 									nSelectedConfig = i;
 							}
 
