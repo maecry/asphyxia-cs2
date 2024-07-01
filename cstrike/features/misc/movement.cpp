@@ -71,7 +71,7 @@ void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_CSP
 	// im lazy so yea :D
 	if (pLocalPawn->GetFlags() & FL_ONGROUND)
 	{
-		pUserCmd->pInButtonState->CheckAndSetBits(EButtonStatePBBits::BUTTON_STATE_PB_BITS_BUTTONSTATE1);
+		pUserCmd->pInButtonState->SetBits(EButtonStatePBBits::BUTTON_STATE_PB_BITS_BUTTONSTATE1);
 		pUserCmd->pInButtonState->nValue &= ~IN_JUMP;
 	}
 }
@@ -81,7 +81,7 @@ void F::MISC::MOVEMENT::AutoStrafe(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLo
 	if (!C_GET(bool, Vars.bAutoStrafe) || pLocalPawn->GetFlags() & FL_ONGROUND)
 		return;
 
-	pUserCmd->CheckAndSetBits(EBaseCmdBits::BASE_BITS_LEFTMOVE);
+	pUserCmd->SetBits(EBaseCmdBits::BASE_BITS_LEFTMOVE);
 	pUserCmd->flSideMove = pUserCmd->nMousedX > 0 ? -1.0f : 1.0f; // a bit yanky, but works
 }
 
@@ -93,7 +93,7 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUse
 	// clamp angle to avoid untrusted angle
 	if (C_GET(bool, Vars.bAntiUntrusted))
 	{
-		pInputEntry->CheckAndSetBits(EInputHistoryBits::INPUT_HISTORY_BITS_VIEWANGLES);
+		pInputEntry->SetBits(EInputHistoryBits::INPUT_HISTORY_BITS_VIEWANGLES);
 		if (pInputEntry->pViewAngles->angValue.IsValid())
 		{
 			pInputEntry->pViewAngles->angValue.Clamp();
@@ -110,7 +110,7 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUse
 
 	// correct movement buttons while player move have different to buttons values
 	// clear all of the move buttons states
-	pUserCmd->pInButtonState->CheckAndSetBits(EButtonStatePBBits::BUTTON_STATE_PB_BITS_BUTTONSTATE1);
+	pUserCmd->pInButtonState->SetBits(EButtonStatePBBits::BUTTON_STATE_PB_BITS_BUTTONSTATE1);
 	pUserCmd->pInButtonState->nValue &= (~IN_FORWARD | ~IN_BACK | ~IN_LEFT | ~IN_RIGHT);
 
 	// re-store buttons by active forward/side moves
@@ -123,7 +123,7 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUse
 		pUserCmd->pInButtonState->nValue |= IN_RIGHT;
 	else if (pUserCmd->flSideMove < 0.0f)
 		pUserCmd->pInButtonState->nValue |= IN_LEFT;
-		
+
 	if (!pInputEntry->pViewAngles->angValue.IsZero())
 	{
 		const float flDeltaX = std::remainderf(pInputEntry->pViewAngles->angValue.x - angCorrectionView.x, 360.f);
@@ -136,10 +136,10 @@ void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUse
 		if (flSensitivity == 0.0f)
 			flSensitivity = 1.0f;
 
-		pUserCmd->CheckAndSetBits(EBaseCmdBits::BASE_BITS_MOUSEDX);
+		pUserCmd->SetBits(EBaseCmdBits::BASE_BITS_MOUSEDX);
 		pUserCmd->nMousedX = static_cast<short>(flDeltaX / (flSensitivity * flPitch));
 
-		pUserCmd->CheckAndSetBits(EBaseCmdBits::BASE_BITS_MOUSEDY);
+		pUserCmd->SetBits(EBaseCmdBits::BASE_BITS_MOUSEDY);
 		pUserCmd->nMousedY = static_cast<short>(-flDeltaY / (flSensitivity * flYaw));
 	}
 }
@@ -176,12 +176,12 @@ void F::MISC::MOVEMENT::MovementCorrection(CBaseUserCmdPB* pUserCmd, CCSGOInputH
 	const float flRollUp = vecUp.z * pUserCmd->flUpMove;
 
 	// solve corrected movement speed
-	pUserCmd->CheckAndSetBits(EBaseCmdBits::BASE_BITS_FORWARDMOVE);
+	pUserCmd->SetBits(EBaseCmdBits::BASE_BITS_FORWARDMOVE);
 	pUserCmd->flForwardMove = vecOldForward.x * flPitchSide + vecOldForward.y * flYawSide + vecOldForward.x * flPitchForward + vecOldForward.y * flYawForward + vecOldForward.z * flRollUp;
 
-	pUserCmd->CheckAndSetBits(EBaseCmdBits::BASE_BITS_LEFTMOVE);
+	pUserCmd->SetBits(EBaseCmdBits::BASE_BITS_LEFTMOVE);
 	pUserCmd->flSideMove = vecOldRight.x * flPitchSide + vecOldRight.y * flYawSide + vecOldRight.x * flPitchForward + vecOldRight.y * flYawForward + vecOldRight.z * flRollUp;
 
-	pUserCmd->CheckAndSetBits(EBaseCmdBits::BASE_BITS_UPMOVE);
+	pUserCmd->SetBits(EBaseCmdBits::BASE_BITS_UPMOVE);
 	pUserCmd->flUpMove = vecOldUp.x * flYawSide + vecOldUp.y * flPitchSide + vecOldUp.x * flYawForward + vecOldUp.y * flPitchForward + vecOldUp.z * flRollUp;
 }

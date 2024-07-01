@@ -127,11 +127,10 @@ public:
 	std::uint32_t nHasBits; // 0x8
 	std::uint64_t nCachedBits; // 0xC
 
-	// @note: this function is used to check if the bits are set and set them if they are not
-	void CheckAndSetBits(std::uint64_t nBits)
+	void SetBits(std::uint64_t nBits)
 	{
-		if (!(nCachedBits & nBits))
-			nCachedBits |= nBits;
+		// @note: you don't need to check if the bits are already set as bitwise OR will not change the value if the bit is already set
+		nCachedBits |= nBits;
 	}
 };
 
@@ -142,6 +141,7 @@ class CMsgQAngle : public CBasePB
 public:
 	QAngle_t angValue; // 0x18
 };
+
 static_assert(sizeof(CMsgQAngle) == 0x28);
 
 class CMsgVector : public CBasePB
@@ -149,6 +149,7 @@ class CMsgVector : public CBasePB
 public:
 	Vector4D_t vecValue; // 0x18
 };
+
 static_assert(sizeof(CMsgVector) == 0x28);
 
 class CCSGOInterpolationInfoPB : public CBasePB
@@ -158,6 +159,7 @@ public:
 	int nSrcTick; // 0x1C
 	int nDstTick; // 0x20
 };
+
 static_assert(sizeof(CCSGOInterpolationInfoPB) == 0x28);
 
 class CCSGOInputHistoryEntryPB : public CBasePB
@@ -179,6 +181,7 @@ public:
 	int nFrameNumber; // 0x70
 	int nTargetEntIndex; // 0x74
 };
+
 static_assert(sizeof(CCSGOInputHistoryEntryPB) == 0x78);
 
 struct CInButtonStatePB : CBasePB
@@ -187,6 +190,7 @@ struct CInButtonStatePB : CBasePB
 	std::uint64_t nValueChanged;
 	std::uint64_t nValueScroll;
 };
+
 static_assert(sizeof(CInButtonStatePB) == 0x30);
 
 struct CSubtickMoveStep : CBasePB
@@ -198,6 +202,7 @@ public:
 	float flAnalogForwardDelta;
 	float flAnalogLeftDelta;
 };
+
 static_assert(sizeof(CSubtickMoveStep) == 0x30);
 
 class CBaseUserCmdPB : public CBasePB
@@ -226,6 +231,7 @@ public:
 		return MEM::CallVFunc<int, 7U>(this);
 	}
 };
+
 static_assert(sizeof(CBaseUserCmdPB) == 0x80);
 
 class CCSGOUserCmdPB
@@ -247,6 +253,7 @@ public:
 			nHasBits |= nBits;
 	}
 };
+
 static_assert(sizeof(CCSGOUserCmdPB) == 0x40);
 
 struct CInButtonState
@@ -257,6 +264,7 @@ public:
 	std::uint64_t nValueChanged; // 0x10
 	std::uint64_t nValueScroll; // 0x18
 };
+
 static_assert(sizeof(CInButtonState) == 0x20);
 
 class CUserCmd
@@ -284,8 +292,9 @@ public:
 				continue;
 
 			pInputEntry->pViewAngles->angValue = angView;
-			pInputEntry->CheckAndSetBits(EInputHistoryBits::INPUT_HISTORY_BITS_VIEWANGLES);
+			pInputEntry->SetBits(EInputHistoryBits::INPUT_HISTORY_BITS_VIEWANGLES);
 		}
 	}
 };
+
 static_assert(sizeof(CUserCmd) == 0x88);
