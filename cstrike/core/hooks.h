@@ -39,6 +39,14 @@ namespace VTABLE
 			FRAMESTAGENOTIFY = 36U,
 		};
 	}
+
+	namespace SDL
+	{
+		enum
+		{
+			ISRELATIVEMOUSEMODE = 78u,
+		};
+	}
 }
 
 class CRenderGameSystem;
@@ -69,6 +77,8 @@ namespace H
 	void CS_FASTCALL OverrideView(void* pClientModeCSNormal, CViewSetup* pSetup);
 	void CS_FASTCALL DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2);
 
+	// sdl functions
+	void* IsRelativeMouseMode(void* pThisptr, bool bActive);
 
 	/* @section: managers */
 	inline CBaseHookObject<decltype(&Present)> hkPresent = {};
@@ -79,6 +89,7 @@ namespace H
 	inline CBaseHookObject<decltype(&GetMatrixForView)> hkGetMatrixForView = {};
 	inline CBaseHookObject<decltype(&CreateMove)> hkCreateMove = {};
 	inline CBaseHookObject<decltype(&MouseInputEnabled)> hkMouseInputEnabled = {};
+	inline CBaseHookObject<decltype(&IsRelativeMouseMode)> hkIsRelativeMouseMode = {};
 	inline CBaseHookObject<decltype(&FrameStageNotify)> hkFrameStageNotify = {};
 	inline CBaseHookObject<decltype(&LevelInit)> hkLevelInit = {};
 	inline CBaseHookObject<decltype(&LevelShutdown)> hkLevelShutdown = {};
