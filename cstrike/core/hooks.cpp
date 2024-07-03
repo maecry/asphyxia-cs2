@@ -123,6 +123,10 @@ bool H::Setup()
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"DrawObject\" hook has been created");
 
+	if (!hkIsRelativeMouseMode.Create(MEM::GetVFunc(I::InputSystem, VTABLE::SDL::ISRELATIVEMOUSEMODE), reinterpret_cast<void*>(&IsRelativeMouseMode)))
+		return false;
+	L_PRINT(LOG_INFO) << CS_XOR("\"IsRelativeMouseMode\" hook has been created");
+
 	return true;
 }
 
@@ -280,4 +284,16 @@ void CS_FASTCALL H::DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CM
 
 	if (!F::OnDrawObject(pAnimatableSceneObjectDesc, pDx11, arrMeshDraw, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2))
 		oDrawObject(pAnimatableSceneObjectDesc, pDx11, arrMeshDraw, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);
+}
+
+void* H::IsRelativeMouseMode(void* pThisptr, bool bActive)
+{
+	const auto oIsRelativeMouseMode = hkIsRelativeMouseMode.GetOriginal();
+
+	MENU::bMainActive = bActive;
+
+	if (MENU::bMainWindowOpened)
+		return oIsRelativeMouseMode(pThisptr, false);
+
+	return oIsRelativeMouseMode(pThisptr, bActive);
 }

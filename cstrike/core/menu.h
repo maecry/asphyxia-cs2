@@ -76,6 +76,7 @@ namespace MENU
 	};
 
 	inline bool bMainWindowOpened = false;
+	inline bool bMainActive = false;
 	inline int nCurrentMainTab = 0;
 	inline ParticleContext_t menuParticle = ParticleContext_t(MENU_MAX_BACKGROUND_PARTICLES);
 	inline AnimationHandler_t animMenuDimBackground;
