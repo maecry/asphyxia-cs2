@@ -34,6 +34,9 @@
 // used: product version
 #include "sdk/interfaces/iengineclient.h"
 
+// used: jthread
+#include <thread>
+
 bool CORE::GetWorkingPath(wchar_t* wszDestination)
 {
 	const wchar_t* wszModuleName = MEM::GetModuleBaseFileName(static_cast<HMODULE>(hDll), true);
@@ -57,20 +60,20 @@ bool CORE::GetWorkingPath(wchar_t* wszDestination)
 	return true;
 }
 
-static bool Setup(HMODULE hModule)
+static void Setup()
 {
 #ifdef CS_LOG_CONSOLE
 	if (!L::AttachConsole(CS_XOR(L"asphyxia developer-mode")))
 	{
 		CS_ASSERT(false); // failed to attach console
-		return false;
+		return;
 	}
 #endif
 #ifdef CS_LOG_FILE
 	if (!L::OpenFile(CS_XOR(L"asphyxia.log")))
 	{
 		CS_ASSERT(false); // failed to open file
-		return false;
+		return;
 	}
 #endif
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("logging system initialization completed");
@@ -79,14 +82,14 @@ static bool Setup(HMODULE hModule)
 	if (!MEM::Setup())
 	{
 		CS_ASSERT(false); // failed to setup memory system
-		return false;
+		return;
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("memory system initialization completed");
 
 	if (!MATH::Setup())
 	{
 		CS_ASSERT(false); // failed to setup math system
-		return false;
+		return;
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("math system initialization completed");
 
@@ -94,14 +97,14 @@ static bool Setup(HMODULE hModule)
 	if (!I::Setup())
 	{
 		CS_ASSERT(false); // failed to setup interfaces
-		return false;
+		return;
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("interfaces initialization completed");
 
 	if (!SDK::Setup())
 	{
 		CS_ASSERT(false); // failed to setup sdk
-		return false;
+		return;
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("sdk initialization completed");
 
@@ -109,7 +112,7 @@ static bool Setup(HMODULE hModule)
 	if (!IPT::Setup())
 	{
 		CS_ASSERT(false); // failed to setup input system
-		return false;
+		return;
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("input system initialization completed");
 
@@ -124,33 +127,33 @@ static bool Setup(HMODULE hModule)
 	if (!F::Setup())
 	{
 		CS_ASSERT(false); // failed to setup features
-		return false;
+		return;
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("features initialization completed");
 
-	if (!SCHEMA::Setup(CS_XOR(L"schema_client.txt"), CS_XOR("client.dll")))
+	// iterate all valid modules for schema
+	std::vector<std::string> vecNeededModules = { CS_XOR("client.dll"), CS_XOR("engine.dll"), CS_XOR("schemasystem.dll") };
+	for (auto& szModule : vecNeededModules)
 	{
-		CS_ASSERT(false); // failed to setup schema system
-		return false;
+		if (!SCHEMA::Setup(CS_XOR(L"schema.txt"), szModule.c_str()))
+		{
+			CS_ASSERT(false); // failed to setup schema system
+			return;
+		}
 	}
-	//if (!SCHEMA::Setup(CS_XOR(L"schema_server.txt"), CS_XOR("server.dll")))
-	//{
-	//	CS_ASSERT(false); // failed to setup schema system
-	//	return false;
-	//}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("schema system initialization completed");
 
 	if (!CONVAR::Dump(CS_XOR(L"convars.txt")))
 	{
 		CS_ASSERT(false); // failed to setup convars system
-		return false;
+		return;
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("convars dumped completed, output: \"convars.txt\"");
 
 	if (!CONVAR::Setup())
 	{
 		CS_ASSERT(false); // failed to setup convars system
-		return false;
+		return;
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("convars system initialization completed");
 
@@ -158,7 +161,7 @@ static bool Setup(HMODULE hModule)
 	if (!H::Setup())
 	{
 		CS_ASSERT(false); // failed to setup hooks
-		return false;
+		return;
 	}
 	L_PRINT(LOG_NONE) << CS_XOR("hooks initialization completed");
 
@@ -174,7 +177,6 @@ static bool Setup(HMODULE hModule)
 		L_PRINT(LOG_WARNING) << L::SetColor(LOG_COLOR_FORE_YELLOW | LOG_COLOR_FORE_INTENSITY) << CS_XOR("version mismatch! local CS2 version: ") << CS_PRODUCTSTRINGVERSION << CS_XOR(", current CS2 version: ") << I::Engine->GetProductVersionString() << CS_XOR(". asphyxia might not function as normal.");
 
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_CYAN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("asphyxia initialization completed, version: ") << CS_STRINGIFY(CS_VERSION);
-	return true;
 }
 
 // @todo: some of those may crash while closing process, because we dont have any dependencies from the game modules, it means them can be unloaded and destruct interfaces etc before our module | modify ldrlist?
@@ -214,6 +216,9 @@ extern "C" BOOL WINAPI _CRT_INIT(HMODULE hModule, DWORD dwReason, LPVOID lpReser
 
 BOOL APIENTRY CoreEntryPoint(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 {
+	// disables the DLL_THREAD_ATTACH and DLL_THREAD_DETACH notifications for the specified dynamic-link library (DLL)
+	DisableThreadLibraryCalls(hModule);
+
 	// process destroy of the cheat before crt calls atexit table
 	if (dwReason == DLL_PROCESS_DETACH)
 		Destroy();
@@ -240,15 +245,11 @@ BOOL APIENTRY CoreEntryPoint(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 		// save our module handle
 		CORE::hDll = hModule;
 
-		// check did we perform main initialization successfully
-		if (!Setup(hModule))
-		{
-			// undo the things we've done
-			Destroy();
-			return FALSE;
-		}
+		// create main thread
+		std::jthread{ []() { Setup(); } }.detach();
 
 		// create panic thread, it isn't critical error if it fails
+		// UPD: idc about std::jthread for panic thread btw he didn't work anyway
 		if (const HANDLE hThread = ::CreateThread(nullptr, 0U, &PanicThread, hModule, 0UL, nullptr); hThread != nullptr)
 			::CloseHandle(hThread);
 	}
