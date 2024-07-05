@@ -132,7 +132,7 @@ static void Setup()
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("features initialization completed");
 
 	// iterate all valid modules for schema
-	std::vector<std::string> vecNeededModules = { CS_XOR("client.dll"), CS_XOR("engine.dll"), CS_XOR("schemasystem.dll") };
+	std::vector<std::string> vecNeededModules = { CS_XOR("client.dll"), CS_XOR("engine2.dll"), CS_XOR("schemasystem.dll") };
 	for (auto& szModule : vecNeededModules)
 	{
 		if (!SCHEMA::Setup(CS_XOR(L"schema.txt"), szModule.c_str()))
