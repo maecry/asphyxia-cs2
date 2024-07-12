@@ -176,6 +176,9 @@ bool I::Setup()
 	GlobalVars = *reinterpret_cast<IGlobalVars**>(MEM::ResolveRelativeAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 0D ? ? ? ? 48 89 41")), 0x3, 0x7));
 	bSuccess &= (GlobalVars != nullptr);
 
+	PVS = reinterpret_cast<CPVS*>(MEM::ResolveRelativeAddress(MEM::FindPattern(ENGINE2_DLL, CS_XOR("48 8D 0D ? ? ? ? 33 D2 FF 50")), 0x3, 0x7));
+	bSuccess &= (PVS != nullptr);
+
 	return bSuccess;
 }
 

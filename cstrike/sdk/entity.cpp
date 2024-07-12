@@ -20,15 +20,15 @@ CCSPlayerController* CCSPlayerController::GetLocalPlayerController()
 
 const Vector_t& CCSPlayerController::GetPawnOrigin()
 {
-	CBaseHandle hPawn = this->GetPawnHandle();
-	if (!hPawn.IsValid())
+	CBaseHandle hPawnHandle = this->GetPawnHandle();
+	if (!hPawnHandle.IsValid())
 		return vecEmpty;
 
-	C_CSPlayerPawn* pPawn = I::GameResourceService->pGameEntitySystem->Get<C_CSPlayerPawn>(hPawn);
-	if (pPawn == nullptr)
+	C_CSPlayerPawn* pPlayerPawn = I::GameResourceService->pGameEntitySystem->Get<C_CSPlayerPawn>(hPawnHandle);
+	if (pPlayerPawn == nullptr)
 		return vecEmpty;
 
-	return pPawn->GetSceneOrigin();
+	return pPlayerPawn->GetSceneOrigin();
 }
 
 C_BaseEntity* C_BaseEntity::GetLocalPlayer()
@@ -101,7 +101,7 @@ bool C_CSWeaponBaseGun::CanPrimaryAttack(const int nWeaponType, const float flSe
 	if (nWeaponType == WEAPONTYPE_KNIFE)
 		return true;
 
-		// check do weapon have ammo
+	// check do weapon have ammo
 	if (this->GetClip1() <= 0)
 		return false;
 

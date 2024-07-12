@@ -13,6 +13,7 @@
 #include "../sdk/interfaces/inetworkclientservice.h"
 #include "../sdk/interfaces/iglobalvars.h"
 #include "../sdk/interfaces/imaterialsystem.h"
+#include "../sdk/interfaces/ipvs.h"
 
 // used: viewsetup
 #include "../sdk/datatypes/viewsetup.h"
@@ -123,7 +124,7 @@ bool H::Setup()
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"DrawObject\" hook has been created");
 
-	if (!hkIsRelativeMouseMode.Create(MEM::GetVFunc(I::InputSystem, VTABLE::SDL::ISRELATIVEMOUSEMODE), reinterpret_cast<void*>(&IsRelativeMouseMode)))
+	if (!hkIsRelativeMouseMode.Create(MEM::GetVFunc(I::InputSystem, VTABLE::INPUTSYSTEM::ISRELATIVEMOUSEMODE), reinterpret_cast<void*>(&IsRelativeMouseMode)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"IsRelativeMouseMode\" hook has been created");
 
@@ -251,6 +252,9 @@ __int64* CS_FASTCALL H::LevelInit(void* pClientModeShared, const char* szNewMap)
 	// if global variables are not captured during I::Setup or we join a new game, recapture it
 	if (I::GlobalVars == nullptr)
 		I::GlobalVars = *reinterpret_cast<IGlobalVars**>(MEM::ResolveRelativeAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 0D ? ? ? ? 48 89 41")), 0x3, 0x7));
+
+	// disable model occlusion
+	I::PVS->Set(false);
 
 	return oLevelInit(pClientModeShared, szNewMap);
 }

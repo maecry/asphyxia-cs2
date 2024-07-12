@@ -40,11 +40,11 @@ namespace VTABLE
 		};
 	}
 
-	namespace SDL
+	namespace INPUTSYSTEM
 	{
 		enum
 		{
-			ISRELATIVEMOUSEMODE = 78u,
+			ISRELATIVEMOUSEMODE = 78U,
 		};
 	}
 }
@@ -76,8 +76,6 @@ namespace H
 	__int64 CS_FASTCALL LevelShutdown(void* pClientModeShared);
 	void CS_FASTCALL OverrideView(void* pClientModeCSNormal, CViewSetup* pSetup);
 	void CS_FASTCALL DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2);
-
-	// sdl functions
 	void* IsRelativeMouseMode(void* pThisptr, bool bActive);
 
 	/* @section: managers */

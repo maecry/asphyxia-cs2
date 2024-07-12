@@ -33,10 +33,7 @@ namespace FNV1A
 		const std::size_t nLength = CRT::StringLength(szString);
 
 		for (std::size_t i = 0U; i < nLength; ++i)
-		{
-			uKey ^= szString[i];
-			uKey *= ullPrime;
-		}
+			uKey = (uKey ^ szString[i]) * ullPrime;
 
 		return uKey;
 	}
