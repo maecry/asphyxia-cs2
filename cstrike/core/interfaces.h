@@ -40,6 +40,7 @@ class INetworkClientService;
 class IMaterialSystem2;
 class IResourceSystem;
 class CResourceHandleUtils;
+class CPVS;
 
 // [d3d] struct
 struct ID3D11Device;
@@ -72,4 +73,5 @@ namespace I
 	inline IMaterialSystem2* MaterialSystem2 = nullptr;
 	inline IResourceSystem* ResourceSystem = nullptr;
 	inline CResourceHandleUtils* ResourceHandleUtils = nullptr;
+	inline CPVS* PVS = nullptr;
 }

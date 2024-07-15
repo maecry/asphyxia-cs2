@@ -161,6 +161,7 @@
     <ClInclude Include="features\visuals.h" />
     <ClInclude Include="features\visuals\chams.h" />
     <ClInclude Include="features\visuals\overlay.h" />
+    <ClInclude Include="sdk\interfaces\ipvs.h" />
     <ClInclude Include="sdk\const.h" />
     <ClInclude Include="sdk\datatypes\color.h" />
     <ClInclude Include="sdk\datatypes\keyvalue3.h" />

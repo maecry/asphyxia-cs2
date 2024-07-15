@@ -308,6 +308,9 @@
     </ClInclude>
     <ClInclude Include="sdk\datatypes\utlbuffer.h" />
     <ClInclude Include="features\CRC.h" />
+    <ClInclude Include="sdk\interfaces\ipvs.h">
+      <Filter>sdk\interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dependencies\imgui\imgui.cpp">

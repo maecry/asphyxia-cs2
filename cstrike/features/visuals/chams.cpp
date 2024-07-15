@@ -100,15 +100,15 @@ bool F::VISUALS::CHAMS::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx
 	if (CRT::StringCompare(pClassInfo->szName, CS_XOR("C_CSPlayerPawn")) != 0)
 		return false;
 
-	auto pPawn = I::GameResourceService->pGameEntitySystem->Get<C_CSPlayerPawn>(hOwner);
-	if (pPawn == nullptr)
+	auto pPlayerPawn = I::GameResourceService->pGameEntitySystem->Get<C_CSPlayerPawn>(hOwner);
+	if (pPlayerPawn == nullptr)
 		return false;
 
-	if (!pPawn->IsOtherEnemy(SDK::LocalPawn))
+	if (!pPlayerPawn->IsOtherEnemy(SDK::LocalPawn))
 		return false;
 
 	// alive state
-	if (pPawn->GetHealth() == 0)
+	if (pPlayerPawn->GetHealth() <= 0)
 		return false;
 
 	return OverrideMaterial(pAnimatableSceneObjectDesc, pDx11, arrMeshDraw, nDataCount, pSceneView, pSceneLayer, pUnk, pUnk2);

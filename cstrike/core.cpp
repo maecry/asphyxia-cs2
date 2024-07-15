@@ -128,16 +128,16 @@ static bool Setup(HMODULE hModule)
 	}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("features initialization completed");
 
-	if (!SCHEMA::Setup(CS_XOR(L"schema_client.txt"), CS_XOR("client.dll")))
+	// iterate all valid modules for schema
+	std::vector<std::string> vecNeededModules = { CS_XOR("client.dll"), CS_XOR("engine2.dll"), CS_XOR("schemasystem.dll") };
+	for (auto& szModule : vecNeededModules)
 	{
-		CS_ASSERT(false); // failed to setup schema system
-		return false;
+		if (!SCHEMA::Setup(CS_XOR(L"schema.txt"), szModule.c_str()))
+		{
+			CS_ASSERT(false); // failed to setup schema system
+			return false;
+		}
 	}
-	//if (!SCHEMA::Setup(CS_XOR(L"schema_server.txt"), CS_XOR("server.dll")))
-	//{
-	//	CS_ASSERT(false); // failed to setup schema system
-	//	return false;
-	//}
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("schema system initialization completed");
 
 	if (!CONVAR::Dump(CS_XOR(L"convars.txt")))
@@ -214,6 +214,9 @@ extern "C" BOOL WINAPI _CRT_INIT(HMODULE hModule, DWORD dwReason, LPVOID lpReser
 
 BOOL APIENTRY CoreEntryPoint(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 {
+	// Disables the DLL_THREAD_ATTACH and DLL_THREAD_DETACH notifications for the specified dynamic-link library (DLL). This can reduce the size of the working set for some applications
+	DisableThreadLibraryCalls(hModule);
+
 	// process destroy of the cheat before crt calls atexit table
 	if (dwReason == DLL_PROCESS_DETACH)
 		Destroy();
