@@ -86,10 +86,18 @@ public:
 class CCollisionProperty
 {
 public:
+	std::uint16_t CollisionMask()
+	{
+		return *reinterpret_cast<std::uint16_t*>(reinterpret_cast<std::uintptr_t>(this) + 0x38);
+	}
+
 	CS_CLASS_NO_INITIALIZER(CCollisionProperty);
 
 	SCHEMA_ADD_FIELD(Vector_t, GetMins, "CCollisionProperty->m_vecMins");
 	SCHEMA_ADD_FIELD(Vector_t, GetMaxs, "CCollisionProperty->m_vecMaxs");
+
+	SCHEMA_ADD_FIELD(std::uint8_t, GetSolidFlags, "CCollisionProperty->m_usSolidFlags");
+	SCHEMA_ADD_FIELD(std::uint8_t, GetCollisionGroup, "CCollisionProperty->m_CollisionGroup");
 };
 
 class CSkeletonInstance;
@@ -142,7 +150,7 @@ public:
 		if (pClassInfo == nullptr)
 			return false;
 
-	return (pClassInfo->InheritsFrom(pWeaponBaseClass));
+		return (pClassInfo->InheritsFrom(pWeaponBaseClass));
 	}
 
 	static C_BaseEntity* GetLocalPlayer();
@@ -208,6 +216,13 @@ public:
 	SCHEMA_ADD_FIELD(CCSPlayer_WeaponServices*, GetWeaponServices, "C_BasePlayerPawn->m_pWeaponServices");
 	SCHEMA_ADD_FIELD(CPlayer_ItemServices*, GetItemServices, "C_BasePlayerPawn->m_pItemServices");
 	SCHEMA_ADD_FIELD(CPlayer_CameraServices*, GetCameraServices, "C_BasePlayerPawn->m_pCameraServices");
+
+	[[nodiscard]] Vector_t GetEyePosition()
+	{
+		Vector_t vecEyePosition = Vector_t(0.0f, 0.0f, 0.0f);
+		MEM::CallVFunc<void, 166U>(this, &vecEyePosition);
+		return vecEyePosition;
+	}
 };
 
 class CCSPlayer_ViewModelServices;
@@ -233,6 +248,8 @@ public:
 	[[nodiscard]] bool IsOtherEnemy(C_CSPlayerPawn* pOther);
 	[[nodiscard]] int GetAssociatedTeam();
 	[[nodiscard]] bool CanAttack(const float flServerTime);
+	[[nodiscard]] std::uint32_t GetOwnerHandleIndex();
+	[[nodiscard]] std::uint16_t GetCollisionMask();
 
 	SCHEMA_ADD_FIELD(bool, IsScoped, "C_CSPlayerPawn->m_bIsScoped");
 	SCHEMA_ADD_FIELD(bool, IsDefusing, "C_CSPlayerPawn->m_bIsDefusing");
@@ -404,5 +421,10 @@ public:
 class CSkeletonInstance : public CGameSceneNode
 {
 public:
-
+	MEM_PAD(0x1CC); //0x0000
+	int nBoneCount; //0x01CC
+	MEM_PAD(0x18); //0x01D0
+	int nMask; //0x01E8
+	MEM_PAD(0x4); //0x01EC
+	Matrix4x2_t* pBoneCache; //0x01F0
 };

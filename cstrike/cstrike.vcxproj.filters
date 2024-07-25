@@ -311,6 +311,9 @@
     <ClInclude Include="sdk\interfaces\ipvs.h">
       <Filter>sdk\interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="sdk\interfaces\cgametracemanager.h">
+      <Filter>sdk\interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dependencies\imgui\imgui.cpp">
@@ -421,5 +424,8 @@
       <Filter>utilities</Filter>
     </ClCompile>
     <ClCompile Include="sdk\datatypes\keyvalues3.cpp" />
+    <ClCompile Include="sdk\interfaces\cgametracemanager.cpp">
+      <Filter>sdk\interfaces</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

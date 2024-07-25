@@ -374,3 +374,67 @@ struct ViewMatrix_t
 };
 
 #pragma pack(pop)
+
+struct Matrix4x2_t
+{
+public:
+	Matrix3x4_t TranslateToMatrix3x4()
+	{
+		Matrix3x4_t matrix = Matrix3x4_t();
+		Vector4D_t vecRotation = Vector4D_t();
+		Vector_t vecPosition = Vector_t();
+
+		vecRotation.x = this->_21; //rot.x
+		vecRotation.y = this->_22; //rot.y
+		vecRotation.z = this->_23; //rot.z
+		vecRotation.w = this->_24; //rot.w
+
+		vecPosition.x = this->_11; //bonepos.x
+		vecPosition.y = this->_12; //bonepos.y
+		vecPosition.z = this->_13; //bonepos.z
+
+		matrix[0][0] = 1.0f - 2.0f * vecRotation.y * vecRotation.y - 2.0f * vecRotation.z * vecRotation.z;
+		matrix[1][0] = 2.0f * vecRotation.x * vecRotation.y + 2.0f * vecRotation.w * vecRotation.z;
+		matrix[2][0] = 2.0f * vecRotation.x * vecRotation.z - 2.0f * vecRotation.w * vecRotation.y;
+
+		matrix[0][1] = 2.0f * vecRotation.x * vecRotation.y - 2.0f * vecRotation.w * vecRotation.z;
+		matrix[1][1] = 1.0f - 2.0f * vecRotation.x * vecRotation.x - 2.0f * vecRotation.z * vecRotation.z;
+		matrix[2][1] = 2.0f * vecRotation.y * vecRotation.z + 2.0f * vecRotation.w * vecRotation.x;
+
+		matrix[0][2] = 2.0f * vecRotation.x * vecRotation.z + 2.0f * vecRotation.w * vecRotation.y;
+		matrix[1][2] = 2.0f * vecRotation.y * vecRotation.z - 2.0f * vecRotation.w * vecRotation.x;
+		matrix[2][2] = 1.0f - 2.0f * vecRotation.x * vecRotation.x - 2.0f * vecRotation.y * vecRotation.y;
+
+		matrix[0][3] = vecPosition.x;
+		matrix[1][3] = vecPosition.y;
+		matrix[2][3] = vecPosition.z;
+
+		return matrix;
+	}
+
+	[[nodiscard]] const Vector_t GetOrigin(int nIndex)
+	{
+		return Vector_t(this[nIndex]._11, this[nIndex]._12, this[nIndex]._13);
+	}
+
+	const void SetOrigin(int nIndex, Vector_t vecValue)
+	{
+		this[nIndex]._11 = vecValue.x;
+		this[nIndex]._12 = vecValue.y;
+		this[nIndex]._13 = vecValue.z;
+	}
+
+	[[nodiscard]] const Vector4D_t GetRotation(int nIndex)
+	{
+		return Vector4D_t(this[nIndex]._21, this[nIndex]._22, this[nIndex]._23, this[nIndex]._24);
+	}
+
+	union
+	{
+		struct
+		{
+			float _11, _12, _13, _14;
+			float _21, _22, _23, _24;
+		};
+	};
+};

@@ -83,6 +83,24 @@ bool C_CSPlayerPawn::CanAttack(const float flServerTime)
 	return true;
 }
 
+
+std::uint32_t C_CSPlayerPawn::GetOwnerHandleIndex()
+{
+	std::uint32_t Result = -1;
+	if (this && GetCollision() && !(GetCollision()->GetSolidFlags() & 4))
+		Result = this->GetOwnerHandle().GetEntryIndex();
+
+	return Result;
+}
+
+std::uint16_t C_CSPlayerPawn::GetCollisionMask()
+{
+	if (this && GetCollision())
+		return GetCollision()->CollisionMask(); // Collision + 0x38
+
+	return 0;
+}
+
 bool C_CSWeaponBaseGun::CanPrimaryAttack(const int nWeaponType, const float flServerTime)
 {
 	// check are weapon support burst mode and it's ready to attack

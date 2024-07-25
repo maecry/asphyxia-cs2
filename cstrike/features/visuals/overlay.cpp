@@ -12,6 +12,7 @@
 #include "../../sdk/entity.h"
 #include "../../sdk/interfaces/cgameentitysystem.h"
 #include "../../sdk/interfaces/iengineclient.h"
+#include "../../sdk/interfaces/cgametracemanager.h"
 
 // used: sdk variables
 #include "../../core/sdk.h"
@@ -572,6 +573,20 @@ void OVERLAY::Player(CCSPlayerController* pLocal, CCSPlayerController* pPlayer, 
 
 	if (pLocalPawn == nullptr || pPlayerPawn == nullptr)
 		return;
+
+	// @note: this is a simple example of how to check if the player is visible
+
+	// initialize trace, construct filterr and initialize ray
+	//GameTrace_t trace = GameTrace_t();
+	//TraceFilter_t filter = TraceFilter_t(0x1C3003, pLocalPawn, nullptr, 4);
+	//Ray_t ray = Ray_t();
+
+	// cast a ray from local player eye positon -> player head bone
+	// @note: would recommend checking for nullptrs
+	//I::GameTraceManager->TraceShape(&ray, pLocalPawn->GetEyePosition(), pPlayerPawn->GetGameSceneNode()->GetSkeletonInstance()->pBoneCache->GetOrigin(6), &filter, &trace);
+	// check if the hit entity is the one we wanted to check and if the trace end point is visible
+	//if (trace.m_pHitEntity != pPlayerPawn || !trace.IsVisible( ))
+	//	return;
 
 	bool bIsEnemy = (pLocalPawn->IsOtherEnemy(pPlayerPawn));
 

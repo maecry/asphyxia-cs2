@@ -161,6 +161,7 @@
     <ClInclude Include="features\visuals.h" />
     <ClInclude Include="features\visuals\chams.h" />
     <ClInclude Include="features\visuals\overlay.h" />
+    <ClInclude Include="sdk\interfaces\cgametracemanager.h" />
     <ClInclude Include="sdk\interfaces\ipvs.h" />
     <ClInclude Include="sdk\const.h" />
     <ClInclude Include="sdk\datatypes\color.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="..\dependencies\minhook\hde\hde64.c" />
     <ClCompile Include="..\dependencies\minhook\hook.c" />
     <ClCompile Include="..\dependencies\minhook\trampoline.c" />
+    <ClCompile Include="sdk\interfaces\cgametracemanager.cpp" />
     <ClCompile Include="core.cpp" />
     <ClCompile Include="core\config.cpp" />
     <ClCompile Include="core\convars.cpp" />
