@@ -426,5 +426,5 @@ public:
 	MEM_PAD(0x18); //0x01D0
 	int nMask; //0x01E8
 	MEM_PAD(0x4); //0x01EC
-	Matrix4x2_t* pBoneCache; //0x01F0
+	Matrix2x4_t* pBoneCache; //0x01F0
 };

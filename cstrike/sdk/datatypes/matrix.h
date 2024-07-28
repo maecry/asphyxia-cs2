@@ -285,11 +285,10 @@ struct ViewMatrix_t
 	[[nodiscard]] const bool operator==(const ViewMatrix_t& viewOther) const
 	{
 		return (
-			arrData[0][0] == viewOther.arrData[0][0] && arrData[0][1] == viewOther.arrData[0][1] && arrData[0][2] == viewOther.arrData[0][2] && arrData[0][3] == viewOther.arrData[0][3] &&
-			arrData[1][0] == viewOther.arrData[1][0] && arrData[1][1] == viewOther.arrData[1][1] && arrData[1][2] == viewOther.arrData[1][2] && arrData[1][3] == viewOther.arrData[1][3] &&
-			arrData[2][0] == viewOther.arrData[2][0] && arrData[2][1] == viewOther.arrData[2][1] && arrData[2][2] == viewOther.arrData[2][2] && arrData[2][3] == viewOther.arrData[2][3] &&
-			arrData[3][0] == viewOther.arrData[3][0] && arrData[3][1] == viewOther.arrData[3][1] && arrData[3][2] == viewOther.arrData[3][2] && arrData[3][3] == viewOther.arrData[3][3]
-			);
+		arrData[0][0] == viewOther.arrData[0][0] && arrData[0][1] == viewOther.arrData[0][1] && arrData[0][2] == viewOther.arrData[0][2] && arrData[0][3] == viewOther.arrData[0][3] &&
+		arrData[1][0] == viewOther.arrData[1][0] && arrData[1][1] == viewOther.arrData[1][1] && arrData[1][2] == viewOther.arrData[1][2] && arrData[1][3] == viewOther.arrData[1][3] &&
+		arrData[2][0] == viewOther.arrData[2][0] && arrData[2][1] == viewOther.arrData[2][1] && arrData[2][2] == viewOther.arrData[2][2] && arrData[2][3] == viewOther.arrData[2][3] &&
+		arrData[3][0] == viewOther.arrData[3][0] && arrData[3][1] == viewOther.arrData[3][1] && arrData[3][2] == viewOther.arrData[3][2] && arrData[3][3] == viewOther.arrData[3][3]);
 	}
 
 	[[nodiscard]] const Matrix3x4_t& As3x4() const
@@ -375,7 +374,7 @@ struct ViewMatrix_t
 
 #pragma pack(pop)
 
-struct Matrix4x2_t
+struct Matrix2x4_t
 {
 public:
 	Matrix3x4_t TranslateToMatrix3x4()
