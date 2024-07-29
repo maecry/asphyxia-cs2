@@ -156,6 +156,8 @@
     <ClInclude Include="core\variables.h" />
     <ClInclude Include="features.h" />
     <ClInclude Include="features\CRC.h" />
+    <ClInclude Include="features\legitbot\aim.h" />
+    <ClInclude Include="features\legitbot\legitbot.h" />
     <ClInclude Include="features\misc.h" />
     <ClInclude Include="features\misc\movement.h" />
     <ClInclude Include="features\visuals.h" />
@@ -227,6 +229,8 @@
     <ClCompile Include="..\dependencies\minhook\hde\hde64.c" />
     <ClCompile Include="..\dependencies\minhook\hook.c" />
     <ClCompile Include="..\dependencies\minhook\trampoline.c" />
+    <ClCompile Include="features\legitbot.cpp" />
+    <ClCompile Include="features\legitbot\aim.cpp" />
     <ClCompile Include="sdk\interfaces\cgametracemanager.cpp" />
     <ClCompile Include="core.cpp" />
     <ClCompile Include="core\config.cpp" />

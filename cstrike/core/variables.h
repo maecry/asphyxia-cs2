@@ -109,6 +109,12 @@ struct Variables_t
 	C_ADD_VARIABLE(ColorPickerVar_t, colAccent1, ColorPickerVar_t(100, 105, 175)); // (dark)
 	C_ADD_VARIABLE(ColorPickerVar_t, colAccent2, ColorPickerVar_t(115, 120, 190)); // (darker)
 #pragma endregion
+#pragma region variables_legitbot
+	C_ADD_VARIABLE(bool, bLegitbot, false);
+	C_ADD_VARIABLE(float, flSmoothing, 10.0f);
+	C_ADD_VARIABLE(bool, bLegitbotAlwaysOn, false);
+	C_ADD_VARIABLE(unsigned int, nLegitbotActivationKey, VK_HOME);
+#pragma endregion
 };
 
 inline Variables_t Vars = {};
