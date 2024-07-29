@@ -13,6 +13,7 @@
 // used: features callbacks
 #include "features/visuals.h"
 #include "features/misc.h"
+#include "features/legitbot.h"
 
 // used: interfaces
 #include "core/interfaces.h"
@@ -70,6 +71,7 @@ void F::OnCreateMove(CUserCmd* pCmd, CBaseUserCmdPB* pBaseCmd, CCSPlayerControll
 		return;
 
 	F::MISC::OnMove(pCmd, pBaseCmd, pLocalController, pLocalPawn);
+	F::LEGITBOT::OnMove(pCmd, pBaseCmd, pLocalController, pLocalPawn);
 }
 
 bool F::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
