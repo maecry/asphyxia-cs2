@@ -26,7 +26,7 @@
   
   [✓] CHAMS - basic chams system
   
-  [x] AIMBOT - none...
+  [✓] AIMBOT - simple head aimbot with smoothing
 
 ## License
 
