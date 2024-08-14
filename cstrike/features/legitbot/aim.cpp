@@ -140,7 +140,7 @@ void F::LEGITBOT::AIM::AimAssist(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 		// @note: would recommend checking for nullptrs
 		I::GameTraceManager->TraceShape(&ray, pLocalPawn->GetEyePosition(), pPawn->GetGameSceneNode()->GetSkeletonInstance()->pBoneCache->GetOrigin(6), &filter, &trace);
 		// check if the hit entity is the one we wanted to check and if the trace end point is visible
-		if (trace.m_pHitEntity != pPawn || !trace.IsVisible())
+		if (trace.m_pHitEntity != pPawn || !trace.IsVisible())// if invisible, skip this entity
 			continue;
 
 		// Get the distance/weight of the move
@@ -168,9 +168,9 @@ void F::LEGITBOT::AIM::AimAssist(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 
 	// Get the smoothing
 	const float flSmoothing = C_GET(float, Vars.flSmoothing);
-	auto aimPunch = pLocalPawn->GetAimPuchAngle();
+	auto aimPunch = pLocalPawn->GetAimPuchAngle();//get AimPunch angles
 	// Apply smoothing and set angles
-	pViewAngles->x += vNewAngles.x / flSmoothing - aimPunch.x;
+	pViewAngles->x += vNewAngles.x / flSmoothing - aimPunch.x;// minus AimPunch angle to counteract recoil
 	pViewAngles->y += vNewAngles.y / flSmoothing - aimPunch.y;
 	pViewAngles->Normalize();
 }
