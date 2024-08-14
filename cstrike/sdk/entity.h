@@ -257,6 +257,7 @@ public:
 	SCHEMA_ADD_FIELD(bool, IsWaitForNoAttack, "C_CSPlayerPawn->m_bWaitForNoAttack");
 	SCHEMA_ADD_FIELD(int, GetShotsFired, "C_CSPlayerPawn->m_iShotsFired");
 	SCHEMA_ADD_FIELD(std::int32_t, GetArmorValue, "C_CSPlayerPawn->m_ArmorValue");
+	SCHEMA_ADD_FIELD(QAngle_t, GetAimPuchAngle, "C_CSPlayerPawn->m_aimPunchAngle");
 };
 
 class CBasePlayerController : public C_BaseModelEntity

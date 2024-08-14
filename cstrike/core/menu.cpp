@@ -364,6 +364,7 @@ void T::LegitBot()
 		}
 
 		ImGui::Checkbox(CS_XOR("enable##aimbot"), &C_GET(bool, Vars.bLegitbot));
+		ImGui::SliderFloat(CS_XOR("aim range"), &C_GET(float, Vars.flAimRange), 1.f, 135.f);
 		ImGui::SliderFloat(CS_XOR("smoothing"), &C_GET(float, Vars.flSmoothing), 1.f, 100.f);
 
 		ImGui::NewLine();
