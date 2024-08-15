@@ -53,12 +53,15 @@ public:
 	QAngle_t angThirdPersonAngles;
 	MEM_PAD(0xE);
 	std::int32_t nSequenceNumber;
-	std::int32_t nOldSequenceNumber;
-	MEM_PAD(0xA);
+	double dbSomeTimer;
 	CExtendedMoveData currentMoveData;
 	std::int32_t nWeaponSwitchTick;
-	MEM_PAD(0x8C);
+	MEM_PAD(0x1C4);
 	CExtendedMoveData* pExtendedMoveData;
+	MEM_PAD(0x48);
+	int32_t nAttackStartHistoryIndex1;
+	int32_t nAttackStartHistoryIndex2;
+	int32_t nAttackStartHistoryIndex3;
 
 	CUserCmd* GetUserCmd()
 	{
