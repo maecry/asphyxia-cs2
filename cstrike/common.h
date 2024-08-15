@@ -12,7 +12,7 @@
  * - used to verify game version
  */
 
-#define CS_PRODUCTSTRINGVERSION CS_XOR("1.40.2.3")
+#define CS_PRODUCTSTRINGVERSION CS_XOR("1.40.2.6")
 
 /*
  * game's modules

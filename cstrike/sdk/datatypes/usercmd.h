@@ -212,7 +212,7 @@ public:
 	std::string* strMoveCrc;
 	CInButtonStatePB* pInButtonState;
 	CMsgQAngle* pViewAngles;
-	std::int32_t nCommandNumber;
+	std::int32_t nLegacyCommandNumber;
 	std::int32_t nClientTick;
 	float flForwardMove;
 	float flSideMove;
@@ -253,7 +253,6 @@ public:
 			nHasBits |= nBits;
 	}
 };
-
 static_assert(sizeof(CCSGOUserCmdPB) == 0x40);
 
 struct CInButtonState
@@ -264,16 +263,16 @@ public:
 	std::uint64_t nValueChanged; // 0x10
 	std::uint64_t nValueScroll; // 0x18
 };
-
 static_assert(sizeof(CInButtonState) == 0x20);
 
 class CUserCmd
 {
 public:
-	MEM_PAD(0x8) // 0x0 VTABLE
-	CCSGOUserCmdPB csgoUserCmd; // 0x8
-	CInButtonState nButtons; // 0x28
-	MEM_PAD(0x20); // 0x50
+	MEM_PAD(0x8); // 0x0 VTABLE
+	MEM_PAD(0x10); // TODO: find out what this is, added 14.08.2024
+	CCSGOUserCmdPB csgoUserCmd; // 0x18
+	CInButtonState nButtons; // 0x58
+	MEM_PAD(0x20); // 0x78
 
 	CCSGOInputHistoryEntryPB* GetInputHistoryEntry(int nIndex)
 	{
@@ -296,5 +295,4 @@ public:
 		}
 	}
 };
-
-static_assert(sizeof(CUserCmd) == 0x88);
+static_assert(sizeof(CUserCmd) == 0x98);

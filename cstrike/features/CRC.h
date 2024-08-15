@@ -57,7 +57,7 @@ namespace CRC
 		protobufBuffer.EnsureCapacity(nCalcualtedCRCSize + 1);
 
 		using fnSerializePartialToArray = bool(__fastcall*)(CBaseUserCmdPB*, CUtlBuffer, int);
-		static const fnSerializePartialToArray oSerializePartialToArray = reinterpret_cast<fnSerializePartialToArray>(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 5C 24 18 55 56 57 48 81 EC 90 00 00 00 48")));
+		static const fnSerializePartialToArray oSerializePartialToArray = reinterpret_cast<fnSerializePartialToArray>(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 5C 24 18 55 56 57 48 81 EC 90")));
 
 		#ifdef CS_PARANOID
 		CS_ASSERT(oSerializePartialToArray != nullptr);

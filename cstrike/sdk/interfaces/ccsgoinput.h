@@ -47,7 +47,7 @@ class CCSGOInput
 public:
 	MEM_PAD(0x250);
 	CUserCmd arrCommands[MULTIPLAYER_BACKUP];
-	MEM_PAD(0x89)
+	MEM_PAD(0x99)
 	bool bInThirdPerson;
 	MEM_PAD(0x6);
 	QAngle_t angThirdPersonAngles;
