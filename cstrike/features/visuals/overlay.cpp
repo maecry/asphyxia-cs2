@@ -591,7 +591,7 @@ void OVERLAY::Player(CCSPlayerController* pLocal, CCSPlayerController* pPlayer, 
 	bool bIsEnemy = (pLocalPawn->IsOtherEnemy(pPlayerPawn));
 
 	// @note: only enemy overlay for now
-	if (!bIsEnemy)
+	if (!bIsEnemy && !C_GET(bool, Vars.bTeamateESP))
 		return;
 
 	ImVec4 vecBox = {};

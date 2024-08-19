@@ -56,6 +56,8 @@ struct Variables_t
 	C_ADD_VARIABLE(TextOverlayVar_t, overlayName, TextOverlayVar_t(false));
 	C_ADD_VARIABLE(BarOverlayVar_t, overlayHealthBar, BarOverlayVar_t(false, false, false, 1.f, Color_t(0, 255, 0), Color_t(255, 0, 0)));
 	C_ADD_VARIABLE(BarOverlayVar_t, overlayArmorBar, BarOverlayVar_t(false, false, false, 1.f, Color_t(0, 255, 255), Color_t(255, 0, 0)));
+	C_ADD_VARIABLE(bool, bTeamateESP, false);
+
 
 	C_ADD_VARIABLE(bool, bVisualChams, false);
 	C_ADD_VARIABLE(int, nVisualChamMaterial, VISUAL_MATERIAL_PRIMARY_WHITE);

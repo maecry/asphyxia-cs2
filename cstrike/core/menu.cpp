@@ -406,6 +406,7 @@ void T::Visuals()
 				ImGui::Checkbox(CS_XOR("name"), &C_GET(TextOverlayVar_t, Vars.overlayName).bEnable);
 				ImGui::Checkbox(CS_XOR("health bar"), &C_GET(BarOverlayVar_t, Vars.overlayHealthBar).bEnable);
 				ImGui::Checkbox(CS_XOR("armor bar"), &C_GET(BarOverlayVar_t, Vars.overlayArmorBar).bEnable);
+				ImGui::Checkbox(CS_XOR("teamates"), &C_GET(bool, Vars.bTeamateESP));
 			}
 			ImGui::EndDisabled();
 
