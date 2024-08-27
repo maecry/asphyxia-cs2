@@ -134,15 +134,15 @@ enum EMoveType : int
 {
 	MOVETYPE_NONE = 0,
 	MOVETYPE_ISOMETRIC,
-	MOVETYPE_WALK,
+	MOVETYPE_WALK = 514,
 	MOVETYPE_STEP,
 	MOVETYPE_FLY, // no gravity, but still collides with stuff
 	MOVETYPE_FLYGRAVITY, // flies through the air and is affected by gravity
 	MOVETYPE_VPHYSICS,
 	MOVETYPE_PUSH, // no clip to world, push and crush
-	MOVETYPE_NOCLIP, // no gravity, no collisions, still do velocity/absvelocity
-	MOVETYPE_LADDER,
-	MOVETYPE_OBSERVER, // observer movement, depends on player's observer mode
+	MOVETYPE_NOCLIP = 1794, // no gravity, no collisions, still do velocity/absvelocity
+	MOVETYPE_LADDER = 2313,
+	MOVETYPE_OBSERVER = 2056, // observer movement, depends on player's observer mode
 	MOVETYPE_CUSTOM,
 	MOVETYPE_LAST = MOVETYPE_CUSTOM,
 	MOVETYPE_MAX_BITS = 4
