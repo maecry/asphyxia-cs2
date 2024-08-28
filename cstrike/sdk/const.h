@@ -130,22 +130,22 @@ enum EEFlags : int
 	EFL_NO_DAMAGE_FORCES = (1 << 31)
 };
 
-enum EMoveType : int
+enum EMoveType : std::uint8_t
 {
 	MOVETYPE_NONE = 0,
-	MOVETYPE_ISOMETRIC,
+	MOVETYPE_OBSOLETE,
 	MOVETYPE_WALK,
-	MOVETYPE_STEP,
-	MOVETYPE_FLY, // no gravity, but still collides with stuff
-	MOVETYPE_FLYGRAVITY, // flies through the air and is affected by gravity
+	MOVETYPE_FLY,
+	MOVETYPE_FLYGRAVITY,
 	MOVETYPE_VPHYSICS,
-	MOVETYPE_PUSH, // no clip to world, push and crush
-	MOVETYPE_NOCLIP, // no gravity, no collisions, still do velocity/absvelocity
+	MOVETYPE_PUSH,
+	MOVETYPE_NOCLIP,
+	MOVETYPE_OBSERVER,
 	MOVETYPE_LADDER,
-	MOVETYPE_OBSERVER, // observer movement, depends on player's observer mode
 	MOVETYPE_CUSTOM,
-	MOVETYPE_LAST = MOVETYPE_CUSTOM,
-	MOVETYPE_MAX_BITS = 4
+	MOVETYPE_LAST,
+	MOVETYPE_INVALID,
+	MOVETYPE_MAX_BITS = 5
 };
 
 // identifies how submerged in water a player is
