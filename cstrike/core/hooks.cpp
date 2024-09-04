@@ -115,11 +115,18 @@ bool H::Setup()
 	//*(float*)(pSetup + 0x494) = -v21; // m_OrthoLeft
 	//*(float*)(pSetup + 0x498) = -v22; // m_OrthoTop
 	//*(float*)(pSetup + 0x4A0) = v22; // m_OrthoBottom
-	//if (!hkOverrideView.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 48 8B FA E8")), reinterpret_cast<void*>(&OverrideView)))
-	//	return false;
+	if (!hkOverrideView.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 48 8B FA")), reinterpret_cast<void*>(&OverrideView)))
+		return false;
 
-	//L_PRINT(LOG_INFO) << CS_XOR("\"OverrideView\" hook has been created");
+	L_PRINT(LOG_INFO) << CS_XOR("\"OverrideView\" hook has been created");
 
+	// @ida CCSGOInput->ValidateInput idx 7
+	if (!hkValidateInput.Create(MEM::GetVFunc(I::Input, VTABLE::INPUT::VALIDATEINPUT), reinterpret_cast<void*>(&ValidateInput)))
+		return false;
+
+	L_PRINT(LOG_INFO) << CS_XOR("\"ValidateInput\" hook has been created");
+	
+	
 	if (!hkDrawObject.Create(MEM::FindPattern(SCENESYSTEM_DLL, CS_XOR("48 8B C4 53 41 54 41 55 48 81 EC ? ? ? ? 4D 63 E1")), reinterpret_cast<void*>(&DrawObject)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"DrawObject\" hook has been created");
@@ -275,6 +282,12 @@ void CS_FASTCALL H::OverrideView(void* pClientModeCSNormal, CViewSetup* pSetup)
 		return hkOverrideView.GetOriginal()(pClientModeCSNormal, pSetup);
 
 	oOverrideView(pClientModeCSNormal, pSetup);
+}
+
+void CS_FASTCALL H::ValidateInput(CCSGOInput* pInput, int unk)
+{
+		const auto oValidateInput = hkValidateInput.GetOriginal();
+		oValidateInput(pInput, unk);
 }
 
 void CS_FASTCALL H::DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)
