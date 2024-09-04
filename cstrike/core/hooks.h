@@ -47,6 +47,14 @@ namespace VTABLE
 			ISRELATIVEMOUSEMODE = 78U,
 		};
 	}
+
+	namespace INPUT
+	{
+		enum
+		{
+			VALIDATEINPUT = 7U,
+		};
+	}
 }
 
 class CRenderGameSystem;
@@ -74,6 +82,7 @@ namespace H
 	void CS_FASTCALL FrameStageNotify(void* rcx, int nFrameStage);
 	__int64* CS_FASTCALL LevelInit(void* pClientModeShared, const char* szNewMap);
 	__int64 CS_FASTCALL LevelShutdown(void* pClientModeShared);
+	void CS_FASTCALL ValidateInput(CCSGOInput* pInput, int unk);
 	void CS_FASTCALL OverrideView(void* pClientModeCSNormal, CViewSetup* pSetup);
 	void CS_FASTCALL DrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2);
 	void* IsRelativeMouseMode(void* pThisptr, bool bActive);
@@ -91,6 +100,7 @@ namespace H
 	inline CBaseHookObject<decltype(&FrameStageNotify)> hkFrameStageNotify = {};
 	inline CBaseHookObject<decltype(&LevelInit)> hkLevelInit = {};
 	inline CBaseHookObject<decltype(&LevelShutdown)> hkLevelShutdown = {};
+	inline CBaseHookObject<decltype(&ValidateInput)> hkValidateInput = {};
 	inline CBaseHookObject<decltype(&OverrideView)> hkOverrideView = {};
 
 	inline CBaseHookObject<decltype(&DrawObject)> hkDrawObject = {};
