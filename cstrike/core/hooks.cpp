@@ -97,13 +97,17 @@ bool H::Setup()
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"FrameStageNotify\" hook has been created");
 
-	// @ida: ClientModeShared -> #STR: "mapname", "transition", "game_newmap"
+	// in ida it will go in order as
+	// @ida: #STR: ; "game_newmap"
+	// @ida: #STR: ; "mapname"
+	// @ida: #STR: ; "transition"
+	// and the pattern is in the first one "game_newmap"
 	if (!hkLevelInit.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 5C 24 ? 56 48 83 EC ? 48 8B 0D ? ? ? ? 48 8B F2")), reinterpret_cast<void*>(&LevelInit)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"LevelInit\" hook has been created");
 
 	// @ida: ClientModeShared -> #STR: "map_shutdown"
-	if (!hkLevelShutdown.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 83 EC ? 48 8B 0D ? ? ? ? 48 8D 15 ? ? ? ? 45 33 C9 45 33 C0 48 8B 01 FF 50 ? 48 85 C0 74 ? 48 8B 0D ? ? ? ? 48 8B D0 4C 8B 01 41 FF 50 ? 48 83 C4")), reinterpret_cast<void*>(&LevelShutdown)))
+	if (!hkLevelShutdown.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 83 EC ? 48 8B 0D ? ? ? ? 48 8D 15 ? ? ? ? 45 33 C9 45 33 C0 48 8B 01 FF 50 ? 48 85 C0 74 ? 48 8B 0D ? ? ? ? 48 8B D0 4C 8B 01 41 FF 50 ? 48 83 C4 28 E9 C3 20 01 ?")), reinterpret_cast<void*>(&LevelShutdown)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"LevelShutdown\" hook has been created");
 
@@ -115,12 +119,12 @@ bool H::Setup()
 	//*(float*)(pSetup + 0x494) = -v21; // m_OrthoLeft
 	//*(float*)(pSetup + 0x498) = -v22; // m_OrthoTop
 	//*(float*)(pSetup + 0x4A0) = v22; // m_OrthoBottom
-	//if (!hkOverrideView.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 48 8B FA E8")), reinterpret_cast<void*>(&OverrideView)))
-	//	return false;
+	if (!hkOverrideView.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 48 8B FA E8 20 1E ED FF")), reinterpret_cast<void*>(&OverrideView)))
+		return false;
 
 	//L_PRINT(LOG_INFO) << CS_XOR("\"OverrideView\" hook has been created");
 
-	if (!hkDrawObject.Create(MEM::FindPattern(SCENESYSTEM_DLL, CS_XOR("48 8B C4 53 41 54 41 55 48 81 EC ? ? ? ? 4D 63 E1")), reinterpret_cast<void*>(&DrawObject)))
+	if (!hkDrawObject.Create(MEM::FindPattern(SCENESYSTEM_DLL, CS_XOR("48 8B C4 53 41 56 48 83 EC 38 4D 8B F0 48 8B DA 48 85 C9 0F 84 99 01 ? ?")), reinterpret_cast<void*>(&DrawObject)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"DrawObject\" hook has been created");
 
@@ -199,19 +203,19 @@ ViewMatrix_t* CS_FASTCALL H::GetMatrixForView(CRenderGameSystem* pRenderGameSyst
 	return matResult;
 }
 
-bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, bool bActive)
+bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, CUserCmd* cmd)
 {
 	const auto oCreateMove = hkCreateMove.GetOriginal();
-	const bool bResult = oCreateMove(pInput, nSlot, bActive);
+	const bool bResult = oCreateMove(pInput, nSlot, cmd);
 
 	if (!I::Engine->IsConnected() || !I::Engine->IsInGame())
 		return bResult;
 
-	CUserCmd* pCmd = SDK::Cmd = pInput->GetUserCmd();
-	if (pCmd == nullptr)
+	SDK::Cmd = cmd;
+	if (SDK::Cmd == nullptr)
 		return bResult;
 
-	CBaseUserCmdPB* pBaseCmd = pCmd->csgoUserCmd.pBaseCmd;
+	CBaseUserCmdPB* pBaseCmd = SDK::Cmd->csgoUserCmd.pBaseCmd;
 	if (pBaseCmd == nullptr)
 		return bResult;
 
@@ -223,11 +227,11 @@ bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, bool bActive)
 	if (SDK::LocalPawn == nullptr)
 		return bResult;
 
-	F::OnCreateMove(pCmd, pBaseCmd, SDK::LocalController);
+	F::OnCreateMove(SDK::Cmd, pBaseCmd, SDK::LocalController);
 
 	CRC::Save(pBaseCmd);
 	if (CRC::CalculateCRC(pBaseCmd) == true)
-		CRC::Apply(pCmd);
+		CRC::Apply(SDK::Cmd);
 
 	return bResult;
 }
@@ -251,8 +255,8 @@ __int64* CS_FASTCALL H::LevelInit(void* pClientModeShared, const char* szNewMap)
 	const auto oLevelInit = hkLevelInit.GetOriginal();
 	// if global variables are not captured during I::Setup or we join a new game, recapture it
 	if (I::GlobalVars == nullptr)
-		I::GlobalVars = *reinterpret_cast<IGlobalVars**>(MEM::ResolveRelativeAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 0D ? ? ? ? 48 89 41")), 0x3, 0x7));
-
+		I::GlobalVars = *reinterpret_cast<IGlobalVars**>(MEM::ResolveRelativeAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 8B 0D 99 C7 0D 01 4C 8D 05 42 CB 0D 01")), 0x3, 0x7));
+	
 	// disable model occlusion
 	I::PVS->Set(false);
 

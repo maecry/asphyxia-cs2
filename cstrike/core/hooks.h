@@ -34,9 +34,17 @@ namespace VTABLE
 	{
 		enum
 		{
-			CREATEMOVE = 5U,
-			MOUSEINPUTENABLED = 16U,
+			CREATEMOVE = 21U,
+			MOUSEINPUTENABLED = 19U,
 			FRAMESTAGENOTIFY = 36U,
+		};
+	}
+
+	namespace INPUT
+	{
+		enum
+		{
+			VALID_VIEWANGLE = 7U,
 		};
 	}
 
@@ -44,7 +52,7 @@ namespace VTABLE
 	{
 		enum
 		{
-			ISRELATIVEMOUSEMODE = 78U,
+			ISRELATIVEMOUSEMODE = 76U,
 		};
 	}
 }
@@ -53,6 +61,7 @@ class CRenderGameSystem;
 class IViewRender;
 class CCSGOInput;
 class CViewSetup;
+class CUserCmd;
 class CMeshData;
 
 namespace H
@@ -69,7 +78,7 @@ namespace H
 
 	// game's functions
 	ViewMatrix_t* CS_FASTCALL GetMatrixForView(CRenderGameSystem* pRenderGameSystem, IViewRender* pViewRender, ViewMatrix_t* pOutWorldToView, ViewMatrix_t* pOutViewToProjection, ViewMatrix_t* pOutWorldToProjection, ViewMatrix_t* pOutWorldToPixels);
-	bool CS_FASTCALL CreateMove(CCSGOInput* pInput, int nSlot, bool bActive);
+	bool CS_FASTCALL CreateMove(CCSGOInput* pInput, int nSlot, CUserCmd* cmd);
 	bool CS_FASTCALL MouseInputEnabled(void* pThisptr);
 	void CS_FASTCALL FrameStageNotify(void* rcx, int nFrameStage);
 	__int64* CS_FASTCALL LevelInit(void* pClientModeShared, const char* szNewMap);
