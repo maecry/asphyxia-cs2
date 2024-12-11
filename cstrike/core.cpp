@@ -36,25 +36,28 @@
 
 bool CORE::GetWorkingPath(wchar_t* wszDestination)
 {
-	const wchar_t* wszModuleName = MEM::GetModuleBaseFileName(static_cast<HMODULE>(hDll), true);
-	CRT::StringCopy(wszDestination, wszModuleName);
+	bool bSuccess = false;
+	PWSTR wszPathToDocuments = nullptr;
 
-	// remove the module name
-	if (wchar_t* pwszLastSlash = CRT::StringCharR(wszDestination, L'\\'); pwszLastSlash != nullptr)
-		*pwszLastSlash = L'\0';
-
-	CRT::StringCat(wszDestination, L"\\.asphyxia\\");
-	// create directory if it doesn't exist
-	if (!::CreateDirectoryW(wszDestination, nullptr))
+	// get path to user documents
+	if (SUCCEEDED(::SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_CREATE, nullptr, &wszPathToDocuments)))
 	{
-		if (const DWORD dwError = ::GetLastError(); dwError != ERROR_ALREADY_EXISTS)
+		CRT::StringCat(CRT::StringCopy(wszDestination, wszPathToDocuments), CS_XOR(L"\\.asphyxia\\"));
+		bSuccess = true;
+
+		// create directory if it doesn't exist
+		if (!::CreateDirectoryW(wszDestination, nullptr))
 		{
-			L_PRINT(LOG_ERROR) << CS_XOR("failed to create default working directory, because one or more intermediate directories don't exist");
-			return false;
+			if (::GetLastError() != ERROR_ALREADY_EXISTS)
+			{
+				L_PRINT(LOG_ERROR) << CS_XOR("failed to create default working directory, because one or more intermediate directories don't exist");
+				bSuccess = false;
+			}
 		}
 	}
+	::CoTaskMemFree(wszPathToDocuments);
 
-	return true;
+	return bSuccess;
 }
 
 static bool Setup(HMODULE hModule)

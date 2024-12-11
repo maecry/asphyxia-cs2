@@ -151,7 +151,8 @@ bool I::Setup()
 #pragma endregion
 
 	// @ida:  #STR: "r_gpu_mem_stats", "-threads", "CTSListBase: Misaligned list\n", "CTSQueue: Misaligned queue\n", "Display GPU memory usage.", "-r_max_device_threads"
-	SwapChain = **reinterpret_cast<ISwapChainDx11***>(MEM::ResolveRelativeAddress(MEM::FindPattern(RENDERSYSTEM_DLL, CS_XOR("66 0F 7F 0D ? ? ? ? 66 0F 7F 05 ? ? ? ? 0F 1F 40")), 0x4, 0x8));
+	// https://media.discordapp.net/attachments/1055004763328106558/1315619131109937152/image.png?ex=6758114b&is=6756bfcb&hm=a568636a5292e2a04f94972f5781d8ad88f170a38ec2a1ce82135726dec23fac&=&format=webp&quality=lossless
+	SwapChain = **reinterpret_cast<ISwapChainDx11***>(MEM::ResolveRelativeAddress(MEM::FindPattern(RENDERSYSTEM_DLL, CS_XOR("66 0F 7F 0D 83 C9 43 ? 48 8B F7 66 0F 7F 05 88 C9 43 ?")), 0x4, 0x8));
 	bSuccess &= (SwapChain != nullptr);
 
 	// grab's d3d11 interfaces for later use
@@ -168,18 +169,23 @@ bool I::Setup()
 			Device->GetImmediateContext(&DeviceContext);
 	}
 	bSuccess &= (Device != nullptr && DeviceContext != nullptr);
-
-	Input = *reinterpret_cast<CCSGOInput**>(MEM::ResolveRelativeAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 8B 0D ? ? ? ? E8 ? ? ? ? 8B BE 84 12 00 00")), 0x3, 0x7));
+	
+	// #STR: CSGOInput
+	Input = *reinterpret_cast<CCSGOInput**>(MEM::ResolveRelativeAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 8B 0D D1 3A 29 01 4C 8D 8F E0 05 ? ? 45 33 FF")), 0x3, 0x7));
 	bSuccess &= (Input != nullptr);
 
-	// @ida: STR '%s:  %f tick(%d) curtime(%f) OnSequenceCycleChanged: %s : %d=[%s]'
-	GlobalVars = *reinterpret_cast<IGlobalVars**>(MEM::ResolveRelativeAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 0D ? ? ? ? 48 89 41")), 0x3, 0x7));
+	// @ida: #STR: "gpGlocals->rendertime() called while IsInSimulation() is true, "gpGlocals->curtime() called while IsInSimulation() is false
+	// @ida: #STR: "C_SceneEntity::SetupClientOnlyScene:  C" then go up until you see it
+	GlobalVars = *reinterpret_cast<IGlobalVars**>(MEM::ResolveRelativeAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 8B 0D 99 C7 0D 01 4C 8D 05 42 CB 0D 01")), 0x3, 0x7));
 	bSuccess &= (GlobalVars != nullptr);
 
-	PVS = reinterpret_cast<CPVS*>(MEM::ResolveRelativeAddress(MEM::FindPattern(ENGINE2_DLL, CS_XOR("48 8D 0D ? ? ? ? 33 D2 FF 50")), 0x3, 0x7));
+	// @ida: #STR: "CRenderingWorldSession::OnLoopActivate" go down just a bit
+	PVS = reinterpret_cast<CPVS*>(MEM::ResolveRelativeAddress(MEM::FindPattern(ENGINE2_DLL, CS_XOR("48 8D 0D ? ? ? ? 33 ? FF 50")), 0x3, 0x7)); 
 	bSuccess &= (PVS != nullptr);
 
-	GameTraceManager = *reinterpret_cast<CGameTraceManager**>(MEM::GetAbsoluteAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("4C 8B 3D ? ? ? ? 24 C9 0C 49 66 0F 7F 45")), 0x3, 0x0));
+	// @ida: #STR: "Physics/TraceShape (Client)"
+	// @ida: #STR: "Weapon_Knife.Stab" then go up
+	GameTraceManager = *reinterpret_cast<CGameTraceManager**>(MEM::GetAbsoluteAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 8B 1D ? ? ? ? 24 ? 0C ? F3 0F 7F 45")), 0x3, 0x0));
 	bSuccess &= (GameTraceManager != nullptr);
 
 	return bSuccess;

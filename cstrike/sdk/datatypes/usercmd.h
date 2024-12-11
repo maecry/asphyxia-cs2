@@ -108,6 +108,18 @@ struct RepeatedPtrField_t
 	int nCurrentSize;
 	int nTotalSize;
 	Rep_t* pRep;
+
+	// @ida: #STR: "cl: CreateMove clamped invalid attack h" go down a bit and you will find it
+	// @ida: #STR: "cl: CreateMove - Invalid player history [ %d, %d, %.3f ] f
+	template <typename T>
+	T* add(T* element)
+	{
+		// Define the function pointer correctly
+		static auto add_to_rep_addr = reinterpret_cast<T * (__fastcall*)(RepeatedPtrField_t*, T*)>(MEM::GetAbsoluteAddress(MEM::FindPattern(CLIENT_DLL, "E8 ? ? ? ? 4C 8B E0 48 8B 44 24 ? 4C 8B CF"), 0x1));
+
+		// Use the function pointer to call the function
+		return add_to_rep_addr(this, element);
+	}
 };
 
 class CBasePB
@@ -215,6 +227,20 @@ public:
 	std::uint32_t nConsumedServerAngleChanges;
 	std::int32_t nCmdFlags;
 	std::uint32_t nPawnEntityHandle;
+
+	CSubtickMoveStep* add_subtick_move()
+	{
+		using fn_add_subtick_move_step = CSubtickMoveStep* (__fastcall*)(void*);
+		static fn_add_subtick_move_step fn_create_new_subtick_move_step = reinterpret_cast<fn_add_subtick_move_step>(MEM::GetAbsoluteAddress(MEM::FindPattern(CLIENT_DLL, "E8 ? ? ? ? 48 8B D0 48 8D 4F 18 E8 ? ? ? ? 48 8B D0"), 0x1));
+
+		if (subtickMovesField.pRep && subtickMovesField.nCurrentSize < subtickMovesField.pRep->nAllocatedSize)
+			return subtickMovesField.pRep->tElements[subtickMovesField.nCurrentSize++];
+
+		CSubtickMoveStep* subtick = fn_create_new_subtick_move_step(nullptr);
+		subtickMovesField.add(subtick);
+
+		return subtick;
+	}
 
 	int CalculateCmdCRCSize()
 	{

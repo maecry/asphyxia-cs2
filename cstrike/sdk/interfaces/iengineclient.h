@@ -45,7 +45,7 @@ public:
 	{
 		int nIndex = -1;
 
-		MEM::CallVFunc<void, 47U>(this, std::ref(nIndex), 0);
+		MEM::CallVFunc<void, 49U>(this, std::ref(nIndex), 0);
 
 		return nIndex + 1;
 	}
@@ -62,6 +62,6 @@ public:
 
 	[[nodiscard]] const char* GetProductVersionString()
 	{
-		return MEM::CallVFunc<const char*, 82U>(this);
+		return MEM::CallVFunc<const char*, 84U>(this);
 	}
 };
