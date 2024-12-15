@@ -220,7 +220,8 @@ public:
 	[[nodiscard]] Vector_t GetEyePosition()
 	{
 		Vector_t vecEyePosition = Vector_t(0.0f, 0.0f, 0.0f);
-		MEM::CallVFunc<void, 166U>(this, &vecEyePosition);
+		// Credit: https://www.unknowncheats.me/forum/4258133-post6228.html
+		MEM::CallVFunc<void, 169U>(this, &vecEyePosition);
 		return vecEyePosition;
 	}
 };
