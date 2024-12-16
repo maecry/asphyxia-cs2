@@ -234,9 +234,16 @@ bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, CUserCmd* cmd)
 
 	F::OnCreateMove(SDK::Cmd, pBaseCmd, SDK::LocalController);
 
+	// TODO : We need to fix CRC saving
+	// 
+	// There seems to be an issue within CBasePB and the classes that derive it.
+	// So far, you may be unable to press specific keys such as crouch and automatic shooting.
+	// A dodgy fix would be to comment it out but it still doesn't fix the bhop etc.
+
 	CRC::Save(pBaseCmd);
 	if (CRC::CalculateCRC(pBaseCmd) == true)
 		CRC::Apply(SDK::Cmd);
+
 
 	return bResult;
 }
