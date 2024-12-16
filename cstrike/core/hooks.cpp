@@ -85,7 +85,11 @@ bool H::Setup()
 	L_PRINT(LOG_INFO) << CS_XOR("\"GetMatrixForView\" hook has been created");
 
 	// @ida: #STR: cl: CreateMove clamped invalid attack history index %d in frame history to -1. Was %d, frame history size %d.\n
-	if (!hkCreateMove.Create(MEM::GetVFunc(I::Input, VTABLE::CLIENT::CREATEMOVE), reinterpret_cast<void*>(&CreateMove)))
+	// Consider updating I::Input, VTABLE::CLIENT::CREATEMOVE and using that instead.
+
+	// For now, we'll use the pattern
+	// Credit: https://www.unknowncheats.me/forum/4265695-post6331.html
+	if (!hkCreateMove.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 48 8D A8")), reinterpret_cast<void*>(&CreateMove)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"CreateMove\" hook has been created");
 
