@@ -124,7 +124,8 @@ bool H::Setup()
 
 	//L_PRINT(LOG_INFO) << CS_XOR("\"OverrideView\" hook has been created");
 
-	if (!hkDrawObject.Create(MEM::FindPattern(SCENESYSTEM_DLL, CS_XOR("48 8B C4 53 41 56 48 83 EC 38 4D 8B F0 48 8B DA 48 85 C9 0F 84 99 01 ? ?")), reinterpret_cast<void*>(&DrawObject)))
+	// Credit: https://www.unknowncheats.me/forum/4253223-post6185.html
+	if (!hkDrawObject.Create(MEM::FindPattern(SCENESYSTEM_DLL, CS_XOR("48 8B C4 48 89 50 ? 53")), reinterpret_cast<void*>(&DrawObject)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"DrawObject\" hook has been created");
 
