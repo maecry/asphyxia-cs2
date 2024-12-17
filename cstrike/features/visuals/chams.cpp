@@ -119,7 +119,7 @@ bool F::VISUALS::CHAMS::OverrideMaterial(void* pAnimatableSceneObjectDesc, void*
 	const auto oDrawObject = H::hkDrawObject.GetOriginal();
 	const CustomMaterial_t customMaterial = arrMaterials[C_GET(int, Vars.nVisualChamMaterial)];
 
-	if (C_GET(bool, Vars.bVisualChamsIgnoreZ))
+	if (C_GET(bool, Vars.bVisualChamsIgnoreZ)) // Ignore Invisible
 	{
 		arrMeshDraw->pMaterial = customMaterial.pMaterialInvisible;
 		arrMeshDraw->colValue = C_GET(Color_t, Vars.colVisualChamsIgnoreZ);

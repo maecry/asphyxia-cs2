@@ -94,7 +94,8 @@ public:
 	bool TraceShape(Ray_t* pRay, Vector_t vecStart, Vector_t vecEnd, TraceFilter_t* pFilter, GameTrace_t* pGameTrace)
 	{
 		using fnTraceShape = bool(__fastcall*)(CGameTraceManager*, Ray_t*, Vector_t*, Vector_t*, TraceFilter_t*, GameTrace_t*);
-		static fnTraceShape oTraceShape = reinterpret_cast<fnTraceShape>(MEM::GetAbsoluteAddress(MEM::FindPattern(CLIENT_DLL, CS_XOR("E8 ? ? ? ? 80 7D ? ? 75 ? F3 0F 10 45")), 0x1, 0x0));
+		// Credit: https://www.unknowncheats.me/forum/4265752-post6333.html
+		static fnTraceShape oTraceShape = reinterpret_cast<fnTraceShape>(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 89 5C 24 20 48 89 4C 24 08 55 56 41")));
 
 		#ifdef CS_PARANOID
 		CS_ASSERT(oTraceShape != nullptr);

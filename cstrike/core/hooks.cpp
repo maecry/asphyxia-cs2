@@ -85,7 +85,11 @@ bool H::Setup()
 	L_PRINT(LOG_INFO) << CS_XOR("\"GetMatrixForView\" hook has been created");
 
 	// @ida: #STR: cl: CreateMove clamped invalid attack history index %d in frame history to -1. Was %d, frame history size %d.\n
-	if (!hkCreateMove.Create(MEM::GetVFunc(I::Input, VTABLE::CLIENT::CREATEMOVE), reinterpret_cast<void*>(&CreateMove)))
+	// Consider updating I::Input, VTABLE::CLIENT::CREATEMOVE and using that instead.
+
+	// For now, we'll use the pattern
+	// Credit: https://www.unknowncheats.me/forum/4265695-post6331.html
+	if (!hkCreateMove.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("48 8B C4 4C 89 40 ? 48 89 48 ? 55 53 56 57 48 8D A8")), reinterpret_cast<void*>(&CreateMove)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"CreateMove\" hook has been created");
 
@@ -124,7 +128,8 @@ bool H::Setup()
 
 	//L_PRINT(LOG_INFO) << CS_XOR("\"OverrideView\" hook has been created");
 
-	if (!hkDrawObject.Create(MEM::FindPattern(SCENESYSTEM_DLL, CS_XOR("48 8B C4 53 41 56 48 83 EC 38 4D 8B F0 48 8B DA 48 85 C9 0F 84 99 01 ? ?")), reinterpret_cast<void*>(&DrawObject)))
+	// Credit: https://www.unknowncheats.me/forum/4253223-post6185.html
+	if (!hkDrawObject.Create(MEM::FindPattern(SCENESYSTEM_DLL, CS_XOR("48 8B C4 48 89 50 ? 53")), reinterpret_cast<void*>(&DrawObject)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"DrawObject\" hook has been created");
 
@@ -229,9 +234,16 @@ bool CS_FASTCALL H::CreateMove(CCSGOInput* pInput, int nSlot, CUserCmd* cmd)
 
 	F::OnCreateMove(SDK::Cmd, pBaseCmd, SDK::LocalController);
 
+	// TODO : We need to fix CRC saving
+	// 
+	// There seems to be an issue within CBasePB and the classes that derive it.
+	// So far, you may be unable to press specific keys such as crouch and automatic shooting.
+	// A dodgy fix would be to comment it out but it still doesn't fix the bhop etc.
+
 	CRC::Save(pBaseCmd);
 	if (CRC::CalculateCRC(pBaseCmd) == true)
 		CRC::Apply(SDK::Cmd);
+
 
 	return bResult;
 }
